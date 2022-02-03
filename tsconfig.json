@@ -14,8 +14,8 @@
       "typeRoots": ["node_modules/@types", "src/typings"],
       "esModuleInterop": true,
       "paths": {
-        "App": ["src/App"],
-        "Pages/*": ["src/Pages/*"],
+        "App": ["src/app"],
+        "Pages/*": ["src/pages/*"],
     }
     },
     "include": ["src/**/*"],

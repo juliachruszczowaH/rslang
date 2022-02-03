@@ -43,6 +43,9 @@ module.exports = {
     },
     compress: true,
     port: 8888,
+    historyApiFallback: true,
+    static: "./",
+    hot: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
