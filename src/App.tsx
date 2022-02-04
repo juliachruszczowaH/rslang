@@ -8,16 +8,17 @@ import Statistics from './screens/Statistics';
 import AudioCallGame from './screens/AudiocallGame';
 import SprintGame from './screens/SprintGame';
 import Book from './screens/Book';
+import Category from './components/Category';
 
 const App: React.FC = () => {
   return (
-    <div>
+    <div className="main-container">
       <Header />
 
       <div className="container mt-3">
         <Routes>
           <Route path={'/book'} element={<Book />}  >
-          <Route path={'/book/:groupId/:pageId'} element={<Home />}>
+          <Route path={'/book/:groupId/:pageId'} element={<Category />}>
                             
                         </Route>
           </Route>

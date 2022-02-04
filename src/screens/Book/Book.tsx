@@ -6,7 +6,7 @@ const Book: React.FC = () => {
     const { groupId,pageId } = useParams();
     console.log(`group: ${groupId}; page: ${pageId}`);
     return (
-        <div>
+        <div className='book-container'>
             <div className='book-links'>
             <ul >
                 <li>
