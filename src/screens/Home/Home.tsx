@@ -8,7 +8,6 @@ const Home: React.FC = () => {
         <div className="home-container">
             <div className="home-content">
                 <h3>Home</h3>
-                <span>{`group: ${groupId}; page: ${pageId}`}</span>
             </div>
         </div>
     );

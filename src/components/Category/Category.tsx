@@ -5,7 +5,7 @@ import { getWords } from '../../services/WordsService';
 import { WordsList } from '../WordsList';
 
 type State = {
-    words?: IWordData[],
+    words: IWordData[],
     currentGroup: number,
     currentPage: number,
 }
@@ -15,7 +15,7 @@ const initialState: State = {
     currentPage: 0
 }
 
-const Category: React.FC = () => {
+export const Category: React.FC = () => {
     const [state, setState] = useState(initialState);
     const { groupId, pageId } = useParams();
     console.log(`Category: group: ${groupId}; page: ${pageId}`)
@@ -24,7 +24,7 @@ const Category: React.FC = () => {
         getWords(groupId ? +groupId : 0, pageId ? +pageId : 0).then(
             (response) => {
                 if (response) {
-                    console.log(response)
+                    console.log(response);
                     setState({ words: response, currentGroup: groupId ? +groupId : 0, currentPage: pageId ? +pageId : 0 });
                 }
 
@@ -42,9 +42,7 @@ const Category: React.FC = () => {
 
     return (
         <div className="list row">
-            {WordsList(state.words ? state.words : [])}
+            {WordsList(state.words)}
         </div>
     );
 }
-
-export default Category;

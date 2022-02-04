@@ -1,10 +1,8 @@
 import React from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import './book.css';
 
 const Book: React.FC = () => {
-    const { groupId,pageId } = useParams();
-    console.log(`group: ${groupId}; page: ${pageId}`);
     return (
         <div className='book-container'>
             <div className='book-links'>
