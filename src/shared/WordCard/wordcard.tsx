@@ -10,6 +10,7 @@ export const WordCard = (word: IWordData) => {
             <img src={API_URL + word.image} className="card-img-top" style={{ width: 150 }} alt={word.word}></img>
             <div className="card-body">
                 <p className="card-text">{word.word}</p>
+                <p className="word-audio">{word.audio}</p>
             </div>
         </div>
     )

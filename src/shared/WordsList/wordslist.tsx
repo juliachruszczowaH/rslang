@@ -12,11 +12,8 @@ export const WordsList = (words: IWordData[]) => {
             <ul className="list-group">
                 {words &&
                     words.map((word: IWordData) => (
-                        <li
-                            className={
-                                "list-group-item "
-                            }
-                            key={word.id}
+                        <li className={ "list-group-item "}
+                            key={ word.id }
                         >
                             {WordCard(word)}
                         </li>
