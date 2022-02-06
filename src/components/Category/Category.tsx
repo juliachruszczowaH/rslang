@@ -37,8 +37,7 @@ export const Category: React.FC = () => {
         console.log(content);
       },
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [groupId, pageId]);
 
 
   return (
