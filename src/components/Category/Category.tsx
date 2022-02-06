@@ -1,4 +1,4 @@
-import React, { ErrorInfo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IWordData } from '../../models/WordModel';
 import { getWords } from '../../services/WordsService';
@@ -29,14 +29,15 @@ export const Category: React.FC = () => {
         }
 
       },
-      (error:any) => {
-        const _content =
+      (error: any) => {
+        const content =
           (error.response && error.response.data) ||
           error.message ||
           error.toString();
-        console.log(_content);
+        console.log(content);
       },
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 

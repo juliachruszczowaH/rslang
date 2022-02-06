@@ -1,42 +1,23 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import { CATEGOTY_LINKS } from '../../constants/words';
 import './book.css';
+
+
 
 const Book: React.FC = () => {
   return (
     <div className='book-container'>
       <div className='book-links'>
         <ul >
-          <li>
-            <Link to={'/book/0/0'}>
-              Book1
-            </Link>
-          </li>
-          <li>
-            <Link to={'/book/1/0'}>
-              Book2
-            </Link>
-          </li>
-          <li>
-            <Link to={'/book/2/0'}>
-              Book3
-            </Link>
-          </li>
-          <li>
-            <Link to={'/book/3/0'}>
-              Book4
-            </Link>
-          </li>
-          <li>
-            <Link to={'/book/4/0'}>
-              Book5
-            </Link>
-          </li>
-          <li>
-            <Link to={'/book/5/0'}>
-              Book6
-            </Link>
-          </li>
+          {CATEGOTY_LINKS.map((item) => (
+            <li>
+              <Link to={`/book/${item}/0`}>
+                {`Book_${item + 1}`}
+              </Link>
+            </li>
+
+          ))}
         </ul>
       </div>
       <Outlet />

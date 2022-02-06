@@ -9,7 +9,7 @@ export const WordsList = (words: IWordData[]) => {
 
   return (
     <div className="col-md-6">
-      <p>There's nothing here!</p>
+      <p>Words list</p>
 
       <ul className="list-group">
         {words &&
