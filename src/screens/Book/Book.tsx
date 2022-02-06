@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { CATEGOTY_LINKS } from '../../constants/words';
+import { CATEGOTY_LINKS } from '../../constants/wordsConstants';
 import './book.css';
 
 
@@ -12,8 +12,8 @@ const Book: React.FC = () => {
         <ul >
           {CATEGOTY_LINKS.map((item) => (
             <li>
-              <Link to={`/book/${item}/0`}>
-                {`Book_${item + 1}`}
+              <Link to={`/book/${item.id}/0`}>
+                {`${item.title}`}
               </Link>
             </li>
 
