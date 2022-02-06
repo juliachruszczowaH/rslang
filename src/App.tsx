@@ -18,9 +18,8 @@ const App: React.FC = () => {
       <div className="container mt-3">
         <Routes>
           <Route path={'/book'} element={<Book />}  >
-          <Route path={'/book/:groupId/:pageId'} element={<Category />}>
-                            
-                        </Route>
+            <Route path={'/book/:groupId/:pageId'} element={<Category />}>
+            </Route>
           </Route>
 
           <Route path={'/sprintgame'} element={<SprintGame />}  ></Route>
@@ -32,7 +31,7 @@ const App: React.FC = () => {
           <Route
             path="*"
             element={
-              <main style={{ padding: "1rem" }}>
+              <main style={{ padding: '1rem' }}>
                 <p>There's nothing here!</p>
               </main>
             } />
@@ -42,7 +41,7 @@ const App: React.FC = () => {
       <Footer />
     </div>
   );
-}
+};
 
 
 
