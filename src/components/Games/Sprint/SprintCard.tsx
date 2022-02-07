@@ -1,26 +1,33 @@
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC } from 'react';
 import Button from '../Common/Button';
 import { getRandomNumber } from '../../../utils/utils';
 import { AnswerObject } from './SprintGameField';
+import { getDataGame, randomAnswer } from '../../../services/WordsService';
 
-type Props = {
+export type SprintData = {
   questionNumber: number;
   questionsWord: string;
   answers: string[];
-  /* posibleAnswerTranslation: string; */
-  onAnswer: (answerCompare: boolean) => void;
+  posibleAnswerTranslation: string;
+  onAnswer: (answerCompare: boolean, compare: boolean) => void;
   userAnswer: AnswerObject;
-  correctAnswer?: boolean;
 };
-const SprintCard: FC</*ISprintData  */ Props> = ({
+const SprintCard: FC<SprintData> = ({
   questionsWord,
   answers,
   onAnswer,
-  /* userAnswer, */
-  correctAnswer,
+  userAnswer,
+  posibleAnswerTranslation,
   questionNumber,
 }) => {
-  const randomAnswer = getRandomNumber(0, answers.length - 1);
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const randomAnswer = answers[getRandomNumber(0, answers.length - 1)];
+
+  const compare = () => {
+    return posibleAnswerTranslation === randomAnswer;
+  };
+
+  console.log(posibleAnswerTranslation);
 
   return (
     <div>
@@ -30,20 +37,20 @@ const SprintCard: FC</*ISprintData  */ Props> = ({
         <div
         /* disabled={userAnswer ? true : false} */
         >
-          {answers[randomAnswer]}
+          {randomAnswer}
         </div>
       </div>
       <div>
         <Button
           /* value={answers[randomAnswer]}  */ onClick={() => {
-      onAnswer(true);
+      onAnswer(true, compare());
     }}
         >
           True
         </Button>
         <Button
           onClick={() => {
-            onAnswer(false);
+            onAnswer(false, compare());
           }}
         >
           False
@@ -54,3 +61,19 @@ const SprintCard: FC</*ISprintData  */ Props> = ({
 };
 
 export default SprintCard;
+/*
+
+   console.log(randomAnswer);
+  const compare = () => {
+    for (let i = 0; i < answers.length; i++) {
+      answers[0] = randomAnswer;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    //console.log(answers[0] === userAnswer.answer ? true : false);
+
+    const answerrrrrr = answers[0];
+    return answerrrrrr;
+  };
+ */
+/* console.log(compare()); */
+// eslint-disable-next-line @typescript-eslint/no-shadow

@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import {  QuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import Button from '../Common/Button';
-import { getDataGame } from '../../../services/WordsService';
+import { getDataGame, getWords, randomAnswer } from '../../../services/WordsService';
 import { useParams } from 'react-router-dom';
+
 export type AnswerObject = {
   question: string;
   answer: string;
   correct: boolean;
   correctAnswer: string;
 };
+
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -19,12 +21,14 @@ const SprintGameField: React.FC = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
 
-  const checkAnswer = (answerCompare: boolean) => {
+  const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       //users answer
-      const answer = 'true';
+      const correct = answerCompare === compare;
+      const answer = '';
       //сравнение ответа с корректным ответом
-      const correct = questions[number].wordTranslate === answer;
+      /* const correct = questions[number].wordTranslate === answer; */
+      //console.log(questions[number].wordTranslate );
       //добавляем скор
       if (correct) setScore((prev) => prev + 100);
 
@@ -35,7 +39,7 @@ const SprintGameField: React.FC = () => {
         correct: correct,
         correctAnswer: questions[number].wordTranslate,
       };
-
+      
       setUserAnswers((prev) => [...prev, answerObject]);
 
       const nextQuestion = number + 1;
@@ -44,27 +48,26 @@ const SprintGameField: React.FC = () => {
       } else {
         setNumber(nextQuestion);
       }
-      console.log(correct);
-      return correct;
+      //console.log(answer);
     }
+    //console.log(answerCompare);
 
     /* передает тру или фолс и сравнивает тру или фолс заложено и еще надо тут же реализовать переключение на след вопрос */
   };
-  const { groupId, pageId } = useParams();
-  console.log(`Category: group: ${groupId}; page: ${pageId}`);
+
   const onStartGame = async () => {
     setLoading(true);
     setGameOver(false);
     /* const newQuestion = await fetchQuizData(Difficulty.FIRST_LEVEL); */
     const newQuestion = await getDataGame(1, 1);
-
     setQuestions(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
     setLoading(false);
   };
-  console.log(getDataGame(1, 1));
+  //console.log(getDataGame(1, 1));
+
 
   return (
     <div>
@@ -89,7 +92,7 @@ const SprintGameField: React.FC = () => {
       {!loading && !gameOver && (
         <SprintCard
           questionNumber={number + 1}
-          /* posibleAnswerTranslation={questions[number].answers[number]} */
+          posibleAnswerTranslation={questions[number].wordTranslate}
           questionsWord={questions[number].word}
           onAnswer={checkAnswer}
           userAnswer={userAnswers[number]}
@@ -109,5 +112,6 @@ const SprintGameField: React.FC = () => {
     </div>
   );
 };
+
 
 export default SprintGameField;

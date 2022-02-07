@@ -31,8 +31,9 @@ export const getDataGame = async (
     return {
       ...wordsData,
       answers: shuffleArray([wordsData.wordTranslate, randomTranslate]),
-
     };
   });
 };
-
+export function randomAnswer(answers: QuestionsState): string {
+  return answers.answers[getRandomNumber(0, answers.answers.length - 1)];
+}
