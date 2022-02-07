@@ -1,8 +1,9 @@
-import React, { FC, useState } from 'react';
-import { Difficulty, QuestionsState } from '../../../models/WordModel';
+import React, { useState } from 'react';
+import {  QuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import Button from '../Common/Button';
-import { fetchQuizData } from '../Common/fetchQuizData';
+import { getDataGame } from '../../../services/WordsService';
+import { useParams } from 'react-router-dom';
 export type AnswerObject = {
   question: string;
   answer: string;
@@ -21,7 +22,7 @@ const SprintGameField: React.FC = () => {
   const checkAnswer = (answerCompare: boolean) => {
     if (!gameOver) {
       //users answer
-      const answer = e.currentTarget.value;
+      const answer = 'true';
       //сравнение ответа с корректным ответом
       const correct = questions[number].wordTranslate === answer;
       //добавляем скор
@@ -49,17 +50,21 @@ const SprintGameField: React.FC = () => {
 
     /* передает тру или фолс и сравнивает тру или фолс заложено и еще надо тут же реализовать переключение на след вопрос */
   };
+  const { groupId, pageId } = useParams();
+  console.log(`Category: group: ${groupId}; page: ${pageId}`);
   const onStartGame = async () => {
     setLoading(true);
     setGameOver(false);
-    const newQuestion = await fetchQuizData(Difficulty.FIRST_LEVEL);
+    /* const newQuestion = await fetchQuizData(Difficulty.FIRST_LEVEL); */
+    const newQuestion = await getDataGame(1, 1);
+
     setQuestions(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
     setLoading(false);
   };
-  console.log(fetchQuizData(Difficulty.SECOND_LEVEL));
+  console.log(getDataGame(1, 1));
 
   return (
     <div>
