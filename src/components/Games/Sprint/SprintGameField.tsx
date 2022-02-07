@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react";
-import { Button } from "../common/Button";
+import React, { FC, useState } from 'react';
+import { Button } from '../common/Button';
 import { Difficulty, QuestionsState } from "../common/interface";
 import { fetchQuizData } from "../common/fetchQuizData";
 import SprintCard from "./SprintCard";
