@@ -1,7 +1,7 @@
-import React, { FC, useState, useCallback } from "react";
-import Button  from "../common/Button";
-import { getRandomNumber } from "../common/utils";
-import { AnswerObject } from "./SprintGameField";
+import React, { FC, useState, useCallback } from 'react';
+import Button from '../Common/Button';
+import { getRandomNumber } from '../../../utils/utils';
+import { AnswerObject } from './SprintGameField';
 
 type Props = {
   questionNumber: number;
@@ -20,22 +20,34 @@ const SprintCard: FC</*ISprintData  */ Props> = ({
   correctAnswer,
   questionNumber,
 }) => {
-
   const randomAnswer = getRandomNumber(0, answers.length - 1);
-  
+
   return (
     <div>
       <p>Question: {questionNumber}</p>
       <p>{questionsWord}</p>
       <div>
         <div
-          /* disabled={userAnswer ? true : false} */
-          
-        >{answers[randomAnswer]}</div>
+        /* disabled={userAnswer ? true : false} */
+        >
+          {answers[randomAnswer]}
+        </div>
       </div>
       <div>
-      <Button /* value={answers[randomAnswer]}  */onClick={()=>{onAnswer(true)}}>True</Button>
-      <Button onClick={()=>{onAnswer(false)}}>False</Button>
+        <Button
+          /* value={answers[randomAnswer]}  */ onClick={() => {
+      onAnswer(true);
+    }}
+        >
+          True
+        </Button>
+        <Button
+          onClick={() => {
+            onAnswer(false);
+          }}
+        >
+          False
+        </Button>
       </div>
     </div>
   );

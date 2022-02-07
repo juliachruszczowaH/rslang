@@ -1,9 +1,8 @@
 import React, { FC, useState } from 'react';
-import { Button } from '../common/Button';
-import { Difficulty, QuestionsState } from "../common/interface";
-import { fetchQuizData } from "../common/fetchQuizData";
-import SprintCard from "./SprintCard";
-
+import { Difficulty, QuestionsState } from '../../../models/WordModel';
+import SprintCard from './SprintCard';
+import Button from '../Common/Button';
+import { fetchQuizData } from '../Common/fetchQuizData';
 export type AnswerObject = {
   question: string;
   answer: string;
