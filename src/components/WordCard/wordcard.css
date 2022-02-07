@@ -1,0 +1,12 @@
+.card {
+    border: 3px solid green;
+    max-width: 250px;
+    border-radius: 5px;
+   
+}
+
+.card-img-top {
+    list-style: none;
+    max-width: 250px;
+
+}
