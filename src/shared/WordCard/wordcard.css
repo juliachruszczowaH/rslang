@@ -1,0 +1,19 @@
+.card-img {
+    width: 250px;
+    height: 250px;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+}
+.card-styles{
+    background-color: yellow;
+}
+.card-styles{
+    background-color: yellow;
+}
+
+.card-styles{
+    background-color: yellow;
+}

@@ -1,16 +1,33 @@
 import { API_URL } from '../../constants/constants';
 import React from 'react';
 import { IWordData } from 'types/interfaces';
+import './wordcard.css';
 
 
 export const WordCard = (word: IWordData) => {
 
     return (
         <div className="card">
-            <img src={API_URL + word.image} className="card-img-top" style={{ width: 150 }} alt={word.word}></img>
+            <div>
+               <img src={API_URL + word.image} className="card-img" alt={word.word}></img>
+            </div>
+           
             <div className="card-body">
-                <p className="card-text">{word.word}</p>
-                <p className="word-audio">{word.audio}</p>
+                <p>{word.word}</p>
+                <p>{word.audio}</p>
+                <p>{word.transcription}</p>
+                <p>{word.audioMeaning}</p>
+                <p>{word.audioExample}</p>
+                <p>{word.textMeaning}</p>
+                <p>{word.textExample}</p>
+                <p>{word.textExample}</p>
+                <p>{word.textExampleTranslate}</p>
+                <p>{word.textMeaningTranslate}</p>
+                <p>{word.wordTranslate}</p>
+                <p>{word.wordTranslate}</p>
+                <p>{word.wordTranslate}</p>
+                <p>{word.wordTranslate}</p>
+
             </div>
         </div>
     )
