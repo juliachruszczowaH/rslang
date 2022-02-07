@@ -17,3 +17,13 @@ export interface IWordData {
 export interface IWordsDataResponse {
   words?: IWordData[];
 }
+export enum Difficulty {
+  FIRST_LEVEL,
+  SECOND_LEVEL,
+  THIRD_LEVEL,
+  FOURTH_LEVEL,
+  FIFTH_LEVEL,
+  SIXTH_LEVEL,
+}
+
+export type QuestionsState = IWordData & { answers: string[] };
