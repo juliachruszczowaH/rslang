@@ -2,6 +2,7 @@ import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
 import './Wordcard.css';
 import headphones from '../../images/audio.png';
+import light from '../../images/lightbulb.png';
 
 export const WordCard = (word: IWordData) => {
   return (
@@ -23,6 +24,10 @@ export const WordCard = (word: IWordData) => {
         <li>{word.textExampleTranslate}</li>
         <li>{word.textMeaningTranslate}</li>
         <li>{word.wordTranslate}</li>
+        <div className="hard-words audio-box">
+          <button className="audio-play">Add Hard word</button>
+          <img className="audio" src={ light } alt="light-bulb" />
+        </div>
       </ul>
 
     </div>
