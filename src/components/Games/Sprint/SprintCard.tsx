@@ -6,9 +6,9 @@ import { getDataGame, randomAnswer } from '../../../services/WordsService';
 
 export type SprintData = {
   questionNumber: number;
-  questionsWord: string;
+  questionsWord: string | undefined;
   answers: string[];
-  posibleAnswerTranslation: string;
+  posibleAnswerTranslation: string | undefined;
   onAnswer: (answerCompare: boolean, compare: boolean) => void;
   userAnswer: AnswerObject;
 };

@@ -11,8 +11,8 @@ export interface IWordData {
   textMeaning?: string;
   textMeaningTranslate?: string;
   transcription?: string;
-  word: string;
-  wordTranslate: string;
+  word?: string;
+  wordTranslate?: string;
 }
 export interface IWordsDataResponse {
   words: IWordData[];

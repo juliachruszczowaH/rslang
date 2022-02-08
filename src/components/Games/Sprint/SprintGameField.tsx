@@ -36,7 +36,7 @@ const SprintGameField: React.FC = () => {
         correctAnswer: questions[number].wordTranslate,
       };
 
-      setUserAnswers((prev) => [...prev, answerObject]);
+      /* setUserAnswers((prev) => [...prev, answerObject]); */
 
       const nextQuestion = number + 1;
       if (nextQuestion === questions.length) {
