@@ -9,6 +9,7 @@ import AudioCallGame from './screens/AudiocallGame';
 import SprintGame from './screens/SprintGame';
 import Book from './screens/Book';
 import { Category } from './components/Category';
+import 'semantic-ui-css/semantic.css';
 
 const App: React.FC = () => {
   return (

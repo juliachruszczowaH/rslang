@@ -9,8 +9,6 @@ export const WordsList = (words: IWordData[]) => {
 
   return (
     <div className="col-md-6">
-      <p>Words list</p>
-
       <ul className="list-group">
         {words &&
           words.map((word: IWordData) => (

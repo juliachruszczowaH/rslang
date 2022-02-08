@@ -11,7 +11,7 @@ const Book: React.FC = () => {
       <div className='book-links'>
         <ul >
           {CATEGOTY_LINKS.map((item) => (
-            <li>
+            <li key={item.id}>
               <Link to={`/book/${item.id}/0`}>
                 {`${item.title}`}
               </Link>

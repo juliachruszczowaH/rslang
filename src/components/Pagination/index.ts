@@ -1,0 +1,1 @@
+export { PaginationElement } from './Pagination';
