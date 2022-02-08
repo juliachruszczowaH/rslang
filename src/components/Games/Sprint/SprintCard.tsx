@@ -35,16 +35,15 @@ const SprintCard: FC<SprintData> = ({
       <p>{questionsWord}</p>
       <div>
         <div
-        /* disabled={userAnswer ? true : false} */
         >
           {randomAnswer}
         </div>
       </div>
       <div>
         <Button
-          /* value={answers[randomAnswer]}  */ onClick={() => {
-      onAnswer(true, compare());
-    }}
+          onClick={() => {
+            onAnswer(true, compare());
+          }}
         >
           True
         </Button>
@@ -61,19 +60,3 @@ const SprintCard: FC<SprintData> = ({
 };
 
 export default SprintCard;
-/*
-
-   console.log(randomAnswer);
-  const compare = () => {
-    for (let i = 0; i < answers.length; i++) {
-      answers[0] = randomAnswer;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    //console.log(answers[0] === userAnswer.answer ? true : false);
-
-    const answerrrrrr = answers[0];
-    return answerrrrrr;
-  };
- */
-/* console.log(compare()); */
-// eslint-disable-next-line @typescript-eslint/no-shadow

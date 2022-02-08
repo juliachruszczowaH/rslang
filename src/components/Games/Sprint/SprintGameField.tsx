@@ -23,13 +23,9 @@ const SprintGameField: React.FC = () => {
 
   const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
-      //users answer
       const correct = answerCompare === compare;
       const answer = '';
-      //сравнение ответа с корректным ответом
-      /* const correct = questions[number].wordTranslate === answer; */
-      //console.log(questions[number].wordTranslate );
-      //добавляем скор
+
       if (correct) setScore((prev) => prev + 100);
 
       //сохраняем ответы в object
@@ -39,7 +35,7 @@ const SprintGameField: React.FC = () => {
         correct: correct,
         correctAnswer: questions[number].wordTranslate,
       };
-      
+
       setUserAnswers((prev) => [...prev, answerObject]);
 
       const nextQuestion = number + 1;
@@ -48,17 +44,12 @@ const SprintGameField: React.FC = () => {
       } else {
         setNumber(nextQuestion);
       }
-      //console.log(answer);
     }
-    //console.log(answerCompare);
-
-    /* передает тру или фолс и сравнивает тру или фолс заложено и еще надо тут же реализовать переключение на след вопрос */
   };
 
   const onStartGame = async () => {
     setLoading(true);
     setGameOver(false);
-    /* const newQuestion = await fetchQuizData(Difficulty.FIRST_LEVEL); */
     const newQuestion = await getDataGame(1, 1);
     setQuestions(newQuestion);
     setScore(0);
@@ -66,7 +57,6 @@ const SprintGameField: React.FC = () => {
     setNumber(0);
     setLoading(false);
   };
-  //console.log(getDataGame(1, 1));
 
 
   return (
@@ -100,15 +90,6 @@ const SprintGameField: React.FC = () => {
         />
       )}
 
-      {/*  {!gameOver &&
-      !loading &&
-      userAnswers.length === number &&
-      number !== questions.length ? (
-        <div>
-          <Button>True</Button>
-          <Button>False</Button>
-        </div>
-      ) : null} */}
     </div>
   );
 };
