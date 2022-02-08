@@ -34,3 +34,9 @@
   display: flex;
   align-items: center;
 }
+
+.audio-play:hover {
+   background-color: rgb(23, 23, 161);
+   transition: all 0.8s ease;
+   color: #fff;
+}
