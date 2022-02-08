@@ -1,6 +1,7 @@
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
-import './wordcard.css';
+import './Wordcard.css';
+import headphones from '../../images/audio.png';
 
 export const WordCard = (word: IWordData) => {
   return (
@@ -8,12 +9,22 @@ export const WordCard = (word: IWordData) => {
       <img
         src={API_URL + word.image}
         className="card-img-top"
-        style={{ width: 150 }}
         alt={word.word}
       ></img>
-      <div className="card-body">
-        <p className="card-text">{word.word}</p>
-      </div>
+      <ul className="card-body">
+        <li className="card-text">{word.word}</li>
+        <div className="audio-box">
+          <button className="audio-play">Play audio</button><img className="audio" src={headphones} />
+        </div>
+        <audio className="card-text" src={API_URL + word.audio}></audio>
+        <li>{word.textMeaning}</li>
+        <li>{word.textExample}</li>
+        <li>{word.transcription}</li>
+        <li>{word.textExampleTranslate}</li>
+        <li>{word.textMeaningTranslate}</li>
+        <li>{word.wordTranslate}</li>
+      </ul>
+
     </div>
   );
 };

@@ -1,0 +1,36 @@
+.card-body {
+  list-style: none;
+  margin-bottom: 20px;
+
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  border: 2px solid gold;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.card-img-top {
+  border-radius: 10px;
+  list-style: none;
+}
+.audio-play {
+  cursor: pointer;
+  background-color: green;
+  outline: none;
+  border: 1px solid gold;
+  color: violet;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+.audio {
+  width: 32px;
+  height: 32px;
+}
+
+.audio-box {
+  display: flex;
+  align-items: center;
+}
