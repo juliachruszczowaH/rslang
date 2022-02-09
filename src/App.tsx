@@ -10,12 +10,14 @@ import SprintGame from './screens/SprintGame';
 import Book from './screens/Book';
 import { Category } from './components/Category';
 
+import 'semantic-ui-css/semantic.css';
+
 const App: React.FC = () => {
   return (
     <div className="main-container">
       <Header />
 
-      <div className="container mt-3">
+      <div className="container" style={{ textAlign: 'center' }}>
         <Routes>
           <Route path={'/book'} element={<Book />}  >
             <Route path={'/book/:groupId/:pageId'} element={<Category />}>

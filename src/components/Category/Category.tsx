@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { Pagination } from 'semantic-ui-react';
 import { IWordData } from '../../models/WordModel';
 import { getWords } from '../../services/WordsService';
 import { WordsList } from '../WordsList';
 
 type State = {
   words: IWordData[],
-  currentGroup: number,
-  currentPage: number,
 };
 const initialState: State = {
   words: [],
-  currentGroup: 0,
-  currentPage: 0,
 };
 
+
 export const Category: React.FC = () => {
-  const [state, setState] = useState(initialState);
+  const [words, setWords] = useState(initialState);
+  const [activePage, setActivePage] = useState(1);
   const { groupId, pageId } = useParams();
-  console.log(`Category: group: ${groupId}; page: ${pageId}`);
+  const [group, setGroup] = useState(groupId ? +groupId : 0);
+  const [page, setPage] = useState(pageId ? +pageId : 0);
+  const navigate = useNavigate();
+  console.log(`PAGINATION: group: ${group}; page: ${page}`);
 
   useEffect(() => {
-    getWords(groupId ? +groupId : 0, pageId ? +pageId : 0).then(
+    getWords(group, page).then(
       (response) => {
         if (response) {
           console.log(response);
-          setState({ words: response, currentGroup: groupId ? +groupId : 0, currentPage: pageId ? +pageId : 0 });
+          // setState({ words: response, currentGroup: groupId ? +groupId : 0, currentPage: pageId ? +pageId : 0 });
+          setWords({ words: response });
         }
 
       },
@@ -37,12 +41,46 @@ export const Category: React.FC = () => {
         console.log(content);
       },
     );
-  }, [groupId, pageId]);
+  }, [group, page]);
 
+  useEffect(() => {
+    if (groupId && pageId) {
+      setGroup(+groupId);
+      setPage(+pageId);
+      setActivePage(group === +groupId ? +pageId + 1 : 0);
+    }
+  }, [groupId, pageId, group]);
 
+  const onChange = () => {
+    setPage(pageId ? +pageId : 0);
+    setGroup(groupId ? +groupId : 0);
+  };
+
+  const onItemClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const rrr = e.target as HTMLElement;
+    console.log(rrr.getAttribute('value'));
+    setActivePage(Number(rrr.getAttribute('value')));
+    setPage(Number(rrr.getAttribute('value')) - 1);
+    navigate(`/book/${group}/${Number(rrr.getAttribute('value')) - 1}`);
+
+  };
   return (
-    <div className="list row">
-      {WordsList(state.words)}
+    <div>
+      <div>
+        <Pagination
+          firstItem={null}
+          lastItem={null}
+          activePage={activePage}
+          onPageChange={onChange}
+          onClick={onItemClick}
+          pointing
+          secondary
+          totalPages={30}
+        />
+      </div>
+      <div className="list row">
+        {WordsList(words.words)}
+      </div>
     </div>
   );
 };
