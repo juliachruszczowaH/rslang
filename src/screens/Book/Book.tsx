@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
-import { MenuItem, Message, Tab } from 'semantic-ui-react';
+import { MenuItem, Tab } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import './book.css';
 

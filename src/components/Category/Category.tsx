@@ -1,10 +1,9 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Pagination } from 'semantic-ui-react';
 import { IWordData } from '../../models/WordModel';
 import { getWords } from '../../services/WordsService';
-import { PaginationElement } from '../Pagination';
 import { WordsList } from '../WordsList';
 
 type State = {
