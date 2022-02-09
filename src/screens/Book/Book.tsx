@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
-import { MenuItem, Tab } from 'semantic-ui-react';
+import { MenuItem, Message, Tab } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import './book.css';
 
@@ -17,11 +17,17 @@ const panes = CATEGOTY_LINKS.map((item) => {
 
 const Book: React.FC = () => {
   const { groupId, pageId } = useParams();
+  const [activeGroup, setActiveGroup] = useState(' ');
+
+  useEffect(() => {
+    setActiveGroup(groupId === undefined ? ' ' : groupId);
+
+  }, [groupId]);
 
   return (
     <div className='book-container'>
       <h3>BOOK</h3>
-      <Tab menu={{ pointing: true, fluid: true, vertical: true }} defaultActiveIndex={groupId} panes={panes} key={0} />
+      <Tab menu={{ pointing: true, fluid: true, vertical: true }} activeIndex={activeGroup} panes={panes} key={0} />
     </div>
   );
 };
