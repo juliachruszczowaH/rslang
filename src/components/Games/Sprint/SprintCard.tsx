@@ -1,17 +1,9 @@
 import React, { FC } from 'react';
 import Button from '../../Common/Button';
 import { getRandomNumber } from '../../../utils/utils';
-import { AnswerObject } from './SprintGameField';
-import { getDataGame, randomAnswer } from '../../../services/WordsService';
+import { SprintData } from '../../../models/WordModel';
 
-export type SprintData = {
-  questionNumber: number;
-  questionsWord: string | undefined;
-  answers: string[];
-  posibleAnswerTranslation: string | undefined;
-  onAnswer: (answerCompare: boolean, compare: boolean) => void;
-  userAnswer: AnswerObject;
-};
+
 const SprintCard: FC<SprintData> = ({
   questionsWord,
   answers,

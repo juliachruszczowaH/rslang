@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import {  QuestionsState } from '../../../models/WordModel';
+import {  QuestionsState, AnswerObject } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import Button from '../../Common/Button';
-import { getDataGame, getWords, randomAnswer } from '../../../services/WordsService';
+import { getDataGame } from '../../../services/WordsService';
 import { useParams } from 'react-router-dom';
 
-export type AnswerObject = {
-  question: string;
-  answer: string;
-  correct: boolean;
-  correctAnswer: string;
-};
+
 
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);

@@ -18,3 +18,18 @@ export interface IWordsDataResponse {
   words: IWordData[];
 }
 export type QuestionsState = IWordData & { answers: string[] };
+
+export type AnswerObject = {
+  question: string;
+  answer: string;
+  correct: boolean;
+  correctAnswer: string;
+};
+export type SprintData = {
+  questionNumber: number;
+  questionsWord: string | undefined;
+  answers: string[];
+  posibleAnswerTranslation: string | undefined;
+  onAnswer: (answerCompare: boolean, compare: boolean) => void;
+  userAnswer: AnswerObject;
+};
