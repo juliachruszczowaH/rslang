@@ -1,3 +1,4 @@
-.book-links{
-    background-color: thistle;
+.ui.vertical.menu .active.item{
+  color: red;
+  text-transform: uppercase;
 }

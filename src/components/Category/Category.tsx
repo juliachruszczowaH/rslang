@@ -1,4 +1,5 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Pagination } from 'semantic-ui-react';
 import { IWordData } from '../../models/WordModel';
@@ -12,22 +13,15 @@ type State = {
 const initialState: State = {
   words: [],
 };
-type PageState = {
-  currentGroup: number,
-  currentPage: number,
-};
-const initialPageState: PageState = {
-  currentGroup: 0,
-  currentPage: 0,
-};
+
 
 export const Category: React.FC = () => {
-  const [group, setGroup] = useState(0);
-  const [page, setPage] = useState(0);
   const [words, setWords] = useState(initialState);
-  const [state, setState] = useState(initialPageState);
   const [activePage, setActivePage] = useState(1);
   const { groupId, pageId } = useParams();
+  const [group, setGroup] = useState(groupId ? +groupId : 0);
+  const [page, setPage] = useState(pageId ? +pageId : 0);
+  const navigate = useNavigate();
   console.log(`PAGINATION: group: ${group}; page: ${page}`);
 
   useEffect(() => {
@@ -35,7 +29,6 @@ export const Category: React.FC = () => {
       (response) => {
         if (response) {
           console.log(response);
-          // setState({ words: response, currentGroup: groupId ? +groupId : 0, currentPage: pageId ? +pageId : 0 });
           setWords({ words: response });
         }
 
@@ -53,7 +46,7 @@ export const Category: React.FC = () => {
   useEffect(() => {
     if (groupId && pageId) {
       setGroup(+groupId);
-      setPage( +pageId);
+      setPage(+pageId);
       setActivePage(group === +groupId ? +pageId + 1 : 0);
     }
   }, [groupId, pageId, group]);
@@ -63,13 +56,12 @@ export const Category: React.FC = () => {
     setGroup(groupId ? +groupId : 0);
   };
 
-  const onItemClick = (e: SyntheticEvent) => {
+  const onItemClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     const rrr = e.target as HTMLElement;
     console.log(rrr.getAttribute('value'));
     setActivePage(Number(rrr.getAttribute('value')));
     setPage(Number(rrr.getAttribute('value')) - 1);
-    setState({ currentGroup: group, currentPage: Number(rrr.getAttribute('value')) - 1 });
-    window.history.pushState('', '', `/book/${group}/${Number(rrr.getAttribute('value')) - 1}`);
+    navigate(`/book/${group}/${Number(rrr.getAttribute('value')) - 1}`);
 
   };
   return (
