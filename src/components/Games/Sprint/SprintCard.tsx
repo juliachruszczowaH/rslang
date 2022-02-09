@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import Button from '../Common/Button';
+import Button from '../../Common/Button';
 import { getRandomNumber } from '../../../utils/utils';
 import { AnswerObject } from './SprintGameField';
 import { getDataGame, randomAnswer } from '../../../services/WordsService';
