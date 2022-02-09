@@ -33,6 +33,9 @@
 h3{
   text-align: center;
 }
+.ui.grid>.stretched.column::after{
+  content: ("Ready to go?\n Select any category to start");
+}
 
 @keyframes App-logo-spin {
   from {

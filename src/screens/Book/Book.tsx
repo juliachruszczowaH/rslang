@@ -9,7 +9,7 @@ const panes = CATEGOTY_LINKS.map((item) => {
     menuItem: (<MenuItem as={Link} to={`/book/${item.id}/0`} key={item.title} style={{ backgroundColor: item.color }}>
       {`${item.title}`}
     </MenuItem>),
-    render: () => (<Tab.Pane style={{ backgroundColor: item.color }}>{<Outlet />}</Tab.Pane>),
+    render: () => (<Tab.Pane style={{ backgroundColor: item.color }} >{<Outlet />}</Tab.Pane>),
     key: `${item.title}`,
   };
 });
@@ -27,7 +27,7 @@ const Book: React.FC = () => {
   return (
     <div className='book-container'>
       <h3>BOOK</h3>
-      <Tab menu={{ pointing: true, fluid: true, vertical: true }} activeIndex={activeGroup} panes={panes} key={0} />
+      <Tab menu={{ pointing: true, fluid: true, vertical: true }} activeIndex={activeGroup} panes={panes} key={0}/>
     </div>
   );
 };
