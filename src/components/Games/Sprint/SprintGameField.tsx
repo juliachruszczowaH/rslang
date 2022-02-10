@@ -4,6 +4,7 @@ import SprintCard from './SprintCard';
 import Button from '../../Common/Button';
 import { getDataGame } from '../../../services/WordsService';
 import { useParams } from 'react-router-dom';
+import Timer from './SprintTimer';
 
 
 
@@ -15,7 +16,9 @@ const SprintGameField: React.FC = () => {
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
-
+  const onGameEnd = (counter: number)=>{
+    setGameOver(true);
+  };
   const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
@@ -34,6 +37,10 @@ const SprintGameField: React.FC = () => {
       /* setUserAnswers((prev) => [...prev, answerObject]); */
 
       const nextQuestion = number + 1;
+      setNumber(number + 1);
+      if (number === questions.length - 1){
+        onGameEnd(number);
+      }
       if (nextQuestion === questions.length) {
         setGameOver(true);
       } else {
@@ -63,18 +70,20 @@ const SprintGameField: React.FC = () => {
       ) : null}
 
 
-      {!gameOver ? (
-        <div>
-          <p>Timer:</p>
-          <p>Score:{score}</p>
-        </div>
-      ) : null}
+      {/* {!gameOver ? (
+
+      ) : null} */}
 
 
       {loading && <p>Loading questions...</p>}
 
 
       {!loading && !gameOver && (
+        <div>
+<div>
+        <p>Timer:<Timer isActive={true} initialTime={5} onCountdownFinish={() => onGameEnd(number)} /></p>
+        <p>Score:{score}</p>
+      </div>
         <SprintCard
           questionNumber={number + 1}
           posibleAnswerTranslation={questions[number].wordTranslate}
@@ -83,11 +92,15 @@ const SprintGameField: React.FC = () => {
           userAnswer={userAnswers[number]}
           answers={questions[number].answers}
         />
+        </div>
+
       )}
 
     </div>
   );
 };
+
+
 
 
 export default SprintGameField;
