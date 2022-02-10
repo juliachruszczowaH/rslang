@@ -26,7 +26,7 @@ const Timer: React.FC<TimerData> = ({
       onCountdownFinish();
     }
   }, [onCountdownFinish, value]);
-  console.log(value);
+  
   return <>{value}</>;
 };
 

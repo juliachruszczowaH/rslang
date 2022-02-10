@@ -5,6 +5,7 @@ import Button from '../../Common/Button';
 import { getDataGame } from '../../../services/WordsService';
 import { useParams } from 'react-router-dom';
 import Timer from './SprintTimer';
+import { CATEGOTY_LINKS } from '../../../constants/wordsConstants';
 
 
 
@@ -19,7 +20,7 @@ const SprintGameField: React.FC = () => {
   const onGameEnd = (counter: number)=>{
     setGameOver(true);
   };
-  const checkAnswer = (answerCompare: boolean, compare: boolean) => {
+  const onCheckAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
       const answer = '';
@@ -49,24 +50,33 @@ const SprintGameField: React.FC = () => {
     }
   };
 
-  const onStartGame = async () => {
+
+
+  const onStartGame = async (level: number) => {
     setLoading(true);
     setGameOver(false);
-    const newQuestion = await getDataGame(1, 1);
+    const newQuestion = await getDataGame(level, 1);
     setQuestions(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
     setLoading(false);
+    console.log(level);
   };
-
+  console.log(setUserAnswers.name);
 
   return (
     <div>
       {gameOver || userAnswers.length === questions.length ? (
-        <Button onClick={onStartGame}>
-          START/тут будкт выбор уровня сложности
+        <div>
+          {CATEGOTY_LINKS.map((item) =>(
+            <Button onClick={()=>{onStartGame(item.id);}}>
+          {`${item.id + 1} LEVEL`}
         </Button>
+          ))}
+        </div>
+
+
       ) : null}
 
 
@@ -81,14 +91,14 @@ const SprintGameField: React.FC = () => {
       {!loading && !gameOver && (
         <div>
 <div>
-        <p>Timer:<Timer isActive={true} initialTime={5} onCountdownFinish={() => onGameEnd(number)} /></p>
+        <p>Timer:<Timer isActive={true} initialTime={60} onCountdownFinish={() => onGameEnd(number)} /></p>
         <p>Score:{score}</p>
       </div>
         <SprintCard
           questionNumber={number + 1}
           posibleAnswerTranslation={questions[number].wordTranslate}
           questionsWord={questions[number].word}
-          onAnswer={checkAnswer}
+          onAnswer={onCheckAnswer}
           userAnswer={userAnswers[number]}
           answers={questions[number].answers}
         />
