@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import {  QuestionsState, AnswerObject } from '../../../models/WordModel';
+import { QuestionsState, AnswerObject } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
-import Button from '../../Common/Button';
 import { getDataGame } from '../../../services/WordsService';
 import { useParams } from 'react-router-dom';
+import { Button, Icon, Loader, Statistic } from 'semantic-ui-react';
 
 
 
@@ -65,13 +65,25 @@ const SprintGameField: React.FC = () => {
 
       {!gameOver ? (
         <div>
-          <p>Timer:</p>
-          <p>Score:{score}</p>
+          <Statistic size='small'>
+            <Statistic.Value>
+              00:00
+            </Statistic.Value>
+            <Statistic.Label><Icon name='stopwatch' size='big' /></Statistic.Label>
+          </Statistic>
+          <Statistic size='small'>
+            <Statistic.Value>
+              {score}
+            </Statistic.Value>
+            <Statistic.Label>Score</Statistic.Label>
+          </Statistic>
         </div>
       ) : null}
 
 
-      {loading && <p>Loading questions...</p>}
+      {
+        <Loader size='large'>Loading</Loader>
+      }
 
 
       {!loading && !gameOver && (
