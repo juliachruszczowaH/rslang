@@ -40,11 +40,11 @@ const SprintCard: FC<SprintData> = ({
         <div>
           <Button.Group>
             <Button onClick={() => {
-              onAnswer(true, compare());
+              onAnswer(false, compare());
             }}>False</Button>
             <Button.Or />
             <Button positive onClick={() => {
-              onAnswer(false, compare());
+              onAnswer(true, compare());
             }}>True</Button>
           </Button.Group>
         </div>
