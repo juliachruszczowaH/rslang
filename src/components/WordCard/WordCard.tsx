@@ -1,3 +1,5 @@
+import { Button, Card, Icon, Image } from 'semantic-ui-react';
+import { play } from '../../utils/utils';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
 import './wordcard.css';
@@ -13,19 +15,17 @@ export const WordCard = (word: IWordData) => {
   }
 
   return (
-    <div className="card">
-      <img
+    <Card>
+      <Image
         src={API_URL + word.image}
-        className="card-img-top"
-        style={{ width: 150 }}
-        alt={word.word}
-      ></img>
-      <div className="card-body">
-        <p className="card-text">{word.word}</p>
-        <button onClick={ playAudio }>Add Me
+        raised ui={false}
+      />
+      <Card.Content extra>
 
-        </button>
-      </div>
-    </div>
+        <Button onClick={() => play(API_URL + word.audio) }>Add Me
+            <Icon name='headphones' />
+        </Button>
+      </Card.Content>
+    </Card>
   );
 };
