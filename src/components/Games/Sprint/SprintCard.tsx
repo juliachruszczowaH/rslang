@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
-import Button from '../../Common/Button';
+import { FC } from 'react';
 import { getRandomNumber } from '../../../utils/utils';
 import { SprintData } from '../../../models/WordModel';
+import { Button, Header, Segment, Statistic } from 'semantic-ui-react';
 
 
 const SprintCard: FC<SprintData> = ({
@@ -23,31 +23,33 @@ const SprintCard: FC<SprintData> = ({
 
   return (
     <div>
-      <p>Question: {questionNumber}</p>
-      <p>{questionsWord}</p>
-      <div>
-        <div
-        >
+      <Segment raised style={{ width: '70%', margin: '20px auto' }}>
+        <Statistic>
+          <Statistic.Value>{questionNumber}</Statistic.Value>
+          <Statistic.Label>Question</Statistic.Label>
+        </Statistic>
+
+        <Header as='h3' block style={{ width: '50%', margin: '20px auto' }}>
+          {questionsWord}
+        </Header>
+
+        <Header as='h3' style={{ width: '50%', margin: '20px auto' }}>
           {randomAnswer}
+        </Header>
+
+        <div>
+          <Button.Group>
+            <Button onClick={() => {
+              onAnswer(false, compare());
+            }}>False</Button>
+            <Button.Or />
+            <Button positive onClick={() => {
+              onAnswer(true, compare());
+            }}>True</Button>
+          </Button.Group>
         </div>
-      </div>
-      <div>
-        <Button
-          onClick={() => {
-            onAnswer(true, compare());
-          }}
-        >
-          True
-        </Button>
-        <Button
-          onClick={() => {
-            onAnswer(false, compare());
-          }}
-        >
-          False
-        </Button>
-      </div>
-    </div>
+      </Segment>
+    </div >
   );
 };
 
