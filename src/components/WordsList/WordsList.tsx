@@ -11,7 +11,7 @@ export const WordsList = (words: IWordData[]) => {
     <div className="col-md-6">
       <p>Words list</p>
 
-      <ul className="list-group">
+      <ul className="list-group" style={{ display: 'flex', flexWrap: 'wrap', justifyContent:'center', gap: '15px' }}>
         {words &&
           words.map((word: IWordData) => (
             <li

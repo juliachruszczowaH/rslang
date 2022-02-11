@@ -8,3 +8,8 @@ export const shuffleArray = (array: any[]) => {
 export const getRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * max);
 };
+
+export const play = (url: string | undefined) => {
+  const audio = new Audio(url);
+  audio.play();
+};
