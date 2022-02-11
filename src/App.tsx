@@ -15,7 +15,7 @@ const App: React.FC = () => {
   const location = useLocation();
   return (
     <div className="main-container">
-      <Header />
+      <Header />  
 
       <div className="container" style={{ textAlign: 'center' }}>
         <Routes>
