@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer';
 import Home from './screens/Home';
@@ -9,13 +9,15 @@ import AudioCallGame from './screens/AudiocallGame';
 import SprintGame from './screens/SprintGame';
 import Book from './screens/Book';
 import { Category } from './components/Category';
+import 'semantic-ui-css/semantic.css';
 
 const App: React.FC = () => {
+  const location = useLocation();
   return (
     <div className="main-container">
       <Header />
 
-      <div className="container mt-3">
+      <div className="container" style={{ textAlign: 'center' }}>
         <Routes>
           <Route path={'/book'} element={<Book />}  >
             <Route path={'/book/:groupId/:pageId'} element={<Category />}>
@@ -38,7 +40,8 @@ const App: React.FC = () => {
         </Routes>
 
       </div>
-      <Footer />
+      {(location.pathname !== '/sprintgame' && location.pathname !== '/audiocall') ? <Footer /> : ''}
+
     </div>
   );
 };
