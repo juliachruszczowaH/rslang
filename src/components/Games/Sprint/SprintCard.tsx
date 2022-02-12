@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { getRandomNumber } from '../../../utils/utils';
-import { SprintData } from '../../../models/WordModel';
+import { AnswerObject, SprintData } from '../../../models/WordModel';
 import { Button, Header, Segment, Statistic } from 'semantic-ui-react';
 
 
@@ -14,6 +14,7 @@ const SprintCard: FC<SprintData> = ({
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const randomAnswer = answers[getRandomNumber(0, answers.length - 1)];
+  const arr: Array<AnswerObject> = [];
 
   const compare = () => {
     return posibleAnswerTranslation === randomAnswer;
