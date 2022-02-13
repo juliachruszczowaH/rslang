@@ -10,6 +10,7 @@ import SprintGame from './screens/SprintGame';
 import Book from './screens/Book';
 import { Category } from './components/Category';
 import 'semantic-ui-css/semantic.css';
+import { Dictionary } from './components/Dictionary';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route path={'/book'} element={<Book />}  >
             <Route path={'/book/:groupId/:pageId'} element={<Category />}>
             </Route>
+            <Route path={'/book/dictionary'} element={<Dictionary />}  ></Route>
           </Route>
 
           <Route path={'/sprintgame'} element={<SprintGame />}  ></Route>

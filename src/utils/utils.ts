@@ -15,9 +15,9 @@ export const play = (url: string | undefined) => {
 };
 
 export const getStorageData = (key: string): string | null => {
-  const data = localStorage.get(key);
+  const data = localStorage.getItem(key);
   if (data) {
-    return JSON.parse(data);
+    return data;
   }
   return null;
 };

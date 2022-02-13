@@ -1,4 +1,4 @@
-import { Button, Card, Icon, Image } from 'semantic-ui-react';
+import { Button, Card, Icon, Image, Popup } from 'semantic-ui-react';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
 import { isAuthenticated } from '../../services/AuthService';
@@ -10,9 +10,11 @@ export const WordCard = (word: IWordData, color: string) => {
     <Card raised>
       <Image src={API_URL + word.image} ui={false} />
       <Card.Content>
-        <Card.Header as="h3" style={{ backgroundColor: color }}>        <Button onClick={() => play(API_URL + word.audio)}>
-          <Icon name='headphones' />
-        </Button>{word.word}</Card.Header>
+        <Card.Header as="h3" style={{ backgroundColor: color }}>
+          <Popup content='Click to listen' trigger={<Button onClick={() => play(API_URL + word.audio)}>
+            <Icon name='headphones' position='center' />
+          </Button>} />
+          {word.word}</Card.Header>
         <Card.Meta>
           <span className='transcription'>{word.transcription}</span>
         </Card.Meta>
