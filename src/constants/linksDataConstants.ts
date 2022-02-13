@@ -12,7 +12,7 @@ export const HEADER_LINKS = [
   { keyword: 'book', title: 'Book' },
   { keyword: 'sprintgame', title: 'Sprint' },
   { keyword: 'audiocall', title: 'Audiocall' },
-  { keyword: 'statictics', title: 'Statictics' },
+  { keyword: 'statistics', title: 'Statictics' },
   { keyword: 'team', title: 'Team' },
 ];
 

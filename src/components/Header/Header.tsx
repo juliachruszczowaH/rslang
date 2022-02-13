@@ -1,16 +1,22 @@
 import { Link, useLocation } from 'react-router-dom';
 import './header.css';
-import { Menu, Dropdown } from 'semantic-ui-react';
-import React, { useState } from 'react';
-import { HEADER_LINKS, HEADER_LOGIN_LINKS } from '../../constants/linksDataConstants';
+import { Menu, Button } from 'semantic-ui-react';
+import React, { useEffect, useState } from 'react';
+import { HEADER_LINKS } from '../../constants/linksDataConstants';
+import { isAuthenticated } from '../../services/AuthService';
+import LoginModal from '../LoginModal';
+import LogoutModal from '../LogoutModal';
 
 const initialProps = {
   name: 'home',
 };
 
 function Header() {
-  const [state, setState] = useState(initialProps);
+  const [, setState] = useState(initialProps);
   const location = useLocation();
+  const [auth, setAuth] = useState(isAuthenticated());
+
+  const links = HEADER_LINKS.filter((item) => { return auth ? item : item.keyword !== 'statistics'; });
 
   const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement | HTMLDivElement, MouseEvent>) => {
     const targetName = e.currentTarget.getAttribute('href')?.replace('/', '');
@@ -19,12 +25,18 @@ function Header() {
     }
   };
 
+  useEffect(() => {
+    console.log(auth);
+    setAuth(isAuthenticated());
+
+  }, [auth]);
+
   return (
-    <Menu stackable secondary>
+    <Menu secondary>
       <Menu.Item>
         <img alt="logo" src='rs-lang-logo.jpg' />
       </Menu.Item>
-      {HEADER_LINKS.map((item) => (
+      {links.map((item) => (
         <Menu.Item as={Link} to={`/${item.keyword}`}
           active={location.pathname.includes(item.keyword)}
           onClick={handleItemClick}
@@ -34,21 +46,10 @@ function Header() {
         </Menu.Item>
       ))}
       <Menu.Menu position='right'>
-        <Dropdown item text='Login'>
-          <Dropdown.Menu>
-            {HEADER_LOGIN_LINKS.map((item) => (
-              <Dropdown.Item as={Link} to={`/${item.keyword}`}
-                selected={location.pathname.includes(item.keyword)}
-                onClick={handleItemClick}
-                key={item.keyword}
-              >
-                {item.title}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
+        {auth ? LogoutModal(<Button color={'orange'} > Logout</Button>) : LoginModal(<Button color={'green'} > Login</Button>)}
       </Menu.Menu>
-    </Menu>
+
+    </Menu >
   );
 }
 
