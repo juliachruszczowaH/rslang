@@ -4,13 +4,21 @@ import React, { useState } from 'react';
 import { QuestionsState, AnswerObject } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataGame } from '../../../services/WordsService';
-import { Button, Divider, Header, Icon, Item, Loader, Modal, Statistic } from 'semantic-ui-react';
+import {
+  Button,
+  Divider,
+  Header,
+  Icon,
+  Item,
+  Loader,
+  Modal,
+  Statistic,
+} from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
-
-
+import { GAME_TIMER, POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
 
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -23,8 +31,6 @@ const SprintGameField: React.FC = () => {
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
 
-
-
   const onGameEnd = (counter: number) => {
     setGameOver(true);
   };
@@ -35,8 +41,6 @@ const SprintGameField: React.FC = () => {
 
       const answer = answerCompare;
 
-      if (correct) setScore((prev) => prev + 100);
-
       const answerObject: AnswerObject = {
         questionID: questions[number].id,
         question: questions[number].word,
@@ -45,6 +49,17 @@ const SprintGameField: React.FC = () => {
         result: correct,
         correctTranslate: questions[number].wordTranslate,
       };
+      if (correct === true) {
+        if (score >= 0 && score < SUM_POINTS[30] ){
+          setScore((prev) => prev + POINTS[1]);
+        } else if (score >= SUM_POINTS[30] && score < SUM_POINTS[90]) {
+          setScore((prev) => prev + POINTS[2]);
+        } else if (score >= SUM_POINTS[90] && score < SUM_POINTS[210]) {
+          setScore((prev) => prev + POINTS[3]);
+        } else {
+          setScore((prev) => prev + POINTS[4]);
+        }
+      }
 
       setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
@@ -54,13 +69,8 @@ const SprintGameField: React.FC = () => {
       } else {
         setNumber(nextQuestion);
       }
-
     }
   };
-
-  
-
-
 
   const onStartGame = async (level: number) => {
     setLoading(true);
@@ -82,7 +92,7 @@ const SprintGameField: React.FC = () => {
         <div>
           {CATEGOTY_LINKS.map((item) => (
             <Button
-            key={item.id}
+              key={item.id}
               color='green'
               onClick={() => {
                 onStartGame(item.id);
@@ -95,48 +105,50 @@ const SprintGameField: React.FC = () => {
       ) : null}
 
       {gameOver ? (
-         <Modal
-         onClose={() => setOpen(false)}
-         onOpen={() => setOpen(true)}
-         open={open}
-         trigger={<Button>SHOW RESULT</Button>}
-       >
-         <Modal.Header>Select a Photo</Modal.Header>
-         <Modal.Content image>
+        <Modal
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+          trigger={<Button>SHOW RESULT</Button>}
+        >
+          <Modal.Header>Select a Photo</Modal.Header>
+          <Modal.Content image>
+            <Modal.Description>
+              <Header>Default Profile Image</Header>
 
-           <Modal.Description>
-             <Header>Default Profile Image</Header>
-
-             {userAnswers.map((item) => (
-              <div key={item.questionID}>
-                <p>
-                {`Question: ${item.question}`}
-                </p>
-                <p>
-                {`Correct answer: ${item.correctTranslate}`}
-                </p>
-                <p>
-                {`Result: ${item.result}`}
-                </p>
-              </div>
-             ))}
-
-           </Modal.Description>
-         </Modal.Content>
-         <Modal.Actions>
-           <Button color='green' onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}>
-             На главную
-           </Button>
-           <Button
-             content='Пройти снова'
-             labelPosition='right'
-             icon='checkmark'
-             onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}
-             positive
-           />
-         </Modal.Actions>
-       </Modal>
-
+              {userAnswers.map((item) => (
+                <div key={item.questionID}>
+                  <p>{`Question: ${item.question}`}</p>
+                  <p>{`Correct answer: ${item.correctTranslate}`}</p>
+                  <p>{`Result: ${item.result}`}</p>
+                </div>
+              ))}
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              color='green'
+              onClick={() => {
+                setOpen(false);
+                setGameStart(true);
+                setGameOver(false);
+              }}
+            >
+              На главную
+            </Button>
+            <Button
+              content='Пройти снова'
+              labelPosition='right'
+              icon='checkmark'
+              onClick={() => {
+                setOpen(false);
+                setGameStart(true);
+                setGameOver(false);
+              }}
+              positive
+            />
+          </Modal.Actions>
+        </Modal>
       ) : null}
 
       {<Loader size='large'>Loading</Loader>}
@@ -148,8 +160,8 @@ const SprintGameField: React.FC = () => {
               <Statistic.Value>
                 <Timer
                   isActive={true}
-                  initialTime={5}
-                   onCountdownFinish={()=>onGameEnd(number)}
+                  initialTime={GAME_TIMER}
+                  onCountdownFinish={() => onGameEnd(number)}
                 />
               </Statistic.Value>
               <Statistic.Label>
@@ -169,7 +181,13 @@ const SprintGameField: React.FC = () => {
             userAnswer={userAnswers[number]}
             answers={questions[number].answers}
           />
+          <Button onClick={()=>{
+            setOpen(false);
+            setGameStart(true);
+            setGameOver(false);
+          }}> HOME</Button>
         </div>
+
       )}
     </div>
   );
