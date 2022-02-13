@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-lone-blocks */
 import React, { useState } from 'react';
 import { QuestionsState, AnswerObject } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataGame } from '../../../services/WordsService';
 import { useParams } from 'react-router-dom';
-import { Button, Icon, Loader, Statistic } from 'semantic-ui-react';
+import { Button, Header, Icon, Loader, Modal, Statistic } from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
-import ModalWindow from './Modal';
+
 
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,7 @@ const SprintGameField: React.FC = () => {
   const [score, setScore] = useState(0);
   const [gameStart, setGameStart] = useState(true);
   const [gameOver, setGameOver] = useState(false);
-
+  const [open, setOpen] = useState(false);
   const arr: AnswerObject[][] = [];
   const onGameEnd = (counter: number) => {
     setGameOver(true);
@@ -60,6 +62,7 @@ const SprintGameField: React.FC = () => {
 
   arr.push(userAnswers);
 
+
   const onStartGame = async (level: number) => {
     setLoading(true);
     setGameStart(false);
@@ -80,6 +83,7 @@ const SprintGameField: React.FC = () => {
         <div>
           {CATEGOTY_LINKS.map((item) => (
             <Button
+            key={item.id}
               color='green'
               onClick={() => {
                 onStartGame(item.id);
@@ -92,21 +96,47 @@ const SprintGameField: React.FC = () => {
       ) : null}
 
       {gameOver ? (
-        <div>
-          GGGG
-          {userAnswers.map((item)=>(
-            <div>
-              {`Вопрос: ${item.question}`}
-              {`Ответ: ${item.correct}`}
-              {`Ваш ответ: ${item.userAnswer}`}
-              {`Результат: ${item.result}`}
-            </div>
-          ))}
-        </div>
+        <Modal
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        trigger={<Button>SHOW RESULT</Button>}
+      >
+        <Modal.Header>Select a Photo</Modal.Header>
+        <Modal.Content image>
+
+          <Modal.Description>
+            <Header>Default Profile Image</Header>
+            {userAnswers.map((item) => (
+              <div key={item.questionID}>
+                <p>
+                {`Question: ${item.question}`}
+                </p>
+                <p>
+                {`Correct answer: ${item.correctTranslate}`}
+                </p>
+                <p>
+                {`Result: ${item.result}`}
+                </p>
+              </div>
+            ))}
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color='green' onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}>
+            На главную
+          </Button>
+          <Button
+            content="Пройти снова"
+            labelPosition='right'
+            icon='checkmark'
+            onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}
+            positive
+          />
+        </Modal.Actions>
+      </Modal>
       ) : null}
-{/*
-            <ModalWindow arrr = {userAnswers}/> */}
-            
+
       {<Loader size='large'>Loading</Loader>}
 
       {!loading && !gameStart && !gameOver && (
@@ -116,7 +146,7 @@ const SprintGameField: React.FC = () => {
               <Statistic.Value>
                 <Timer
                   isActive={true}
-                  initialTime={60}
+                  initialTime={5}
                    onCountdownFinish={()=>onGameEnd(number)}
                 />
               </Statistic.Value>
