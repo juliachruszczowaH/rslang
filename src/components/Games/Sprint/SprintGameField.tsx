@@ -4,6 +4,10 @@ import SprintCard from './SprintCard';
 import { getDataGame } from '../../../services/WordsService';
 import { useParams } from 'react-router-dom';
 import { Button, Icon, Loader, Statistic } from 'semantic-ui-react';
+import Timer from './SprintTimer';
+import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
+import { getRandomNumber } from '../../../utils/utils';
+import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
 
 
 
@@ -16,6 +20,9 @@ const SprintGameField: React.FC = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
 
+  const onGameEnd = (counter: number)=>{
+    setGameOver(true);
+  };
   const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
@@ -34,6 +41,10 @@ const SprintGameField: React.FC = () => {
       /* setUserAnswers((prev) => [...prev, answerObject]); */
 
       const nextQuestion = number + 1;
+      setNumber(number + 1);
+      if (number === questions.length - 1){
+        onGameEnd(number);
+      }
       if (nextQuestion === questions.length) {
         setGameOver(true);
       } else {
@@ -42,10 +53,10 @@ const SprintGameField: React.FC = () => {
     }
   };
 
-  const onStartGame = async () => {
+  const onStartGame = async (level: number) => {
     setLoading(true);
     setGameOver(false);
-    const newQuestion = await getDataGame(1, 1);
+    const newQuestion = await getDataGame(level, getRandomNumber(1, PAGES_PER_CATEGORY));
     setQuestions(newQuestion);
     setScore(0);
     setUserAnswers([]);
@@ -57,17 +68,33 @@ const SprintGameField: React.FC = () => {
   return (
     <div>
       {gameOver || userAnswers.length === questions.length ? (
-        <Button onClick={onStartGame}>
-          START/тут будкт выбор уровня сложности
-        </Button>
+        <div>
+        {CATEGOTY_LINKS.map((item) =>(
+        <Button color='green' onClick={()=>{onStartGame(item.id);}}>
+      {`${item.id + 1} LEVEL`}
+    </Button>
+        ))}
+        </div>
+
       ) : null}
 
 
-      {!gameOver ? (
+      {/* {!gameOver ? (
+
+      ) : null}
+ */}
+
+      {
+        <Loader size='large'>Loading</Loader>
+      }
+
+
+      {!loading && !gameOver && (
         <div>
+           <div>
           <Statistic size='small'>
             <Statistic.Value>
-              00:00
+            <Timer isActive={true} initialTime={60} onCountdownFinish={() => onGameEnd(number)} />
             </Statistic.Value>
             <Statistic.Label><Icon name='stopwatch' size='big' /></Statistic.Label>
           </Statistic>
@@ -78,15 +105,6 @@ const SprintGameField: React.FC = () => {
             <Statistic.Label>Score</Statistic.Label>
           </Statistic>
         </div>
-      ) : null}
-
-
-      {
-        <Loader size='large'>Loading</Loader>
-      }
-
-
-      {!loading && !gameOver && (
         <SprintCard
           questionNumber={number + 1}
           posibleAnswerTranslation={questions[number].wordTranslate}
@@ -95,6 +113,8 @@ const SprintGameField: React.FC = () => {
           userAnswer={userAnswers[number]}
           answers={questions[number].answers}
         />
+        </div>
+
       )}
 
     </div>
