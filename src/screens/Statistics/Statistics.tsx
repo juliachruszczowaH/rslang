@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Segment, Statistic } from 'semantic-ui-react';
 import { IStatOptions } from '../../models/StatisticsModel';
+import { getCurrentToken, getCurrentUserId } from '../../services/AuthService';
 import { getUserStatistics } from '../../services/StatisticsService';
-import { getStorageData } from '../../utils/utils';
 import './statistics.css';
 
 const Statistics: React.FC = () => {
-  const currentUser = getStorageData('currentId');
-  const token = getStorageData('token');
+  const currentUser = getCurrentUserId();
+  const token = getCurrentToken();
   const [stat, setStat] = useState<IStatOptions>({ lastLoginDate: 0, creationDate: 0 });
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Statistics: React.FC = () => {
             <Card raised>
               <Statistic>
                 <Statistic.Value>{new Date(stat.lastLoginDate).toLocaleString()}</Statistic.Value>
-                <Statistic.Label>Last login date</Statistic.Label>
+                <Statistic.Label>Last login date/time</Statistic.Label>
               </Statistic>
             </Card>
           </Segment>
@@ -45,7 +45,7 @@ const Statistics: React.FC = () => {
             <Card raised>
               <Statistic>
                 <Statistic.Value>{new Date(stat.creationDate).toLocaleString()}</Statistic.Value>
-                <Statistic.Label>Account creation date</Statistic.Label>
+                <Statistic.Label>Account creation date/time</Statistic.Label>
               </Statistic>
             </Card>
           </Segment>

@@ -3,25 +3,23 @@ import { IWordData } from '../../models/WordModel';
 import { WordCard } from '../WordCard';
 import './wordslist.css';
 
-export const WordsList = (words: IWordData[], color: string) => {
+export const WordsList = (words: IWordData[], color: string, isDictionary = false) => {
   console.log('words');
   console.log(words);
   console.log(color);
 
   return (
-    <div className="words-list">
-      <p>Words list</p>
-
-      <ul className="list-group" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '15px' }}>
+    <div className="words-list" key={'word-list-container'}>
+      <ul className="list-group" key={'word-list'} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '15px' }}>
         {words &&
-          words.map((word: IWordData) => (
+          words.map((word: IWordData, index: number) => (
             <li
               className={
                 'list-group-item'
               }
-              key={word.id}
+              key={index}
             >
-              {WordCard(word, color)}
+              {WordCard(word, color, isDictionary)}
             </li>
           ))}
       </ul>

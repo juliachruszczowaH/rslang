@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button, Card, Icon, Image, Popup } from 'semantic-ui-react';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
@@ -5,9 +6,21 @@ import { isAuthenticated } from '../../services/AuthService';
 import { play } from '../../utils/utils';
 import './wordcard.css';
 
-export const WordCard = (word: IWordData, color: string) => {
+export const WordCard = (word: IWordData, color: string, isDictionary: boolean) => {
+  console.log('Dictionary => ' + isDictionary);
+
+  const handleHardClick = () => {
+    console.log('HARD: ' + (word.id || word._id));
+
+  };
+
+  const handleKnownClick = () => {
+    console.log('KNOWN: ' + (word.id || word._id));
+  };
+
+
   return (
-    <Card raised>
+    <Card raised key={word.id}>
       <Image src={API_URL + word.image} ui={false} />
       <Card.Content>
         <Card.Header as="h3" style={{ backgroundColor: color }}>
@@ -23,10 +36,10 @@ export const WordCard = (word: IWordData, color: string) => {
         </Card.Description>
       </Card.Content>
       {isAuthenticated() ? (<Card.Content extra>
-        <Button onClick={() => console.log('difficult')}>
-          <Icon name='eye' />
+        <Button onClick={handleHardClick}>
+          <Icon name={isDictionary ? 'eye slash' : 'eye'} />
         </Button>
-        <Button onClick={() => console.log('known')}>
+        <Button onClick={handleKnownClick}>
           <Icon name='check circle outline' />
         </Button>
       </Card.Content>) : null}

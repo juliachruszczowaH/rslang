@@ -27,11 +27,12 @@ export const Category: React.FC = () => {
   const color = CATEGOTY_LINKS.find(i => i.id === group)?.color;
 
   useEffect(() => {
+    let isMounted = true;
     getWords(group, page).then(
       (response) => {
         if (response) {
           console.log(response);
-          setWords({ words: response });
+          if (isMounted) setWords({ words: response });
         }
 
       },
@@ -43,6 +44,7 @@ export const Category: React.FC = () => {
         console.log(content);
       },
     );
+    return () => { isMounted = false; };
   }, [group, page]);
 
   useEffect(() => {
@@ -50,6 +52,10 @@ export const Category: React.FC = () => {
       setGroup(+groupId);
       setPage(+pageId);
       setActivePage(group === +groupId ? +pageId + 1 : 0);
+    } else {
+      setWords(initialState);
+      setGroup(0);
+      setPage(0);
     }
   }, [groupId, pageId, group]);
 

@@ -11,8 +11,7 @@ const defaultPanes = CATEGOTY_LINKS.map((item) => {
     menuItem: (<MenuItem as={Link} to={`/book/${item.id}/0`} key={item.title} style={{ backgroundColor: item.color }}>
       {`${item.title}`}
     </MenuItem>),
-    render: () => (<Tab.Pane style={{ backgroundColor: item.color }} >{<Outlet />}</Tab.Pane>),
-    key: `${item.title}`,
+    render: () => (<Tab.Pane key={`${item.title}pane`} style={{ backgroundColor: item.color }} >{<Outlet />}</Tab.Pane>),
   };
 });
 
@@ -20,8 +19,7 @@ const dictionaryPane = {
   menuItem: (<MenuItem as={Link} to={'/book/dictionary'} key={'dictionary'} >
     Dictionary
   </MenuItem>),
-  render: () => (<Tab.Pane  >{<Dictionary />}</Tab.Pane>),
-  key: 'dict pane',
+  render: () => (<Tab.Pane key={'dictpane'} >{<Outlet />}</Tab.Pane>),
 };
 
 const panes = isAuthenticated() ? defaultPanes.concat(dictionaryPane) : defaultPanes;
@@ -52,7 +50,7 @@ const Book: React.FC = () => {
           <Icon name='help' />
           To start select any category
         </Message>}
-      <Tab menu={{ pointing: true, fluid: true, widths: panes.length }} activeIndex={activeGroup} panes={panes} key={0} onTabChange={() => setIsSelected(true)} />
+      <Tab menu={{ pointing: true, fluid: true, widths: panes.length }} activeIndex={activeGroup} panes={panes} onTabChange={() => setIsSelected(true)} />
     </div>
   );
 };

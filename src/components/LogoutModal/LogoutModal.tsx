@@ -15,6 +15,9 @@ export const LogoutModal = (triggerElement: JSX.Element): JSX.Element => {
     if (location.pathname === '/statistics') {
       navigate('/home');
     }
+    if (location.pathname === '/book/dictionary') {
+      navigate('/book');
+    }
     window.location.reload();
   };
 

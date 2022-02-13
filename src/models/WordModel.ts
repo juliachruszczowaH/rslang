@@ -1,9 +1,21 @@
+export type UserWordOptions = {
+  isNew: boolean
+}
+export type totalCount = {
+  count: boolean
+}
+export type UserWordData = {
+  id: string,
+  difficulty: string,
+  wordId: string
+}
 export interface IWordData {
   audio?: string;
   audioExample?: string;
   audioMeaning?: string;
   group?: number;
   id?: string;
+  _id?: string;
   image?: string;
   page?: number;
   textExample?: string;
@@ -13,7 +25,14 @@ export interface IWordData {
   transcription?: string;
   word?: string;
   wordTranslate?: string;
+  userWord?: UserWordData
 }
+
+export interface IUserWordData {
+  paginatedResults:IWordData[];
+  totaCount: totalCount[];
+}
+
 export interface IWordsDataResponse {
   words: IWordData[];
 }
