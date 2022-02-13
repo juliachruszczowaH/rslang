@@ -4,8 +4,8 @@ import { Menu, Button } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
 import { HEADER_LINKS } from '../../constants/linksDataConstants';
 import { isAuthenticated } from '../../services/AuthService';
-import LoginModal from '../LoginModal';
-import LogoutModal from '../LogoutModal';
+import { LogoutModal } from '../LogoutModal';
+import { LoginModal } from '../LoginModal';
 
 const initialProps = {
   name: 'home',
