@@ -1,15 +1,18 @@
 import { Button, Card, Icon, Image } from 'semantic-ui-react';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
+import { isAuthenticated } from '../../services/AuthService';
 import { play } from '../../utils/utils';
 import './wordcard.css';
 
-export const WordCard = (word: IWordData) => {
+export const WordCard = (word: IWordData, color: string) => {
   return (
     <Card>
-      <Image src={API_URL + word.image} raised ui={false} />
+      <Image src={API_URL + word.image} ui={false} />
       <Card.Content>
-        <Card.Header>{word.word}</Card.Header>
+        <Card.Header as="h3" style={{ backgroundColor: color }}>        <Button onClick={() => play(API_URL + word.audio)}>
+          <Icon name='headphones' />
+        </Button>{word.word}</Card.Header>
         <Card.Meta>
           <span className='transcription'>{word.transcription}</span>
         </Card.Meta>
@@ -17,11 +20,15 @@ export const WordCard = (word: IWordData) => {
           {word.wordTranslate}
         </Card.Description>
       </Card.Content>
-      <Card.Content extra>
-        <Button onClick={() => play(API_URL + word.audio)}>
-          <Icon name='headphones' />
+      {isAuthenticated() ? (<Card.Content extra>
+        <Button onClick={() => console.log('difficult')}>
+          <Icon name='eye' />
         </Button>
-      </Card.Content>
+        <Button onClick={() => console.log('known')}>
+          <Icon name='check circle outline' />
+        </Button>
+      </Card.Content>) : null}
+
     </Card>
   );
 };
