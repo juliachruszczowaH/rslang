@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { QuestionsState, AnswerObject } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataGame } from '../../../services/WordsService';
-import { useParams } from 'react-router-dom';
-import { Button, Header, Icon, Loader, Modal, Statistic } from 'semantic-ui-react';
+import { Button, Divider, Header, Icon, Item, Loader, Modal, Statistic } from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
+
 
 
 const SprintGameField: React.FC = () => {
@@ -22,23 +22,21 @@ const SprintGameField: React.FC = () => {
   const [gameStart, setGameStart] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
-  const arr: AnswerObject[][] = [];
+
+
+
   const onGameEnd = (counter: number) => {
     setGameOver(true);
-    console.log(arr);
-    console.log(userAnswers);
-    console.log(setGameOver);
   };
 
   const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
-      console.log(answerCompare);
+
       const answer = answerCompare;
 
       if (correct) setScore((prev) => prev + 100);
 
-      //сохраняем ответы в object
       const answerObject: AnswerObject = {
         questionID: questions[number].id,
         question: questions[number].word,
@@ -60,7 +58,8 @@ const SprintGameField: React.FC = () => {
     }
   };
 
-  arr.push(userAnswers);
+  
+
 
 
   const onStartGame = async (level: number) => {
@@ -96,18 +95,19 @@ const SprintGameField: React.FC = () => {
       ) : null}
 
       {gameOver ? (
-        <Modal
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        open={open}
-        trigger={<Button>SHOW RESULT</Button>}
-      >
-        <Modal.Header>Select a Photo</Modal.Header>
-        <Modal.Content image>
+         <Modal
+         onClose={() => setOpen(false)}
+         onOpen={() => setOpen(true)}
+         open={open}
+         trigger={<Button>SHOW RESULT</Button>}
+       >
+         <Modal.Header>Select a Photo</Modal.Header>
+         <Modal.Content image>
 
-          <Modal.Description>
-            <Header>Default Profile Image</Header>
-            {userAnswers.map((item) => (
+           <Modal.Description>
+             <Header>Default Profile Image</Header>
+
+             {userAnswers.map((item) => (
               <div key={item.questionID}>
                 <p>
                 {`Question: ${item.question}`}
@@ -119,22 +119,24 @@ const SprintGameField: React.FC = () => {
                 {`Result: ${item.result}`}
                 </p>
               </div>
-            ))}
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color='green' onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}>
-            На главную
-          </Button>
-          <Button
-            content="Пройти снова"
-            labelPosition='right'
-            icon='checkmark'
-            onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}
-            positive
-          />
-        </Modal.Actions>
-      </Modal>
+             ))}
+
+           </Modal.Description>
+         </Modal.Content>
+         <Modal.Actions>
+           <Button color='green' onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}>
+             На главную
+           </Button>
+           <Button
+             content='Пройти снова'
+             labelPosition='right'
+             icon='checkmark'
+             onClick={() => {setOpen(false); setGameStart(true); setGameOver(false);}}
+             positive
+           />
+         </Modal.Actions>
+       </Modal>
+
       ) : null}
 
       {<Loader size='large'>Loading</Loader>}
