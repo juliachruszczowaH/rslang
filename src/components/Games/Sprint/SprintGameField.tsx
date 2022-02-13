@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-lone-blocks */
 import React, { useState } from 'react';
-import { QuestionsState, AnswerObject } from '../../../models/WordModel';
+import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
-import { getDataGame } from '../../../services/WordsService';
+import { getDataSprintGame } from '../../../services/WordsService';
 import {
   Button,
   Divider,
@@ -23,7 +23,7 @@ import { GAME_TIMER, POINTS, SUM_POINTS } from '../../../constants/gamesConstant
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(0);
-  const [questions, setQuestions] = useState<QuestionsState[]>([]);
+  const [questions, setQuestions] = useState<SprintQuestionsState[]>([]);
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
@@ -75,7 +75,7 @@ const SprintGameField: React.FC = () => {
   const onStartGame = async (level: number) => {
     setLoading(true);
     setGameStart(false);
-    const newQuestion = await getDataGame(
+    const newQuestion = await getDataSprintGame(
       level,
       getRandomNumber(1, PAGES_PER_CATEGORY),
     );

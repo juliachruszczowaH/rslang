@@ -16,6 +16,7 @@ const SprintCard: FC<SprintData> = ({
   const compare = () => {
     return posibleAnswerTranslation === randomAnswer;
   };
+  console.log(posibleAnswerTranslation);
 
   return (
     <div>

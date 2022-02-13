@@ -17,8 +17,8 @@ export interface IWordData {
 export interface IWordsDataResponse {
   words: IWordData[];
 }
-export type QuestionsState = IWordData & { answers: string[] };
-
+export type SprintQuestionsState = IWordData & { answers: string[] };
+export type AudioQuestionsState = IWordData & { answersAudioCall: string[] };
 export type AnswerObject = {
   questionID?: string;
   question?: string;
@@ -35,4 +35,12 @@ export type SprintData = {
   posibleAnswerTranslation: string | undefined;
   onAnswer: (answerCompare: boolean, compare: boolean) => void;
   userAnswer: AnswerObject;
+};
+export type AudioCallData = {
+  questionNumber: number;
+  questionsWord: string | undefined;
+  answersAudioCall: string[];
+  posibleAnswerTranslation: string | undefined;
+  onAnswer: (/* answerCompare: boolean, */ compare: boolean) => void;
+  userAnswer: boolean;
 };
