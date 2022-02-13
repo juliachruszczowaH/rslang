@@ -13,3 +13,11 @@ export const play = (url: string | undefined) => {
   const audio = new Audio(url);
   audio.play();
 };
+
+export const getStorageData = (key: string): string | null => {
+  const data = localStorage.get(key);
+  if (data) {
+    return JSON.parse(data);
+  }
+  return null;
+};

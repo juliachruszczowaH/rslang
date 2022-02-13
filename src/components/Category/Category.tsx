@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Pagination } from 'semantic-ui-react';
+import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import { IWordData } from '../../models/WordModel';
 import { getWords } from '../../services/WordsService';
 import { WordsList } from '../WordsList';
@@ -22,6 +23,8 @@ export const Category: React.FC = () => {
   const [page, setPage] = useState(pageId ? +pageId : 0);
   const navigate = useNavigate();
   console.log(`PAGINATION: group: ${group}; page: ${page}`);
+
+  const color = CATEGOTY_LINKS.find(i => i.id === group)?.color;
 
   useEffect(() => {
     getWords(group, page).then(
@@ -78,7 +81,7 @@ export const Category: React.FC = () => {
         />
       </div>
       <div className="list row">
-        {WordsList(words.words)}
+        {WordsList(words.words, color ? color : 'red')}
       </div>
     </div>
   );
