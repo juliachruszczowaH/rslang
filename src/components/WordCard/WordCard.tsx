@@ -17,9 +17,29 @@ export const WordCard = (word: IWordData) => {
           {word.wordTranslate}
         </Card.Description>
       </Card.Content>
+      <Card.Content>
+        <Card.Description>
+          {word.textExample}
+        </Card.Description>
+        <Card.Description>
+          {word.transcription}
+        </Card.Description>
+        <Card.Description>
+          {word.textMeaningTranslate}
+        </Card.Description>
+        <Card.Description>
+          {word.textExampleTranslate}
+        </Card.Description>
+        <Card.Description>
+          {word.textMeaning}
+        </Card.Description>
+      </Card.Content>
       <Card.Content extra>
-        <Button onClick={() => play(API_URL + word.audio)}>
+        <Button onClick={() => play(API_URL + word.audioMeaning)}>
           <Icon name='headphones' />
+        </Button>
+        <Button>
+          <Icon name='arrow alternate circle down' />
         </Button>
       </Card.Content>
     </Card>
