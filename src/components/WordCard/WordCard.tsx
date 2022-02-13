@@ -7,7 +7,7 @@ import './wordcard.css';
 
 export const WordCard = (word: IWordData, color: string) => {
   return (
-    <Card>
+    <Card raised>
       <Image src={API_URL + word.image} ui={false} />
       <Card.Content>
         <Card.Header as="h3" style={{ backgroundColor: color }}>        <Button onClick={() => play(API_URL + word.audio)}>
