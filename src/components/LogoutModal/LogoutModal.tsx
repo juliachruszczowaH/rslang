@@ -3,15 +3,7 @@ import { Button, Header, Icon, Modal } from 'semantic-ui-react';
 import { logout } from '../../services/AuthService';
 import './logoutmodal.css';
 
-
-type FormState = {
-  email: string,
-  password: string,
-  name: string
-};
-
-
-const LogoutModal = (triggerElement: JSX.Element): JSX.Element => {
+export const LogoutModal = (triggerElement: JSX.Element): JSX.Element => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = () => {
@@ -49,8 +41,5 @@ const LogoutModal = (triggerElement: JSX.Element): JSX.Element => {
         </Button>
       </Modal.Actions>
     </Modal>
-
   );
 };
-
-export default LogoutModal;

@@ -19,7 +19,7 @@ type FormState = {
   name: string;
 };
 
-const LoginModal = (triggerElement: JSX.Element): JSX.Element => {
+export const LoginModal = (triggerElement: JSX.Element): JSX.Element => {
   const initialState: FormState = { email: '', password: '', name: '' };
 
   const [state, setState] = useState(true);
@@ -236,4 +236,3 @@ const LoginModal = (triggerElement: JSX.Element): JSX.Element => {
   );
 };
 
-export default LoginModal;
