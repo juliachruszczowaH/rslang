@@ -72,33 +72,6 @@ const SprintGameField: React.FC = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  function onChangeScore() {
-    const correctAnswerData: Array<boolean> = [];
-    const inCorrect: Array<boolean> = [];
-    userAnswers.map((el) => {
-      if (el.result === true) {
-        setScore((prev) => prev + POINTS[1]);
-        correctAnswerData.push(el.correct);
-        if (correctAnswerData.length - 1 >= 0 && correctAnswerData.length < 3) {
-          setScore((prev) => prev + POINTS[1]);
-        } else if (correctAnswerData.length >= 3) {
-          setScore((prev) => prev + POINTS[2]);
-        } else if (
-          correctAnswerData.length >= 6 &&
-          correctAnswerData.length < 9
-        ) {
-          setScore((prev) => prev + POINTS[3]);
-        } else {
-          setScore((prev) => prev + POINTS[4]);
-        }
-      }
-      if (el.result === false) inCorrect.push(el.correct);
-    });
-    console.log(correctAnswerData);
-    console.log(inCorrect);
-  }
-
   const onStartGame = async (level: number) => {
     setLoading(true);
     setGameStart(false);
@@ -208,7 +181,13 @@ const SprintGameField: React.FC = () => {
             userAnswer={userAnswers[number]}
             answers={questions[number].answers}
           />
+          <Button onClick={()=>{
+            setOpen(false);
+            setGameStart(true);
+            setGameOver(false);
+          }}> HOME</Button>
         </div>
+
       )}
     </div>
   );
