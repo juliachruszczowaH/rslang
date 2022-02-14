@@ -11,14 +11,18 @@ const Home: React.FC = () => {
   return (
      
     <div className="home-content">
-      <div>
-        <h1>ABOUT RS-LANG </h1>
-        <p>Learning English has never been so easy
-          Memorizing English words can be fun and challenging. Play games, listen to pronunciation, improve your knowledge. With our app, learning is a joy.
+      <div className="home-content-box">
+        <h1>RS Lang</h1>
+        <p className="basic-text">
+          Learning English has never been so easy
+          Memorizing English words can be fun and challenging.
+          Play games, listen to pronunciation, improve your knowledge.
+          With our app, learning is a joy.
         </p>
       </div>
-        <h3>Advantages</h3>
-        <div className='advantages'>
+      
+      <div className="advantages">
+          <h3>Advantages</h3>
           <div className="advantages-box">
           <div className="advantages-box-description">
             <img className="icons" src={ book } alt="" />
@@ -60,17 +64,11 @@ const Home: React.FC = () => {
             </p>
           </div>
         </div>
-        
-        
-        </div>
-        
-
+      </div>
       <div className="presentation">
         <h2>HERE VIDEO PRESENTATION</h2>
       </div>
     </div>
-
-
   );
 };
 
