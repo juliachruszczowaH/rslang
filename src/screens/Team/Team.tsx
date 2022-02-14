@@ -30,7 +30,7 @@ const TeamUnits = () => {
                     <h1 className='card-unit-title'>Nadya</h1>
                     <div className='unit-box'>
                         <p className='unit-description'>
-                            Nadya is the best game-developer
+                          Nadya is the best game-developer
                         </p>
                         <div className='github-box'>
                             <img className='github-logo' src={ github } alt="github" />
@@ -46,7 +46,7 @@ const TeamUnits = () => {
                             Aleksandr is working in greek shop
                         </p>
                         <div className='github-box'>
-                            <img className='github-logo' src={ github } alt="github" />
+                            <img className='github-logo' src={ github} alt="github" />
                             <a className='github-link' href='https://github.com/alexboagreek/' target='_blank' rel="noreferrer">Link to github</a>
                         </div>
                     </div>
