@@ -5,11 +5,11 @@
 
 .advantages {
   margin-bottom: 30px;
-
 }
 .advantages-box {
   display: flex;
   justify-content: center;
+
 }
 .icons {
   width: 64px;
@@ -23,12 +23,24 @@
   padding: 30px;
   border-radius: 5px;
   margin-bottom: 30px;
+  box-shadow: 1px green;
 }
 
 .home-content-box {
   display: flex;
-  max-width: 350px;
+  max-width: 300px;
   align-items: center;
+  margin-left: 439px;
   flex-direction: column;
-  margin-left: 436px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.box-title {
+  margin-bottom: 30px;
+}
+
+.box-title {
+  text-transform: uppercase;
+  color: rgb(12, 12, 117);
+  font-size: 47px;
 }

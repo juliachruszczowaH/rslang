@@ -11,21 +11,21 @@ const Home: React.FC = () => {
   return (
      
     <div className="home-content">
-      <div className="home-content-box">
-        <h1>RS Lang</h1>
-        <p className="basic-text">
-          Learning English has never been so easy
-          Memorizing English words can be fun and challenging.
-          Play games, listen to pronunciation, improve your knowledge.
-          With our app, learning is a joy.
-        </p>
-      </div>
-      
+     
       <div className="advantages">
-          <h3>Advantages</h3>
+          <div className="home-content-box">
+            <h1 className="box-title">RS Lang</h1>
+            <p className="basic-text">
+              Learning English has never been so easy
+              Memorizing English words can be fun and challenging.
+              Play games, listen to pronunciation, improve your knowledge.
+              With our app, learning is a joy.
+            </p>
+          </div>
+          <h2 className="box-title">Advantages</h2>
           <div className="advantages-box">
           <div className="advantages-box-description">
-            <img className="icons" src={ book } alt="" />
+            <img className="icons" src={ book } alt="book-logo" />
             <h2>Book</h2>
               <p>
                 The electronic textbook consists of six sections.
@@ -34,7 +34,7 @@ const Home: React.FC = () => {
               </p>
             </div>
             <div className="advantages-box-description">
-              <img className="icons" src= { dictionary } alt="" />
+              <img className="icons" src= { dictionary } alt="dictionary-logo" />
               <h2>Dictionary</h2>
               <p>
                 The dictionary contains lists of studied words,
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
         </div>
         <div className="advantages-box">
           <div className="advantages-box-description">
-            <img className="icons" src= { game } alt="" />
+            <img className="icons" src= { game } alt="game" />
                 <h2>Games</h2>
             <p>
               For learning words and reinforcing memorization,
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
 
           </div>
           <div className="advantages-box-description">
-            <img className="icons" src={ stat } alt="" />
+            <img className="icons" src={ stat } alt="statistic" />
             <h2>Statistic</h2>
             <p>
               All the progress of training can be viewed in statistics,
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className="presentation">
-        <h2>HERE VIDEO PRESENTATION</h2>
+        <h2 className='box-title'>Video Presentation</h2>
       </div>
     </div>
   );
