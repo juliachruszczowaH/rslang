@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Pagination } from 'semantic-ui-react';
+import { Divider, Pagination } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import { IWordData } from '../../models/WordModel';
 import { getWords } from '../../services/WordsService';
@@ -86,6 +86,7 @@ export const Category: React.FC = () => {
           totalPages={30}
         />
       </div>
+      <Divider />
       <div className="list row">
         {WordsList(words.words, color ? color : 'red')}
       </div>

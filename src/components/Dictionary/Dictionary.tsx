@@ -42,12 +42,9 @@ export const Dictionary: React.FC = () => {
 
 
 
-  return (
-    <div key={'list-cont'}>
-      {words.words.length > 0 ? <div className="list row" key='list'>
-        {WordsList(words.words, 'orange', true)}
-      </div> : <h3>No hard words in dictionary yet.</h3>}
-
+  return words.words.length > 0 ? (
+    <div key={words.words.length}>
+      {WordsList(words.words, 'orange', true) }
     </div>
-  );
+  ) : (<h3 key={words.words.length}>No hard words in dictionary yet.</h3>);
 };
