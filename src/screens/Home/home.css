@@ -1,3 +1,11 @@
-.home-container {
+.home-content {
+  max-width: 1200px;
+  margin: 0 auto;
   background-color: lightcoral;
 }
+
+.adventures {
+  display: flex;
+  margin-left: 30px;
+}
+
