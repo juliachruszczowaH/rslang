@@ -4,8 +4,22 @@
   background-color: lightcoral;
 }
 
-.adventures {
+.advantages {
   display: flex;
   margin-left: 30px;
-}
 
+}
+.advantages-box {
+  display: flex;
+  justify-content: center;
+}
+.icons {
+  width: 64px;
+  height: 64px;
+
+}
+.advantages-box-description {
+  border: 3px solid rgb(60, 151, 60);
+  max-width: 250px;
+  margin-right: 30px;
+}
