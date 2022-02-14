@@ -14,6 +14,22 @@ export const getUserWords = async (id: string, token: string): Promise<UserWordD
   return data.data;
 };
 
+export const setWordIsDiffucult = async (userId: string, token: string, wordId: string, isHard = true): Promise<UserWordData[]> => {
+  const body = JSON.stringify({
+    difficulty: isHard ? 'hard' : 'light',
+
+  });
+  const data = await axios.post(`${API_URL}users/${userId}/words/${wordId}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+  console.log(data);
+  return data.data;
+};
+
 export const getHardWords = async (id: string, token: string): Promise<IUserWordData[]> => {
   const data = await axios.get(encodeURI(`${API_URL}users/${id}/aggregatedWords`), {
     params: { filter: JSON.stringify({ '$and': [{ 'userWord.difficulty': 'hard' }] }) },

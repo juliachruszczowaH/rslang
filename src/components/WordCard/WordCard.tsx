@@ -1,22 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Divider, Grid, Icon, Image, Popup, Segment } from 'semantic-ui-react';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
-import { isAuthenticated } from '../../services/AuthService';
+import { getCurrentToken, getCurrentUserId, isAuthenticated } from '../../services/AuthService';
+import { setWordIsDiffucult } from '../../services/UserWordsService';
 import { play } from '../../utils/utils';
 import './wordcard.css';
 
 export const WordCard = (word: IWordData, color: string, isDictionary: boolean) => {
   console.log('Dictionary => ' + isDictionary);
+  const currentUser = getCurrentUserId();
+  const token = getCurrentToken();
 
   const handleHardClick = () => {
-    console.log('HARD: ' + (word.id || word._id));
-
+    if (isDictionary) {
+      console.log('HARD: ' + (word._id));
+    } else {
+      console.log('HARD: ' + (word.id));
+      if (currentUser && token && word.id) {
+        setWordIsDiffucult(currentUser, token, word.id);
+      }
+    }
   };
 
   const handleKnownClick = () => {
     console.log('KNOWN: ' + (word.id || word._id));
   };
+
 
   return (
     <Card key={word.id} >
@@ -62,6 +72,7 @@ export const WordCard = (word: IWordData, color: string, isDictionary: boolean) 
           <Divider />
           {isAuthenticated() ? (
             <Card.Content extra>
+              {/* {hard ? <Icon color='red' name={'eye'} /> : null} */}
               <Button onClick={handleHardClick}>
                 <Icon name={isDictionary ? 'eye slash' : 'eye'} />
               </Button>
