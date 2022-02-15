@@ -34,18 +34,11 @@ const AudioCallGameField: React.FC = () => {
     setGameOver(true);
   };
 
-  const checkAnswer = (/* answerCompare: boolean, */compare: boolean ) => {
+  const checkAnswer = (e: any ) => {
     if (!gameOver) {
-      const correct = /* answerCompare === */ compare;
+      const answer = e.currentTarget.value;
+      const correct = questions[number].wordTranslate === answer;
 
-      const answerObject: AnswerObject = {
-        questionID: questions[number].id,
-        question: questions[number].word,
-        userAnswer: correct,
-        correct: compare,
-        result: correct,
-        correctTranslate: questions[number].wordTranslate,
-      };
       if (correct === true) {
         if (score >= 0 && score < SUM_POINTS[30] ){
           setScore((prev) => prev + POINTS[1]);
@@ -57,6 +50,14 @@ const AudioCallGameField: React.FC = () => {
           setScore((prev) => prev + POINTS[4]);
         }
       }
+      const answerObject: AnswerObject = {
+        questionID: questions[number].id,
+        question: questions[number].word,
+        correct,
+        answer,
+        correctTranslate: questions[number].wordTranslate,
+      };
+
 
       setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
@@ -67,6 +68,7 @@ const AudioCallGameField: React.FC = () => {
         setNumber(nextQuestion);
       }
     }
+    console.log(questions[number].answersAudioCall);
   };
 
   const onStartGame = async (level: number) => {
@@ -117,7 +119,7 @@ const AudioCallGameField: React.FC = () => {
                 <div key={item.questionID}>
                   <p>{`Question: ${item.question}`}</p>
                   <p>{`Correct answer: ${item.correctTranslate}`}</p>
-                  <p>{`Result: ${item.result}`}</p>
+                  <p>{`Result: ${item.correct}`}</p>
                 </div>
               ))}
             </Modal.Description>
@@ -163,7 +165,6 @@ const AudioCallGameField: React.FC = () => {
             posibleAnswerTranslation={questions[number].wordTranslate}
             questionsWord={questions[number].word}
             onAnswer={checkAnswer}
-            userAnswer={true/* userAnswers[number] */}
             answersAudioCall={questions[number].answersAudioCall}
           />
           <Button onClick={()=>{

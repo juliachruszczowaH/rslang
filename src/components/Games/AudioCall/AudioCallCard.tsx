@@ -7,21 +7,11 @@ import { Button, Header, Segment, Statistic } from 'semantic-ui-react';
 const AudioCallCard: FC<AudioCallData> = ({
   questionsWord,
   answersAudioCall,
-  userAnswer,
   onAnswer,
   posibleAnswerTranslation,
   questionNumber,
 }) => {
-  const randomAnswer = answersAudioCall[getRandomNumber(0, answersAudioCall.length - 1)];
 
-  const compare = () => {
-    return posibleAnswerTranslation === randomAnswer;
-  };
-  console.log(posibleAnswerTranslation);
-
-   const randomAnswers = () => {
-      for()
-   }
 
   return (
     <div>
@@ -30,15 +20,20 @@ const AudioCallCard: FC<AudioCallData> = ({
           <Statistic.Value>{questionNumber}</Statistic.Value>
           <Statistic.Label>Question</Statistic.Label>
         </Statistic>
-
+        <div>
+          {questionsWord}
+        </div>
 
         <div>
-            {answersAudioCall.map((el) => (
-              <Button disabled={userAnswer}>
-                {`${el}`}
+            {answersAudioCall.map((answer) => (
+              <Button value={answer} onClick={onAnswer}>
+                {`${answer}`}
               </Button>
 
             ))}
+            {/* <Button value={posibleAnswerTranslation} onClick={onAnswer}>
+              {posibleAnswerTranslation}
+            </Button> */}
            {/*  <Button onClick={() => {
               onAnswer(false, compare());
             }}>False</Button>

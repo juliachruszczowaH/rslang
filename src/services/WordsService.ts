@@ -28,21 +28,35 @@ export const getDataSprintGame = async (
 export const getDataAudioGame = async (
   group = 0,
   page = 0,
-)/* : Promise<AudioQuestionsState[]>  */=> {
+) : Promise<AudioQuestionsState[]> => {
   const data = await getWords(group, page);
-  const incorrectAnswers: Array<any> = [];
-  for (let i = 0; i < 5; i++){
-    /* if (data.filter(el => !el.wordTranslate)) */
-    console.log(data);
-    incorrectAnswers.push(data[getRandomNumber(1, 19)].wordTranslate);
-  }
-  /* return data.map((wordsData: IWordData) => {
+
+
+  return data.map((wordsData: IWordData) => {
+    const randomTranslate = () =>  {
+      const atherAnswerArray = [];
+      for (let i = 0; i < 5; i++){
+        if (data[i].wordTranslate !== wordsData.wordTranslate){
+          atherAnswerArray.push(data[i].wordTranslate);
+          console.log(data[i]);
+        }
+
+      }
+      console.log(wordsData.wordTranslate);
+
+      return atherAnswerArray;
+      /* data[getRandomNumber(1, 19)].wordTranslate */
+    };
+    //console.log(randomTranslate());
     return {
       ...wordsData,
-      answersAudioCall: shuffleArray([...incorrectAnswers, wordsData.wordTranslate]),
+      answersAudioCall: shuffleArray([ wordsData.wordTranslate, ...randomTranslate()]),
     };
-  }); */
+  });
 };
+
+
+
 //export function
 export function randomAnswer(answers: SprintQuestionsState): string {
   return answers.answers[getRandomNumber(0, answers.answers.length - 1)];

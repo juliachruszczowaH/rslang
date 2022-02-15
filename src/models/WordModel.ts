@@ -18,15 +18,18 @@ export interface IWordsDataResponse {
   words: IWordData[];
 }
 export type SprintQuestionsState = IWordData & { answers: string[] };
+
 export type AudioQuestionsState = IWordData & { answersAudioCall: string[] };
+
 export type AnswerObject = {
   questionID?: string;
   question?: string;
-  userAnswer: boolean;
+  userAnswer?: boolean;
+  answer?: string;
   correct: boolean;
   correctTranslate?: string;
   transcription?: string;
-  result: boolean;
+  result?: boolean;
 };
 export type SprintData = {
   questionNumber: number;
@@ -41,6 +44,6 @@ export type AudioCallData = {
   questionsWord: string | undefined;
   answersAudioCall: string[];
   posibleAnswerTranslation: string | undefined;
-  onAnswer: (/* answerCompare: boolean, */ compare: boolean) => void;
-  userAnswer: boolean;
+  onAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
+
 };
