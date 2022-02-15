@@ -8,18 +8,14 @@ const SprintCard: FC<SprintData> = ({
   questionsWord,
   answers,
   onAnswer,
-  userAnswer,
   posibleAnswerTranslation,
   questionNumber,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-shadow
   const randomAnswer = answers[getRandomNumber(0, answers.length - 1)];
 
   const compare = () => {
     return posibleAnswerTranslation === randomAnswer;
   };
-
-  console.log(posibleAnswerTranslation);
 
   return (
     <div>
