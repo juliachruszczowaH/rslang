@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { getRandomNumber } from '../../../utils/utils';
-import { AudioCallData, SprintData } from '../../../models/WordModel';
-import { Button, Header, Segment, Statistic } from 'semantic-ui-react';
+import { getRandomNumber, play } from '../../../utils/utils';
+import { AudioCallData, IWordData, SprintData } from '../../../models/WordModel';
+import { Button, Header, Icon, Segment, Statistic } from 'semantic-ui-react';
+import { API_URL } from '../../../services/AppService';
 
 
 const AudioCallCard: FC<AudioCallData> = ({
@@ -10,9 +11,9 @@ const AudioCallCard: FC<AudioCallData> = ({
   onAnswer,
   posibleAnswerTranslation,
   questionNumber,
-}) => {
-
-
+}, word: IWordData) => {
+  play(API_URL + word.audio);
+  console.log(answersAudioCall);
   return (
     <div>
       <Segment raised style={{ width: '70%', margin: '20px auto' }}>
@@ -21,9 +22,8 @@ const AudioCallCard: FC<AudioCallData> = ({
           <Statistic.Label>Question</Statistic.Label>
         </Statistic>
         <div>
-          {questionsWord}
+        <Icon  name='volume up' />
         </div>
-
         <div>
             {answersAudioCall.map((answer) => (
               <Button value={answer} onClick={onAnswer}>
@@ -31,16 +31,6 @@ const AudioCallCard: FC<AudioCallData> = ({
               </Button>
 
             ))}
-            {/* <Button value={posibleAnswerTranslation} onClick={onAnswer}>
-              {posibleAnswerTranslation}
-            </Button> */}
-           {/*  <Button onClick={() => {
-              onAnswer(false, compare());
-            }}>False</Button>
-            <Button.Or />
-            <Button positive onClick={() => {
-              onAnswer(true, compare());
-            }}>True</Button> */}
 
         </div>
       </Segment>

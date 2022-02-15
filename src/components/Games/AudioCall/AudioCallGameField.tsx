@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-lone-blocks */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
 import { getDataAudioGame } from '../../../services/WordsService';
 import {
@@ -14,14 +14,14 @@ import {
   Statistic,
 } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
-import { getRandomNumber } from '../../../utils/utils';
+import { getRandomNumber, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
 import { GAME_TIMER, POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
 import AudioCallCard from './AudioCallCard';
+import { API_URL } from '../../../services/AppService';
 
 const AudioCallGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(0);
   const [questions, setQuestions] = useState<AudioQuestionsState[]>([]);
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
@@ -29,12 +29,15 @@ const AudioCallGameField: React.FC = () => {
   const [gameStart, setGameStart] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
 
   const onGameEnd = (counter: number) => {
     setGameOver(true);
   };
 
+
   const checkAnswer = (e: any ) => {
+
     if (!gameOver) {
       const answer = e.currentTarget.value;
       const correct = questions[number].wordTranslate === answer;
@@ -70,6 +73,12 @@ const AudioCallGameField: React.FC = () => {
     }
     console.log(questions[number].answersAudioCall);
   };
+  useEffect(() => {
+    if (questions[number]) {
+      play(API_URL + questions[number].audio);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questions[number]]);
 
   const onStartGame = async (level: number) => {
     setLoading(true);
@@ -83,6 +92,7 @@ const AudioCallGameField: React.FC = () => {
     setUserAnswers([]);
     setNumber(0);
     setLoading(false);
+
   };
 
   return (
