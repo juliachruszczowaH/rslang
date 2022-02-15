@@ -42,7 +42,7 @@ export type SprintData = {
 export type AudioCallData = {
   questionNumber: number;
   questionsWord: string | undefined;
-  answersAudioCall: string[];
+  answersAudioCall:  string[];
   posibleAnswerTranslation: string | undefined;
   onAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
 
