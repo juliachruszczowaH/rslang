@@ -151,7 +151,7 @@ const SprintGameField: React.FC = () => {
                 setGameOver(false);
               }}
             >
-              Back to game page
+              Back to main page
             </Button>
             <Button
               content='Try again'
