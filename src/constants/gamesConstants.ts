@@ -9,4 +9,4 @@ export const SUM_POINTS = {
   90: 90,
   210: 210,
 };
-export const GAME_TIMER = 120;
+export const GAME_TIMER = 60;
