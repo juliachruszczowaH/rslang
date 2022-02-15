@@ -36,9 +36,10 @@ export const WordCard = (word: IWordData, color: string, isDictionary: boolean) 
             src={API_URL + word.image}
           />
           <Segment raised style={{ backgroundColor: color }}>
-            <Card.Header as={'h3'} textAlign='left'>          <Popup content='Click to listen' trigger={<Button onClick={() => play(API_URL + word.audio)}>
-              <Icon name='headphones' position='center' />
-            </Button>} />
+            <Card.Header as={'h3'} textAlign='left'>
+              <Popup content='Click to listen' trigger={<Button onClick={() => play([API_URL + word.audio])}>
+                <Icon name='headphones' position='center' />
+              </Button>} />
               {word.word} <Card.Meta textAlign='center'> <span className='transcription'>{word.transcription}</span></Card.Meta></Card.Header>
 
           </Segment>

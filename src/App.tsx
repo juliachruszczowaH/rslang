@@ -23,7 +23,7 @@ const App: React.FC = () => {
           <Route path={'/book'} element={<Book />}  >
             <Route path={'/book/:groupId/:pageId'} element={<Category />}>
             </Route>
-            <Route path={'/book/dictionary'} element={<Dictionary />}  ></Route>
+            <Route path={'/book/dictionary'} element={<Category />}  ></Route>
           </Route>
 
           <Route path={'/sprintgame'} element={<SprintGame />}  ></Route>
