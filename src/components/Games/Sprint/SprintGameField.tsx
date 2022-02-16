@@ -1,5 +1,4 @@
-
-import React, {  useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
@@ -24,7 +23,6 @@ import {
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
-
 
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -89,6 +87,8 @@ const SprintGameField: React.FC = () => {
       }
     }
   };
+
+  
   /* useEffect(() => {
 
     if (questions.length - 1 === number) {
@@ -165,7 +165,7 @@ const SprintGameField: React.FC = () => {
                 setGameOver(false);
               }}
             >
-              <NavLink to='/home' >Back to main page</NavLink>
+              <NavLink to='/home'>Back to main page</NavLink>
             </Button>
             <Button
               content='Try again'
@@ -217,7 +217,8 @@ const SprintGameField: React.FC = () => {
               setOpen(false);
               setGameStart(false);
               setGameOver(true);
-            } }          >
+            }}
+          >
             {' '}
             STOP THE GAME
           </Button>
@@ -225,6 +226,5 @@ const SprintGameField: React.FC = () => {
       )}
     </div>
   );
-
 };
 export default SprintGameField;

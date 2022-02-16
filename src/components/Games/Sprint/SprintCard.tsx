@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { getRandomNumber } from '../../../utils/utils';
 import { SprintData } from '../../../models/WordModel';
 import { Button, Header, Segment, Statistic } from 'semantic-ui-react';
@@ -13,10 +13,23 @@ const SprintCard: FC<SprintData> = ({
 }) => {
   const randomAnswer = answers[getRandomNumber(0, answers.length - 1)];
 
-  const compare = () => {
+  const compare = useCallback(() => {
     return posibleAnswerTranslation === randomAnswer;
-  };
-  
+  }, [posibleAnswerTranslation, randomAnswer]);
+  useEffect(() => {
+    const keyHandler = (e: any) => {
+      if (e.key === 39 || e.which === 39) {
+        onAnswer(true, compare());
+      } else if (e.key === 37 || e.which === 37) {
+        onAnswer(false, compare());
+      }
+    };
+    window.addEventListener('keydown', keyHandler);
+
+    return () => {
+      window.removeEventListener('keydown', keyHandler);
+    };
+  }, [compare, onAnswer]);
 
   return (
     <div>

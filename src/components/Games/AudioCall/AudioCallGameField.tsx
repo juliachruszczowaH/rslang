@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-lone-blocks */
 import React, { useEffect, useState } from 'react';
 import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
 import { getDataAudioGame } from '../../../services/WordsService';
@@ -17,8 +15,7 @@ import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
 import { POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
 import AudioCallCard from './AudioCallCard';
 import { API_URL } from '../../../services/AppService';
-import { Link } from '@reach/router';
-import { NavLink, Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 
