@@ -8,6 +8,7 @@ import {
   Icon,
   List,
   Loader,
+  Message,
   Modal,
   Statistic,
 } from 'semantic-ui-react';
@@ -88,7 +89,6 @@ const SprintGameField: React.FC = () => {
     }
   };
 
-  
   /* useEffect(() => {
 
     if (questions.length - 1 === number) {
@@ -107,6 +107,18 @@ const SprintGameField: React.FC = () => {
     <div>
       {gameStart /* || userAnswers.length === questions.length */ ? (
         <div>
+          <Message info>
+            <Message.Header>Welcome to the game "Sprint"</Message.Header>
+            <p>
+              Sprint is a speed game where you have 60 seconds to complete the
+              game. Use the mouse and the right or left key to select the
+              correct answer.
+            </p>
+            <p>
+              Below you need to select the level of difficulty of the questions.
+            </p>
+          </Message>
+
           {CATEGOTY_LINKS.map((item) => (
             <Button
               key={item.id}
@@ -126,10 +138,10 @@ const SprintGameField: React.FC = () => {
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
           open={open}
-          size='tiny'
+          size="tiny"
           closeOnEscape={false}
           closeOnDimmerClick={false}
-          trigger={<Button>SHOW RESULT</Button>}
+          trigger={<Button inverted color='red'>SHOW RESULT</Button>}
         >
           <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
             userAnswers.filter((i) => i.result).length
@@ -144,10 +156,10 @@ const SprintGameField: React.FC = () => {
                       name={item.result ? 'checkmark' : 'close'}
                       color={item.result ? 'green' : 'red'}
                     />
-                    <List.Content verticalAlign='middle'>
+                    <List.Content verticalAlign="middle">
                       <List.Header
                         as={'h3'}
-                        color='blue'
+                        color="blue"
                       >{`${item.question}`}</List.Header>
                       <List.Description>{`${item.correctTranslate}`}</List.Description>
                     </List.Content>
@@ -161,16 +173,16 @@ const SprintGameField: React.FC = () => {
               basic
               onClick={() => {
                 setOpen(false);
-                setGameStart(true);
+                setGameStart(false);
                 setGameOver(false);
               }}
             >
-              <NavLink to='/home'>Back to main page</NavLink>
+              <NavLink to="/home">Back to main page</NavLink>
             </Button>
             <Button
-              content='Try again'
-              labelPosition='right'
-              icon='checkmark'
+              content="Try again"
+              labelPosition="right"
+              icon="checkmark"
               onClick={() => {
                 setOpen(false);
                 setGameStart(true);
@@ -182,12 +194,12 @@ const SprintGameField: React.FC = () => {
         </Modal>
       ) : null}
 
-      {<Loader size='large'>Loading</Loader>}
+      {<Loader size="large">Loading</Loader>}
 
       {!loading && !gameStart && !gameOver && (
         <div>
           <div>
-            <Statistic size='small'>
+            <Statistic size="small">
               <Statistic.Value>
                 <Timer
                   isActive={true}
@@ -196,10 +208,10 @@ const SprintGameField: React.FC = () => {
                 />
               </Statistic.Value>
               <Statistic.Label>
-                <Icon name='stopwatch' size='big' />
+                <Icon name="stopwatch" size="big" />
               </Statistic.Label>
             </Statistic>
-            <Statistic size='small'>
+            <Statistic size="small">
               <Statistic.Value>{score}</Statistic.Value>
               <Statistic.Label>Score</Statistic.Label>
             </Statistic>
@@ -213,6 +225,7 @@ const SprintGameField: React.FC = () => {
             answers={questions[number].answers}
           />
           <Button
+           basic color='red'
             onClick={() => {
               setOpen(false);
               setGameStart(false);

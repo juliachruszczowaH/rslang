@@ -21,11 +21,11 @@ const AudioCallCard: FC<AudioCallData> = ({
           <Statistic.Label>Question</Statistic.Label>
         </Statistic>
         <div>
-        <Icon  name='volume up' />
+        <Icon  name='volume up' size='huge' color='red' style={{ margin: '20px 0px', opacity: '70%' }}/>
         </div>
         <div>
             {answersAudioCall.map((answer) => (
-              <Button value={answer} onClick={onAnswer}>
+              <Button  basic color='green' value={answer} onClick={onAnswer}>
                 {`${answer}`}
               </Button>
             ))}

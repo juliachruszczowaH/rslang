@@ -6,6 +6,7 @@ import {
   Header,
   List,
   Loader,
+  Message,
   Modal,
   Statistic,
 } from 'semantic-ui-react';
@@ -105,10 +106,22 @@ const AudioCallGameField: React.FC = () => {
     <div>
       {gameStart /* || userAnswers.length === questions.length */ ? (
         <div>
+          <Message info>
+            <Message.Header>Welcome to the game "AudioCall"</Message.Header>
+            <p>
+            The "AudioCall" is a game in which the question is pronounced
+            in English and you have to choose one of the 5 proposed translation
+            options. Use the mouse and keys from 1 to 5 to select the correct
+            answer, to repeat the question, press the space bar.
+            </p>
+            <p>
+              Below you need to select the level of difficulty of the questions.
+            </p>
+          </Message>
           {CATEGOTY_LINKS.map((item) => (
             <Button
               key={item.id}
-              color='green'
+              style={{ backgroundColor: item.color }}
               onClick={() => {
                 onStartGame(item.id);
               }}
@@ -127,7 +140,7 @@ const AudioCallGameField: React.FC = () => {
         size='tiny'
         closeOnEscape={false}
         closeOnDimmerClick={false}
-        trigger={<Button>SHOW RESULT</Button>}
+        trigger={<Button inverted color='red'>SHOW RESULT</Button>}
         >
           <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
             userAnswers.filter((i) => i.correct).length
@@ -199,7 +212,7 @@ const AudioCallGameField: React.FC = () => {
             onAnswer={checkAnswer}
             answersAudioCall={questions[number].answersAudioCall}
           />
-          <Button
+          <Button basic color='red'
             onClick={() => {
               setOpen(false);
               setGameStart(false);
