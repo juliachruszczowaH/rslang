@@ -20,10 +20,13 @@ export interface IWordsDataResponse {
 export type QuestionsState = IWordData & { answers: string[] };
 
 export type AnswerObject = {
-  question: string;
-  answer: string;
+  questionID?: string;
+  question?: string;
+  userAnswer: boolean;
   correct: boolean;
-  correctAnswer: string;
+  correctTranslate?: string;
+  transcription?: string;
+  result: boolean;
 };
 export type SprintData = {
   questionNumber: number;
