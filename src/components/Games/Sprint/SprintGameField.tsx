@@ -1,15 +1,27 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-lone-blocks */
 import React, { useState } from 'react';
 import { QuestionsState, AnswerObject } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataGame } from '../../../services/WordsService';
-import { useParams } from 'react-router-dom';
-import { Button, Icon, Loader, Statistic } from 'semantic-ui-react';
+import {
+  Button,
+  Header,
+  Icon,
+  List,
+  Loader,
+  Modal,
+  Statistic,
+} from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
-
-
+import {
+  GAME_TIMER,
+  POINTS,
+  SUM_POINTS,
+} from '../../../constants/gamesConstants';
 
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -18,35 +30,45 @@ const SprintGameField: React.FC = () => {
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
-  const [gameOver, setGameOver] = useState(true);
+  const [gameStart, setGameStart] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const onGameEnd = (counter: number)=>{
+  const onGameEnd = (counter: number) => {
     setGameOver(true);
   };
+
   const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
-      const answer = '';
 
-      if (correct) setScore((prev) => prev + 100);
+      const answer = answerCompare;
 
-      //сохраняем ответы в object
-      const answerObject = {
+      const answerObject: AnswerObject = {
+        questionID: questions[number].id,
         question: questions[number].word,
-        answer: answer,
-        correct: correct,
-        correctAnswer: questions[number].wordTranslate,
+        userAnswer: answer,
+        correct: compare,
+        result: correct,
+        correctTranslate: questions[number].wordTranslate,
       };
+      if (correct === true) {
+        if (score >= 0 && score < SUM_POINTS[30]) {
+          setScore((prev) => prev + POINTS[1]);
+        } else if (score >= SUM_POINTS[30] && score < SUM_POINTS[90]) {
+          setScore((prev) => prev + POINTS[2]);
+        } else if (score >= SUM_POINTS[90] && score < SUM_POINTS[210]) {
+          setScore((prev) => prev + POINTS[3]);
+        } else {
+          setScore((prev) => prev + POINTS[4]);
+        }
+      }
 
-      /* setUserAnswers((prev) => [...prev, answerObject]); */
-
+      setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
       setNumber(number + 1);
-      if (number === questions.length - 1){
+      if (number === questions.length - 1) {
         onGameEnd(number);
-      }
-      if (nextQuestion === questions.length) {
-        setGameOver(true);
       } else {
         setNumber(nextQuestion);
       }
@@ -55,8 +77,11 @@ const SprintGameField: React.FC = () => {
 
   const onStartGame = async (level: number) => {
     setLoading(true);
-    setGameOver(false);
-    const newQuestion = await getDataGame(level, getRandomNumber(1, PAGES_PER_CATEGORY));
+    setGameStart(false);
+    const newQuestion = await getDataGame(
+      level,
+      getRandomNumber(1, PAGES_PER_CATEGORY),
+    );
     setQuestions(newQuestion);
     setScore(0);
     setUserAnswers([]);
@@ -64,62 +89,129 @@ const SprintGameField: React.FC = () => {
     setLoading(false);
   };
 
-
   return (
     <div>
-      {gameOver || userAnswers.length === questions.length ? (
+      {gameStart /* || userAnswers.length === questions.length */ ? (
         <div>
-        {CATEGOTY_LINKS.map((item) =>(
-        <Button color='green' onClick={()=>{onStartGame(item.id);}}>
-      {`${item.id + 1} LEVEL`}
-    </Button>
-        ))}
+          {CATEGOTY_LINKS.map((item) => (
+            <Button
+              key={item.id}
+              onClick={() => {
+                onStartGame(item.id);
+              }}
+              style={{ backgroundColor: item.color }}
+            >
+              {`${item.id + 1} LEVEL`}
+            </Button>
+          ))}
         </div>
-
       ) : null}
 
-
-      {/* {!gameOver ? (
-
+      {gameOver ? (
+        <Modal
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+          size='tiny'
+          closeOnEscape={false}
+          closeOnDimmerClick={false}
+          trigger={<Button>SHOW RESULT</Button>}
+        >
+          <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
+            userAnswers.filter((i) => i.result).length
+          } - are correct)`}</Modal.Header>
+          <Modal.Content image scrolling>
+            <Modal.Description>
+              <Header>Game result</Header>
+              <List celled ordered>
+                {userAnswers.map((item) => (
+                  <List.Item key={item.questionID}>
+                    <List.Icon
+                      name={item.result ? 'checkmark' : 'close'}
+                      color={item.result ? 'green' : 'red'}
+                    />
+                    <List.Content verticalAlign='middle'>
+                      <List.Header
+                        as={'h3'}
+                        color='blue'
+                      >{`${item.question}`}</List.Header>
+                      <List.Description>{`${item.correctTranslate}`}</List.Description>
+                    </List.Content>
+                  </List.Item>
+                ))}
+              </List>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              basic
+              onClick={() => {
+                setOpen(false);
+                setGameStart(true);
+                setGameOver(false);
+              }}
+            >
+              Back to main page
+            </Button>
+            <Button
+              content='Try again'
+              labelPosition='right'
+              icon='checkmark'
+              onClick={() => {
+                setOpen(false);
+                setGameStart(true);
+                setGameOver(false);
+              }}
+              positive
+            />
+          </Modal.Actions>
+        </Modal>
       ) : null}
- */}
 
-      {
-        <Loader size='large'>Loading</Loader>
-      }
+      {<Loader size='large'>Loading</Loader>}
 
-
-      {!loading && !gameOver && (
+      {!loading && !gameStart && !gameOver && (
         <div>
-           <div>
-          <Statistic size='small'>
-            <Statistic.Value>
-            <Timer isActive={true} initialTime={60} onCountdownFinish={() => onGameEnd(number)} />
-            </Statistic.Value>
-            <Statistic.Label><Icon name='stopwatch' size='big' /></Statistic.Label>
-          </Statistic>
-          <Statistic size='small'>
-            <Statistic.Value>
-              {score}
-            </Statistic.Value>
-            <Statistic.Label>Score</Statistic.Label>
-          </Statistic>
+          <div>
+            <Statistic size='small'>
+              <Statistic.Value>
+                <Timer
+                  isActive={true}
+                  initialTime={GAME_TIMER}
+                  onCountdownFinish={() => onGameEnd(number)}
+                />
+              </Statistic.Value>
+              <Statistic.Label>
+                <Icon name='stopwatch' size='big' />
+              </Statistic.Label>
+            </Statistic>
+            <Statistic size='small'>
+              <Statistic.Value>{score}</Statistic.Value>
+              <Statistic.Label>Score</Statistic.Label>
+            </Statistic>
+          </div>
+          <SprintCard
+            questionNumber={number + 1}
+            posibleAnswerTranslation={questions[number].wordTranslate}
+            questionsWord={questions[number].word}
+            onAnswer={checkAnswer}
+            userAnswer={userAnswers[number]}
+            answers={questions[number].answers}
+          />
+          <Button
+            onClick={() => {
+              setOpen(false);
+              setGameStart(true);
+              setGameOver(false);
+            }}
+          >
+            {' '}
+            Back to game page
+          </Button>
         </div>
-        <SprintCard
-          questionNumber={number + 1}
-          posibleAnswerTranslation={questions[number].wordTranslate}
-          questionsWord={questions[number].word}
-          onAnswer={checkAnswer}
-          userAnswer={userAnswers[number]}
-          answers={questions[number].answers}
-        />
-        </div>
-
       )}
-
     </div>
   );
 };
-
 
 export default SprintGameField;
