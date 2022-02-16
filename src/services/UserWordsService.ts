@@ -14,9 +14,9 @@ export const getUserWords = async (id: string, token: string): Promise<UserWordD
   return data.data;
 };
 
-export const setWordIsDiffucult = async (userId: string, token: string, wordId: string, isHard = true): Promise<UserWordData[]> => {
+export const setWordToHard = async (userId: string, token: string, wordId: string, isHard = true): Promise<UserWordData[]> => {
   const body = JSON.stringify({
-    difficulty: isHard ? 'hard' : 'light',
+    difficulty: isHard ? 'hard' : 'normal',
 
   });
   const data = await axios.post(`${API_URL}users/${userId}/words/${wordId}`, body, {
@@ -30,8 +30,12 @@ export const setWordIsDiffucult = async (userId: string, token: string, wordId: 
   return data.data;
 };
 
+
+
+
+
 export const getHardWords = async (id: string, token: string): Promise<IUserWordData[]> => {
-  const data = await axios.get(encodeURI(`${API_URL}users/${id}/aggregatedWords`), {
+  const data = await axios.get(encodeURI(`${API_URL}users/${id}/aggregatedWords?group=&page=&wordsPerPage=${600}`), {
     params: { filter: JSON.stringify({ '$and': [{ 'userWord.difficulty': 'hard' }] }) },
     headers: {
       Authorization: `Bearer ${token}`,
@@ -42,6 +46,20 @@ export const getHardWords = async (id: string, token: string): Promise<IUserWord
   console.log(data);
   return data.data;
 };
+
+export const getUserAggregatedWords = async (id: string, token: string, group: number, page: number, wordsPerPage = 20, filter?: undefined): Promise<IUserWordData[]> => {
+  const data = await axios.get(encodeURI(`${API_URL}users/${id}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=${wordsPerPage}`), {
+    params: { filter: JSON.stringify(filter) },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+  console.log(data);
+  return data.data;
+};
+
 
 export const getUserWordById = async (userId: string, wordId: string, token: string): Promise<UserWordData[]> => {
   const data = await axios.get(`${API_URL}users/${userId}/words`, {
