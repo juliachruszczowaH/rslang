@@ -44,6 +44,6 @@ export type AudioCallData = {
   questionsWord: string | undefined;
   answersAudioCall:  string[];
   posibleAnswerTranslation: string | undefined;
-  onAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onAnswer: (e: React.MouseEvent<HTMLButtonElement> | string) => void;
 
 };

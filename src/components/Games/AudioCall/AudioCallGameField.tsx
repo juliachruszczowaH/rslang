@@ -69,17 +69,22 @@ const AudioCallGameField: React.FC = () => {
       if (number === questions.length - 1) {
         onGameEnd(number);
       } else {
-        setNumber(nextQuestion);
+        setTimeout(() => {setNumber(nextQuestion);}, 1000);
       }
     }
 
   };
+
+
+
   useEffect(() => {
     if (questions[number]) {
       play(API_URL + questions[number].audio);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions[number]]);
+
+
 
   const onStartGame = async (level: number) => {
     setLoading(true);

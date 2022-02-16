@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { getRandomNumber, play } from '../../../utils/utils';
 import { AudioCallData, IWordData, SprintData } from '../../../models/WordModel';
 import { Button, Header, Icon, Segment, Statistic } from 'semantic-ui-react';
@@ -10,6 +10,8 @@ const AudioCallCard: FC<AudioCallData> = ({
   onAnswer,
   questionNumber,
 }, word: IWordData) => {
+  console.log(answersAudioCall[1]);
+
 
   return (
     <div>
