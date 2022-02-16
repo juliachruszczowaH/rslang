@@ -5,7 +5,7 @@ import { Label, Menu, Image } from 'semantic-ui-react';
 
 function Footer() {
   return (
-    <Menu  fluid widths={3}>
+    <Menu secondary style={{ display: 'flex', justifyContent: 'space-around' }}>
       <Menu.Item>
         <Label
           as="a"
@@ -15,7 +15,7 @@ function Footer() {
           <Image
             avatar
             spaced="right"
-            src="https://react.semantic-ui.com/images/avatar/small/joe.jpg"
+            src="https://react.semantic-ui.com/images/avatar/small/molly.png"
           />
           juliachruszczowaH
         </Label>
@@ -24,7 +24,7 @@ function Footer() {
           <Image
             avatar
             spaced="right"
-            src="https://react.semantic-ui.com/images/avatar/small/stevie.jpg"
+            src="https://react.semantic-ui.com/images/avatar/small/jenny.jpg"
           />
           nnadeysha
         </Label>
@@ -39,7 +39,7 @@ function Footer() {
       </Menu.Item>
       <Menu.Item> &copy; 2022</Menu.Item>
 
-      <Menu.Item>
+      <Menu.Item position='right'>
         <Image
           href="https://rs.school/js/"
           target="_blank"
