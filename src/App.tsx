@@ -17,7 +17,7 @@ const App: React.FC = () => {
     <div className="main-container">
       <Header />
 
-      <div className="container" style={{ textAlign: 'center' }}>
+      <div className="main-content-container" style={{ textAlign: 'center' }}>
         <Routes>
           <Route path={'/book'} element={<Book />}  >
             <Route path={'/book/:groupId/:pageId'} element={<Category />}>
