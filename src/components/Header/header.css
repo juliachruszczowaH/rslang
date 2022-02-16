@@ -1,9 +1,1 @@
-.navbar,.navbar-nav {
-  display: flex;
-  justify-content: space-between;
-}
 
-.nav-item{
-    list-style-type: none;
-    margin: 10px;
-}
