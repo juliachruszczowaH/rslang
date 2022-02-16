@@ -5,10 +5,7 @@ import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
 import { getDataAudioGame } from '../../../services/WordsService';
 import {
   Button,
-  Divider,
   Header,
-  Icon,
-  Item,
   List,
   Loader,
   Modal,
@@ -17,9 +14,14 @@ import {
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
-import { GAME_TIMER, POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
+import { POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
 import AudioCallCard from './AudioCallCard';
 import { API_URL } from '../../../services/AppService';
+import { Link } from '@reach/router';
+import { NavLink, Route } from 'react-router-dom';
+import correctSound from '../../../assets/sound/correct.mp3';
+import wrongSound from '../../../assets/sound/wrong.mp3';
+
 
 const AudioCallGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -30,7 +32,6 @@ const AudioCallGameField: React.FC = () => {
   const [gameStart, setGameStart] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
 
   const onGameEnd = (counter: number) => {
     setGameOver(true);
@@ -44,6 +45,7 @@ const AudioCallGameField: React.FC = () => {
       const correct = questions[number].wordTranslate === answer;
 
       if (correct === true) {
+        play(correctSound);
         if (score >= 0 && score < SUM_POINTS[30] ){
           setScore((prev) => prev + POINTS[1]);
         } else if (score >= SUM_POINTS[30] && score < SUM_POINTS[90]) {
@@ -53,6 +55,8 @@ const AudioCallGameField: React.FC = () => {
         } else {
           setScore((prev) => prev + POINTS[4]);
         }
+      } else {
+        play(wrongSound);
       }
       const answerObject: AnswerObject = {
         questionID: questions[number].id,
@@ -154,11 +158,12 @@ const AudioCallGameField: React.FC = () => {
               basic
               onClick={() => {
                 setOpen(false);
-                setGameStart(true);
+                setGameStart(false);
                 setGameOver(false);
               }}
             >
-              Back to main page
+              <NavLink to='/home' >Back to main page</NavLink>
+
             </Button>
             <Button
               content='Try again'
@@ -192,11 +197,15 @@ const AudioCallGameField: React.FC = () => {
             onAnswer={checkAnswer}
             answersAudioCall={questions[number].answersAudioCall}
           />
-          <Button onClick={()=>{
-            setOpen(false);
-            setGameStart(true);
-            setGameOver(false);
-          }}> HOME</Button>
+          <Button
+            onClick={() => {
+              setOpen(false);
+              setGameStart(false);
+              setGameOver(true);
+            } }          >
+            {' '}
+            STOP THE GAME
+          </Button>
         </div>
 
       )}

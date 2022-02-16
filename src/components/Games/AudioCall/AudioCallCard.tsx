@@ -10,8 +10,7 @@ const AudioCallCard: FC<AudioCallData> = ({
   onAnswer,
   questionNumber,
 }, word: IWordData) => {
-  play(API_URL + word.audio);
-  console.log(answersAudioCall);
+
   return (
     <div>
       <Segment raised style={{ width: '70%', margin: '20px auto' }}>

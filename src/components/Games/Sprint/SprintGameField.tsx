@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-lone-blocks */
-import React, { useEffect, useState } from 'react';
+
+import React, {  useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
@@ -16,14 +14,16 @@ import {
 } from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
-import { getRandomNumber } from '../../../utils/utils';
+import { getRandomNumber, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
 import {
   GAME_TIMER,
   POINTS,
   SUM_POINTS,
 } from '../../../constants/gamesConstants';
-import { useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import correctSound from '../../../assets/sound/correct.mp3';
+import wrongSound from '../../../assets/sound/wrong.mp3';
 
 
 const SprintGameField: React.FC = () => {
@@ -66,6 +66,7 @@ const SprintGameField: React.FC = () => {
         correctTranslate: questions[number].wordTranslate,
       };
       if (correct === true) {
+        play(correctSound);
         if (score >= 0 && score < SUM_POINTS[30]) {
           setScore((prev) => prev + POINTS[1]);
         } else if (score >= SUM_POINTS[30] && score < SUM_POINTS[90]) {
@@ -75,6 +76,8 @@ const SprintGameField: React.FC = () => {
         } else {
           setScore((prev) => prev + POINTS[4]);
         }
+      } else {
+        play(wrongSound);
       }
 
       setUserAnswers((prev) => [...prev, answerObject]);
@@ -162,7 +165,7 @@ const SprintGameField: React.FC = () => {
                 setGameOver(false);
               }}
             >
-              Back to main page
+              <NavLink to='/home' >Back to main page</NavLink>
             </Button>
             <Button
               content='Try again'
@@ -212,12 +215,11 @@ const SprintGameField: React.FC = () => {
           <Button
             onClick={() => {
               setOpen(false);
-              setGameStart(true);
-              setGameOver(false);
-            }}
-          >
+              setGameStart(false);
+              setGameOver(true);
+            } }          >
             {' '}
-            Back to game page
+            STOP THE GAME
           </Button>
         </div>
       )}
