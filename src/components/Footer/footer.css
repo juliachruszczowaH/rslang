@@ -1,7 +1,30 @@
 .footer {
   background-color: darkslategrey;
+  padding: 10px;
 }
+
 .footer-container {
+  justify-content: space-between;
+}
+
+.footer-logo {
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+.footer-logo:hover {
+  opacity: 1;
+  transition: all ease 0.8s;
+}
+
+.footer-box {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.item-styles {
+  font-size: 20px;
+  color: #fff;
 }
