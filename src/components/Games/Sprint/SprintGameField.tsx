@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-lone-blocks */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
@@ -17,7 +18,13 @@ import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
-import { GAME_TIMER, POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
+import {
+  GAME_TIMER,
+  POINTS,
+  SUM_POINTS,
+} from '../../../constants/gamesConstants';
+import { useParams } from 'react-router-dom';
+
 
 const SprintGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -33,19 +40,12 @@ const SprintGameField: React.FC = () => {
   const onGameEnd = (counter: number) => {
     setGameOver(true);
   };
-
-  const updateDataWords = async (level: number) =>{
-    await getDataSprintGame(level, (page - 1));
-  };
   const onStartGame = async (level: number) => {
     setLoading(true);
     setGameStart(false);
     const randomNumberPage = getRandomNumber(1, PAGES_PER_CATEGORY);
-    const newQuestion =  await getDataSprintGame(
-      level,
-      page,
-    );
     setPage(randomNumberPage);
+    const newQuestion = await getDataSprintGame(level, page);
     setQuestions(newQuestion);
     setScore(0);
     setUserAnswers([]);
@@ -53,7 +53,7 @@ const SprintGameField: React.FC = () => {
     setLoading(false);
   };
 
-  const checkAnswer = (answerCompare: boolean, compare: boolean) => {
+  const checkAnswer = async (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
       const answer = answerCompare;
@@ -78,16 +78,27 @@ const SprintGameField: React.FC = () => {
       }
 
       setUserAnswers((prev) => [...prev, answerObject]);
-      setNumber(number + 1);
-
-
-      if (number >= questions.length - 1) {
-        setPage((prev) => prev - 1);
-        updateDataWords(1);
+      const nextQuestion = number + 1;
+      if (number === questions.length - 1) {
+        onGameEnd(number);
+      } else {
+        setNumber(nextQuestion);
       }
-      console.log(page);
     }
   };
+  /* useEffect(() => {
+
+    if (questions.length - 1 === number) {
+      getDataSprintGame(
+        1,
+        page - 1,
+      ).then((res) => {
+        setQuestions(res);
+
+      });
+    }
+
+  }, [questions.length, number, page]); */
 
   return (
     <div>
@@ -212,6 +223,6 @@ const SprintGameField: React.FC = () => {
       )}
     </div>
   );
-};
 
+};
 export default SprintGameField;

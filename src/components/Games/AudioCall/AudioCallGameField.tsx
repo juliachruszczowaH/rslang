@@ -9,6 +9,7 @@ import {
   Header,
   Icon,
   Item,
+  List,
   Loader,
   Modal,
   Statistic,
@@ -64,14 +65,13 @@ const AudioCallGameField: React.FC = () => {
 
       setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
-      setNumber(number + 1);
       if (number === questions.length - 1) {
         onGameEnd(number);
       } else {
         setNumber(nextQuestion);
       }
     }
-    console.log(questions[number].answersAudioCall);
+
   };
   useEffect(() => {
     if (questions[number]) {
@@ -115,38 +115,53 @@ const AudioCallGameField: React.FC = () => {
 
       {gameOver ? (
         <Modal
-          onClose={() => setOpen(false)}
-          onOpen={() => setOpen(true)}
-          open={open}
-          trigger={<Button>SHOW RESULT</Button>}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        size='tiny'
+        closeOnEscape={false}
+        closeOnDimmerClick={false}
+        trigger={<Button>SHOW RESULT</Button>}
         >
-          <Modal.Header>Select a Photo</Modal.Header>
-          <Modal.Content image>
+          <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
+            userAnswers.filter((i) => i.correct).length
+          } - are correct)`}</Modal.Header>
+          <Modal.Content image scrolling>
             <Modal.Description>
-              <Header>Default Profile Image</Header>
+              <Header>Game result</Header>
 
-              {userAnswers.map((item) => (
-                <div key={item.questionID}>
-                  <p>{`Question: ${item.question}`}</p>
-                  <p>{`Correct answer: ${item.correctTranslate}`}</p>
-                  <p>{`Result: ${item.correct}`}</p>
-                </div>
-              ))}
+              <List celled ordered>
+                {userAnswers.map((item) => (
+                  <List.Item key={item.questionID}>
+                    <List.Icon
+                      name={item.correct ? 'checkmark' : 'close'}
+                      color={item.correct ? 'green' : 'red'}
+                    />
+                    <List.Content verticalAlign='middle'>
+                      <List.Header
+                        as={'h3'}
+                        color='blue'
+                      >{`${item.question}`}</List.Header>
+                      <List.Description>{`${item.correctTranslate}`}</List.Description>
+                    </List.Content>
+                  </List.Item>
+                ))}
+              </List>
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>
-            <Button
-              color='green'
+          <Button
+              basic
               onClick={() => {
                 setOpen(false);
                 setGameStart(true);
                 setGameOver(false);
               }}
             >
-              На главную
+              Back to main page
             </Button>
             <Button
-              content='Пройти снова'
+              content='Try again'
               labelPosition='right'
               icon='checkmark'
               onClick={() => {

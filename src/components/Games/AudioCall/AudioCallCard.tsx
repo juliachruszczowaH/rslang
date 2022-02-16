@@ -6,10 +6,8 @@ import { API_URL } from '../../../services/AppService';
 
 
 const AudioCallCard: FC<AudioCallData> = ({
-  questionsWord,
   answersAudioCall,
   onAnswer,
-  posibleAnswerTranslation,
   questionNumber,
 }, word: IWordData) => {
   play(API_URL + word.audio);
@@ -29,9 +27,7 @@ const AudioCallCard: FC<AudioCallData> = ({
               <Button value={answer} onClick={onAnswer}>
                 {`${answer}`}
               </Button>
-
             ))}
-
         </div>
       </Segment>
     </div >

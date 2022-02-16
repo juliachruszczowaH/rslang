@@ -5,7 +5,7 @@ export interface IWordData {
   group?: number;
   id?: string;
   image?: string;
-  page?: number;
+  page: number;
   textExample?: string;
   textExampleTranslate?: string;
   textMeaning?: string;
