@@ -1,7 +1,6 @@
-import { FC, useEffect } from 'react';
-import { getRandomNumber, play } from '../../../utils/utils';
-import { AudioCallData, IWordData, SprintData } from '../../../models/WordModel';
-import { Button, Header, Icon, Segment, Statistic } from 'semantic-ui-react';
+import { FC } from 'react';
+import { AudioCallData } from '../../../models/WordModel';
+import { Button, Icon, Segment, Statistic } from 'semantic-ui-react';
 import { API_URL } from '../../../services/AppService';
 
 
@@ -9,7 +8,7 @@ const AudioCallCard: FC<AudioCallData> = ({
   answersAudioCall,
   onAnswer,
   questionNumber,
-}, word: IWordData) => {
+}) => {
   console.log(answersAudioCall[1]);
 
 
@@ -25,7 +24,7 @@ const AudioCallCard: FC<AudioCallData> = ({
         </div>
         <div>
             {answersAudioCall.map((answer) => (
-              <Button  basic color='green' /* value={answer} */ onClick={()=>{onAnswer(answer);}}>
+              <Button  basic color='green' onClick={()=>{onAnswer(answer);}}>
                 {`${answer}`}
               </Button>
             ))}

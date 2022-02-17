@@ -20,7 +20,6 @@ import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 
-
 const AudioCallGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<AudioQuestionsState[]>([]);
@@ -35,16 +34,13 @@ const AudioCallGameField: React.FC = () => {
     setGameOver(true);
   };
 
-
-  const checkAnswer = (/* e: any, */ answer: string ) => {
-
+  const checkAnswer = (answer: string) => {
     if (!gameOver) {
-      /* const answer = e.currentTarget.value; */
       const correct = questions[number].wordTranslate === answer;
 
       if (correct === true) {
         play(correctSound);
-        if (score >= 0 && score < SUM_POINTS[30] ){
+        if (score >= 0 && score < SUM_POINTS[30]) {
           setScore((prev) => prev + POINTS[1]);
         } else if (score >= SUM_POINTS[30] && score < SUM_POINTS[90]) {
           setScore((prev) => prev + POINTS[2]);
@@ -64,32 +60,29 @@ const AudioCallGameField: React.FC = () => {
         correctTranslate: questions[number].wordTranslate,
       };
 
-
       setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
       if (number === questions.length - 1) {
         onGameEnd(number);
       } else {
-        setTimeout(() => {setNumber(nextQuestion);}, 1000);
+        setTimeout(() => {
+          setNumber(nextQuestion);
+        }, 1000);
       }
     }
-
   };
-
-
 
   useEffect(() => {
     if (questions[number]) {
       play(API_URL + questions[number].audio);
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions[number]]);
-
 
   useEffect(() => {
     if (gameOver || gameStart) return undefined;
-    const handleKeysControl = (event: KeyboardEvent) =>{
+    const handleKeysControl = (event: KeyboardEvent) => {
       if (event.repeat) return;
       if (event.key === '1') checkAnswer(questions[number].answersAudioCall[0]);
       if (event.key === '2') checkAnswer(questions[number].answersAudioCall[1]);
@@ -114,20 +107,19 @@ const AudioCallGameField: React.FC = () => {
     setUserAnswers([]);
     setNumber(0);
     setLoading(false);
-
   };
 
   return (
     <div>
-      {gameStart /* || userAnswers.length === questions.length */ ? (
+      {gameStart ? (
         <div>
           <Message info>
             <Message.Header>Welcome to the game "AudioCall"</Message.Header>
             <p>
-            The "AudioCall" is a game in which the question is pronounced
-            in English and you have to choose one of the 5 proposed translation
-            options. Use the mouse and keys from 1 to 5 to select the correct
-            answer, to repeat the question, press the space bar.
+              The "AudioCall" is a game in which the question is pronounced in
+              English and you have to choose one of the 5 proposed translation
+              options. Use the mouse and keys from 1 to 5 to select the correct
+              answer, to repeat the question, press the space bar.
             </p>
             <p>
               Below you need to select the level of difficulty of the questions.
@@ -149,13 +141,17 @@ const AudioCallGameField: React.FC = () => {
 
       {gameOver ? (
         <Modal
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        open={open}
-        size='tiny'
-        closeOnEscape={false}
-        closeOnDimmerClick={false}
-        trigger={<Button inverted color='red'>SHOW RESULT</Button>}
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+          size="tiny"
+          closeOnEscape={false}
+          closeOnDimmerClick={false}
+          trigger={
+            <Button inverted color="red">
+              SHOW RESULT
+            </Button>
+          }
         >
           <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
             userAnswers.filter((i) => i.correct).length
@@ -171,10 +167,10 @@ const AudioCallGameField: React.FC = () => {
                       name={item.correct ? 'checkmark' : 'close'}
                       color={item.correct ? 'green' : 'red'}
                     />
-                    <List.Content verticalAlign='middle'>
+                    <List.Content verticalAlign="middle">
                       <List.Header
                         as={'h3'}
-                        color='blue'
+                        color="blue"
                       >{`${item.question}`}</List.Header>
                       <List.Description>{`${item.correctTranslate}`}</List.Description>
                     </List.Content>
@@ -184,7 +180,7 @@ const AudioCallGameField: React.FC = () => {
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>
-          <Button
+            <Button
               basic
               onClick={() => {
                 setOpen(false);
@@ -192,13 +188,12 @@ const AudioCallGameField: React.FC = () => {
                 setGameOver(false);
               }}
             >
-              <NavLink to='/home' >Back to main page</NavLink>
-
+              <NavLink to="/home">Back to main page</NavLink>
             </Button>
             <Button
-              content='Try again'
-              labelPosition='right'
-              icon='checkmark'
+              content="Try again"
+              labelPosition="right"
+              icon="checkmark"
               onClick={() => {
                 setOpen(false);
                 setGameStart(true);
@@ -210,12 +205,12 @@ const AudioCallGameField: React.FC = () => {
         </Modal>
       ) : null}
 
-      {<Loader size='large'>Loading</Loader>}
+      {<Loader size="large">Loading</Loader>}
 
       {!loading && !gameStart && !gameOver && (
         <div>
           <div>
-            <Statistic size='small'>
+            <Statistic size="small">
               <Statistic.Value>{score}</Statistic.Value>
               <Statistic.Label>Score</Statistic.Label>
             </Statistic>
@@ -227,17 +222,19 @@ const AudioCallGameField: React.FC = () => {
             onAnswer={checkAnswer}
             answersAudioCall={questions[number].answersAudioCall}
           />
-          <Button basic color='red'
+          <Button
+            basic
+            color="red"
             onClick={() => {
               setOpen(false);
               setGameStart(false);
               setGameOver(true);
-            } }          >
+            }}
+          >
             {' '}
             STOP THE GAME
           </Button>
         </div>
-
       )}
     </div>
   );

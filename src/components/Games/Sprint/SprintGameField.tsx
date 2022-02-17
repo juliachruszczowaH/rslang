@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
@@ -89,23 +89,10 @@ const SprintGameField: React.FC = () => {
     }
   };
 
-  /* useEffect(() => {
-
-    if (questions.length - 1 === number) {
-      getDataSprintGame(
-        1,
-        page - 1,
-      ).then((res) => {
-        setQuestions(res);
-
-      });
-    }
-
-  }, [questions.length, number, page]); */
 
   return (
     <div>
-      {gameStart /* || userAnswers.length === questions.length */ ? (
+      {gameStart ? (
         <div>
           <Message info>
             <Message.Header>Welcome to the game "Sprint"</Message.Header>
@@ -141,7 +128,11 @@ const SprintGameField: React.FC = () => {
           size="tiny"
           closeOnEscape={false}
           closeOnDimmerClick={false}
-          trigger={<Button inverted color='red'>SHOW RESULT</Button>}
+          trigger={
+            <Button inverted color="red">
+              SHOW RESULT
+            </Button>
+          }
         >
           <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
             userAnswers.filter((i) => i.result).length
@@ -225,7 +216,8 @@ const SprintGameField: React.FC = () => {
             answers={questions[number].answers}
           />
           <Button
-           basic color='red'
+            basic
+            color="red"
             onClick={() => {
               setOpen(false);
               setGameStart(false);
