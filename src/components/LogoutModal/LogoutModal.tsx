@@ -1,14 +1,23 @@
+
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Header, Icon, Modal } from 'semantic-ui-react';
 import { logout } from '../../services/AuthService';
 import './logoutmodal.css';
 
 export const LogoutModal = (triggerElement: JSX.Element): JSX.Element => {
   const [open, setOpen] = useState(false);
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const handleConfirm = () => {
     logout();
     setOpen(false);
+    if (location.pathname === '/statistics') {
+      navigate('/home');
+    }
+    if (location.pathname === '/book/dictionary') {
+      navigate('/book');
+    }
     window.location.reload();
   };
 
