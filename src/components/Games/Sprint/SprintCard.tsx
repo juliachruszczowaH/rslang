@@ -18,6 +18,7 @@ const SprintCard: FC<SprintData> = ({
 
   useEffect(() => {
     const handleKeysControl = (event: KeyboardEvent) => {
+      event.preventDefault();
       if (event.key === 'ArrowRight') {
         onAnswer(true, compare());
       } else if (event.key === 'ArrowLeft') {

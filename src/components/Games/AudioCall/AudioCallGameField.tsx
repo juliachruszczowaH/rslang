@@ -19,6 +19,7 @@ import { API_URL } from '../../../services/AppService';
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
+import GameStartScreen from '../GameStartScreen';
 
 const AudioCallGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -83,6 +84,7 @@ const AudioCallGameField: React.FC = () => {
   useEffect(() => {
     if (gameOver || gameStart) return undefined;
     const handleKeysControl = (event: KeyboardEvent) => {
+      event.preventDefault();
       if (event.repeat) return;
       if (event.key === '1') checkAnswer(questions[number].answersAudioCall[0]);
       if (event.key === '2') checkAnswer(questions[number].answersAudioCall[1]);
@@ -113,30 +115,31 @@ const AudioCallGameField: React.FC = () => {
     <div>
       {gameStart ? (
         <div>
-          <Message info>
-            <Message.Header>Welcome to the game "AudioCall"</Message.Header>
-            <p>
-              The "AudioCall" is a game in which the question is pronounced in
-              English and you have to choose one of the 5 proposed translation
-              options. Use the mouse and keys from 1 to 5 to select the correct
-              answer, to repeat the question, press the space bar.
-            </p>
-            <p>
-              Below you need to select the level of difficulty of the questions.
-            </p>
-          </Message>
-          {CATEGOTY_LINKS.map((item) => (
-            <Button
-              key={item.id}
-              style={{ backgroundColor: item.color }}
-              onClick={() => {
-                onStartGame(item.id);
-              }}
-            >
-              {`${item.id + 1} LEVEL`}
-            </Button>
-          ))}
-        </div>
+        <Message info>
+          <Message.Header>Welcome to the game "AudioCall"</Message.Header>
+          <p>
+            The "AudioCall" is a game in which the question is pronounced in
+            English and you have to choose one of the 5 proposed translation
+            options. Use the mouse and keys from 1 to 5 to select the correct
+            answer, to repeat the question, press the space bar.
+          </p>
+          <p>
+            Below you need to select the level of difficulty of the questions.
+          </p>
+        </Message>
+        {CATEGOTY_LINKS.map((item) => (
+          <Button
+            key={item.id}
+            style={{ backgroundColor: item.color }}
+            onClick={() => {
+              onStartGame(item.id);
+            }}
+          >
+            {`${item.id + 1} LEVEL`}
+          </Button>
+        ))}
+      </div>
+
       ) : null}
 
       {gameOver ? (
@@ -241,3 +244,5 @@ const AudioCallGameField: React.FC = () => {
 };
 
 export default AudioCallGameField;
+
+{/* */}
