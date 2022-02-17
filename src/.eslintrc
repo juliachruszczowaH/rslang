@@ -17,7 +17,7 @@
     },
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly",
+        "SharedArrayBuffer": "readonly"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -38,6 +38,7 @@
         "jsx-a11y/label-has-associated-control": "off",
         "no-debugger": "warn",
         "@typescript-eslint/explicit-module-boundary-types": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "@typescript-eslint/comma-dangle":"off"
     }
 }

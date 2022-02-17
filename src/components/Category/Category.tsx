@@ -1,12 +1,19 @@
 import React, { useEffect, useState, MouseEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Button, Card, Divider, Icon, Pagination, Popup, Image, Segment, Loader } from 'semantic-ui-react';
+import { Button, Card, Divider, Icon, Pagination, Popup, Image, Segment, Loader, Label } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from '../../services/AuthService';
-import { getHardWords, getUserAggregatedWords, setWordToHard } from '../../services/UserWordsService';
+import {
+  createUpdateUserWordById,
+  getHardWords,
+  getPaginatedAllUserAggregatedWords,
+  getUserWordById,
+  setWordToHard,
+  updateUserWordById,
+} from '../../services/UserWordsService';
 import { getWords } from '../../services/WordsService';
 import { play } from '../../utils/utils';
 
@@ -31,7 +38,7 @@ export const Category: React.FunctionComponent = () => {
   const token = getCurrentToken();
   const isDictionary = location.pathname === '/book/dictionary';
 
-  const color = CATEGOTY_LINKS.find(i => i.id === group)?.color;
+  const color = isDictionary ? '#f4defc' : CATEGOTY_LINKS.find((i) => i.id === group)?.color;
 
   useEffect(() => {
     let isMounted = true;
@@ -39,7 +46,7 @@ export const Category: React.FunctionComponent = () => {
       if (isDictionary) {
         if (updated) {
           getHardWords(id, token).then(
-            response => {
+            (response) => {
               if (response) {
                 console.log('response');
                 console.log(response[0]);
@@ -55,8 +62,8 @@ export const Category: React.FunctionComponent = () => {
         }
       } else {
         if (updated) {
-          getUserAggregatedWords(id, token, group, page).then(
-            response => {
+          getPaginatedAllUserAggregatedWords(id, token, group, page).then(
+            (response) => {
               if (response) {
                 console.log('response');
                 console.log(response[0]);
@@ -74,7 +81,7 @@ export const Category: React.FunctionComponent = () => {
     } else {
       if (updated) {
         getWords(group, page).then(
-          response => {
+          (response) => {
             if (response) {
               console.log(response);
               if (isMounted) setWords({ words: response });
@@ -123,26 +130,25 @@ export const Category: React.FunctionComponent = () => {
   console.log('Dictionary => ' + isDictionary);
 
   const handleHardClick = (wordId: string | undefined) => {
-    if (isDictionary) {
-      console.log(wordId);
-      if (id && token) {
-        console.log(wordId);
-        if (wordId) setWordToHard(id, token, wordId, false);
-        setUpdated(true);
-      }
-    } else {
-      if (id && token) {
-        console.log(wordId);
-        if (wordId) setWordToHard(id, token, wordId);
-        setUpdated(true);
-      }
+    if (id && token) {
+      if (wordId)
+        createUpdateUserWordById(id, token, wordId, { difficulty: isDictionary ? 'normal' : 'hard', optional: { isKnown: false } }).then(() =>
+          setUpdated(true)
+        );
     }
-    console.log('HARD: ');
+
+    console.log('HARD: ' + isDictionary);
   };
 
-  const handleKnownClick = () => {
-    console.log('KNOWN: ');
-    setUpdated(true);
+  const handleKnownClick = (wordId: string | undefined) => {
+    console.log(wordId);
+    if (id && token) {
+      if (wordId) {
+        createUpdateUserWordById(id, token, wordId, { difficulty: 'normal', optional: { isKnown: true } }).then(() => setUpdated(true));
+      }
+    }
+
+    console.log('known: ');
   };
 
   return (
@@ -161,26 +167,43 @@ export const Category: React.FunctionComponent = () => {
       )}
       <Divider key={Math.floor(Math.random() * (0 - 10001)) + 0} />
       {words.words.length > 0 ? (
-        <Card.Group stackable centered style={{ height: '70vh', overflowY: 'scroll' }}>
+        <Card.Group stackable centered style={{ overflowY: 'scroll' }}>
           {words.words &&
             words.words.map((word: IWordData, index: number) => (
               <Card key={`${index}-card`}>
                 <Card.Content>
                   <div>
-                    <Image src={API_URL + word.image} size="small" />
-                    <Segment raised style={{ backgroundColor: color }}>
+                    <Image src={API_URL + word.image} size="medium" />
+                    <Segment
+                      raised
+                      style={{
+                        backgroundColor: color,
+                        borderColor: word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === true ? 'green' : 'none',
+                      }}
+                    >
                       <Card.Header as={'h3'} textAlign="left">
+                        {word.userWord?.difficulty === 'hard' || word.userWord?.optional?.isKnown === true ? (
+                          <Label
+                            color={word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === true ? 'green' : undefined}
+                            ribbon="right"
+                            size="mini"
+                          >
+                            {word.userWord?.difficulty === 'hard' ? 'hard' : word.userWord?.optional?.isKnown === true ? 'known' : undefined}
+                          </Label>
+                        ) : null}
                         <Popup
                           content="Click to listen"
                           trigger={
                             <Button
                               circular
-                              content={<Icon name="headphones" circular position="center" />}
+                              inverted
+                              color="blue"
+                              icon="headphones"
                               onClick={() => play([API_URL + word.audio, API_URL + word.audioMeaning, API_URL + word.audioExample])}
-                            ></Button>
+                            />
                           }
                         />
-                        {word.word}{' '}
+                        {word.word}
                         <Card.Meta textAlign="center">
                           {' '}
                           <span className="transcription">{word.transcription}</span>
@@ -214,14 +237,27 @@ export const Category: React.FunctionComponent = () => {
                     </Card.Description>
                     <Divider />
                     {isAuthenticated() ? (
-                      <Card.Content extra>
-                        {word.userWord?.difficulty === 'hard' ? <Icon color="red" name={'eye'} /> : null}
-                        <Button onClick={() => handleHardClick(word._id)} color={updated ? 'red' : 'green'} key={word._id}>
-                          <Icon name={isDictionary ? 'eye slash' : 'eye'} />
+                      <Card.Content extra style={{ maxHeight: '40px' }}>
+                        <Button
+                          circular
+                          inverted
+                          color="red"
+                          icon={isDictionary ? 'trash alternate' : 'eye'}
+                          onClick={() => handleHardClick(word._id)}
+                          key={word._id}
+                          loading={updated}
+                          disabled={word.userWord?.difficulty === 'hard' && !isDictionary}
+                        >
                         </Button>
-                        <Button onClick={handleKnownClick}>
-                          <Icon name="check circle outline" />
-                        </Button>
+                        <Button
+                          circular
+                          inverted
+                          color="green"
+                          icon="check circle outline"
+                          loading={updated}
+                          disabled={word.userWord?.optional?.isKnown}
+                          onClick={() => handleKnownClick(word._id)}
+                        ></Button>
                       </Card.Content>
                     ) : null}
                   </div>

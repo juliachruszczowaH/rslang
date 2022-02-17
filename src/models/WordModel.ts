@@ -1,13 +1,17 @@
-export type UserWordOptions = {
-  isNew: boolean
-}
 export type totalCount = {
   count: boolean
 }
+
+export type IUserWordOptionals = {
+  isNew?: boolean,
+  isKnown?: boolean
+}
+
 export type UserWordData = {
-  id: string,
-  difficulty: string,
-  wordId: string
+  id?: string,
+  difficulty?: string,
+  wordId?: string,
+  optional?: IUserWordOptionals
 }
 export interface IWordData {
   audio?: string;
@@ -29,7 +33,7 @@ export interface IWordData {
 }
 
 export interface IUserWordData {
-  paginatedResults:IWordData[];
+  paginatedResults: IWordData[];
   totaCount: totalCount[];
 }
 

@@ -1,3 +1,5 @@
+import { IUserWordOptionals, UserWordData } from '../models/WordModel';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const shuffleArray = (array: any[]) => {
   return array
@@ -29,3 +31,4 @@ export const getStorageData = (key: string): string | null => {
   }
   return null;
 };
+

@@ -32,8 +32,8 @@ function Header() {
   }, [auth]);
 
   return (
-    <Menu secondary>
-      <Menu.Item>
+    <Menu>
+      <Menu.Item header>
         <img alt="logo" src='rs-lang-logo.jpg' />
       </Menu.Item>
       {links.map((item) => (
@@ -46,7 +46,7 @@ function Header() {
         </Menu.Item>
       ))}
       <Menu.Menu position='right'>
-        {auth ? LogoutModal(<Button color={'orange'} > Logout</Button>) : LoginModal(<Button color={'green'} > Login</Button>)}
+        {auth ? LogoutModal(<Button color={'orange'} circular inverted size='small'> Logout</Button>) : LoginModal(<Button color={'green'} circular inverted size='small'> Login</Button>)}
       </Menu.Menu>
 
     </Menu >
