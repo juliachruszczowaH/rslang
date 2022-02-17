@@ -1,70 +1,45 @@
-import React, { useState } from 'react';
-import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
-import SprintCard from './SprintCard';
-import { getDataSprintGame } from '../../../services/WordsService';
+import React, { useEffect, useState } from 'react';
+import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
+import { getDataAudioGame } from '../../../services/WordsService';
 import {
   Button,
   Header,
-  Icon,
   List,
   Loader,
   Message,
   Modal,
   Statistic,
 } from 'semantic-ui-react';
-import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
-import {
-  GAME_TIMER,
-  POINTS,
-  SUM_POINTS,
-} from '../../../constants/gamesConstants';
+import { POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
+import AudioCallCard from './AudioCallCard';
+import { API_URL } from '../../../services/AppService';
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 
-const SprintGameField: React.FC = () => {
+
+
+const AudioCallGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<SprintQuestionsState[]>([]);
-  const [page, setPage] = useState(29);
+  const [questions, setQuestions] = useState<AudioQuestionsState[]>([]);
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameStartFromMenu, setGameStartFromMenu] = useState(true);
-  /* const [gameStartFromBook, setGameStartFromBook] = useState(true); */
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
 
   const onGameEnd = (counter: number) => {
     setGameOver(true);
   };
-  const onStartGame = async (level: number) => {
-    setLoading(true);
-    setGameStartFromMenu(false);
-    const randomNumberPage = getRandomNumber(1, PAGES_PER_CATEGORY);
-    setPage(randomNumberPage);
-    const newQuestion = await getDataSprintGame(level, page);
-    setQuestions(newQuestion);
-    setScore(0);
-    setUserAnswers([]);
-    setNumber(0);
-    setLoading(false);
-  };
 
-  const checkAnswer = async (answerCompare: boolean, compare: boolean) => {
+  const checkAnswer = (answer: string) => {
     if (!gameOver) {
-      const correct = answerCompare === compare;
-      const answer = answerCompare;
-      const answerObject: AnswerObject = {
-        questionID: questions[number].id,
-        question: questions[number].word,
-        userAnswer: answer,
-        correct: compare,
-        result: correct,
-        correctTranslate: questions[number].wordTranslate,
-      };
+      const correct = questions[number].wordTranslate === answer;
+
       if (correct === true) {
         play(correctSound);
         if (score >= 0 && score < SUM_POINTS[30]) {
@@ -79,46 +54,93 @@ const SprintGameField: React.FC = () => {
       } else {
         play(wrongSound);
       }
+      const answerObject: AnswerObject = {
+        questionID: questions[number].id,
+        question: questions[number].word,
+        correct,
+        answer,
+        correctTranslate: questions[number].wordTranslate,
+      };
 
       setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
       if (number === questions.length - 1) {
         onGameEnd(number);
       } else {
-        setNumber(nextQuestion);
+        setTimeout(() => {
+          setNumber(nextQuestion);
+        }, 1000);
       }
     }
   };
 
+  useEffect(() => {
+    if (questions[number]) {
+      play([API_URL + questions[number].audio]);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questions[number]]);
+
+  useEffect(() => {
+    if (gameOver || gameStartFromMenu) return undefined;
+    const handleKeysControl = (event: KeyboardEvent) => {
+      event.preventDefault();
+      if (event.repeat) return;
+      if (event.key === '1') checkAnswer(questions[number].answersAudioCall[0]);
+      if (event.key === '2') checkAnswer(questions[number].answersAudioCall[1]);
+      if (event.key === '3') checkAnswer(questions[number].answersAudioCall[2]);
+      if (event.key === '4') checkAnswer(questions[number].answersAudioCall[3]);
+      if (event.key === '5') checkAnswer(questions[number].answersAudioCall[4]);
+      if (event.key === ' ') play([API_URL + questions[number].audio]);
+      console.log(questions[number].answersAudioCall[0]);
+    };
+    window.addEventListener<'keypress'>('keypress', handleKeysControl);
+    return () => window.removeEventListener('keypress', handleKeysControl);
+  });
+  const onStartGame = async (level: number) => {
+    setLoading(true);
+    setGameStartFromMenu(false);
+    const newQuestion = await getDataAudioGame(
+      level,
+      getRandomNumber(1, PAGES_PER_CATEGORY),
+    );
+    setQuestions(newQuestion);
+    setScore(0);
+    setUserAnswers([]);
+    setNumber(0);
+    setLoading(false);
+  };
 
   return (
     <div>
       {gameStartFromMenu ? (
         <div>
-          <Message info>
-            <Message.Header>Welcome to the game "Sprint"</Message.Header>
-            <p>
-              Sprint is a speed game where you have 60 seconds to complete the
-              game. Use the mouse and the right or left key to select the
-              correct answer.
-            </p>
-            <p>
-              Below you need to select the level of difficulty of the questions.
-            </p>
-          </Message>
+        <Message info>
+          <Message.Header>Welcome to the game "AudioCall"</Message.Header>
+          <p>
+            The "AudioCall" is a game in which the question is pronounced in
+            English and you have to choose one of the 5 proposed translation
+            options. Use the mouse and keys from 1 to 5 to select the correct
+            answer, to repeat the question, press the space bar.
+          </p>
+          <p>
+            Below you need to select the level of difficulty of the questions.
+          </p>
+        </Message>
+        {CATEGOTY_LINKS.map((item) => (
+          <Button
+            key={item.id}
+            style={{ backgroundColor: item.color }}
+            onClick={() => {
+              onStartGame(item.id);
+            }}
+          >
+            {`${item.id + 1} LEVEL`}
+          </Button>
+        ))}
+      </div>
 
-          {CATEGOTY_LINKS.map((item) => (
-            <Button
-              key={item.id}
-              onClick={() => {
-                onStartGame(item.id);
-              }}
-              style={{ backgroundColor: item.color }}
-            >
-              {`${item.id + 1} LEVEL`}
-            </Button>
-          ))}
-        </div>
       ) : null}
 
       {gameOver ? (
@@ -136,17 +158,18 @@ const SprintGameField: React.FC = () => {
           }
         >
           <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
-            userAnswers.filter((i) => i.result).length
+            userAnswers.filter((i) => i.correct).length
           } - are correct)`}</Modal.Header>
           <Modal.Content image scrolling>
             <Modal.Description>
               <Header>Game result</Header>
+
               <List celled ordered>
                 {userAnswers.map((item) => (
                   <List.Item key={item.questionID}>
                     <List.Icon
-                      name={item.result ? 'checkmark' : 'close'}
-                      color={item.result ? 'green' : 'red'}
+                      name={item.correct ? 'checkmark' : 'close'}
+                      color={item.correct ? 'green' : 'red'}
                     />
                     <List.Content verticalAlign="middle">
                       <List.Header
@@ -192,29 +215,16 @@ const SprintGameField: React.FC = () => {
         <div>
           <div>
             <Statistic size="small">
-              <Statistic.Value>
-                <Timer
-                  isActive={true}
-                  initialTime={GAME_TIMER}
-                  onCountdownFinish={() => onGameEnd(number)}
-                />
-              </Statistic.Value>
-              <Statistic.Label>
-                <Icon name="stopwatch" size="big" />
-              </Statistic.Label>
-            </Statistic>
-            <Statistic size="small">
               <Statistic.Value>{score}</Statistic.Value>
               <Statistic.Label>Score</Statistic.Label>
             </Statistic>
           </div>
-          <SprintCard
+          <AudioCallCard
             questionNumber={number + 1}
             posibleAnswerTranslation={questions[number].wordTranslate}
             questionsWord={questions[number].word}
             onAnswer={checkAnswer}
-            userAnswer={userAnswers[number]}
-            answers={questions[number].answers}
+            answersAudioCall={questions[number].answersAudioCall}
           />
           <Button
             basic
@@ -233,4 +243,7 @@ const SprintGameField: React.FC = () => {
     </div>
   );
 };
-export default SprintGameField;
+
+export default AudioCallGameField;
+
+{/* */}

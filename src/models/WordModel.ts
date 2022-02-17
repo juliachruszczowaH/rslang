@@ -1,18 +1,19 @@
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type totalCount = {
   count: boolean
-}
+};
 
 export type IUserWordOptionals = {
   isNew?: boolean,
   isKnown?: boolean
-}
+};
 
 export type UserWordData = {
   id?: string,
   difficulty?: string,
   wordId?: string,
   optional?: IUserWordOptionals
-}
+};
 export interface IWordData {
   audio?: string;
   audioExample?: string;
@@ -21,7 +22,7 @@ export interface IWordData {
   id?: string;
   _id?: string;
   image?: string;
-  page?: number;
+  page: number;
   textExample?: string;
   textExampleTranslate?: string;
   textMeaning?: string;
@@ -40,7 +41,9 @@ export interface IUserWordData {
 export interface IWordsDataResponse {
   words: IWordData[];
 }
-export type QuestionsState = IWordData & { answers: string[] };
+export type SprintQuestionsState = IWordData & { answers: string[] };
+
+export type AudioQuestionsState = IWordData & { answersAudioCall: string[] };
 
 export interface IWordsDataResponse {
   words: IWordData[];
@@ -49,11 +52,12 @@ export interface IWordsDataResponse {
 export type AnswerObject = {
   questionID?: string;
   question?: string;
-  userAnswer: boolean;
+  userAnswer?: boolean;
+  answer?: string;
   correct: boolean;
   correctTranslate?: string;
   transcription?: string;
-  result: boolean;
+  result?: boolean;
 };
 export type SprintData = {
   questionNumber: number;
@@ -62,4 +66,12 @@ export type SprintData = {
   posibleAnswerTranslation: string | undefined;
   onAnswer: (answerCompare: boolean, compare: boolean) => void;
   userAnswer: AnswerObject;
+};
+export type AudioCallData = {
+  questionNumber: number;
+  questionsWord: string | undefined;
+  answersAudioCall:  string[];
+  posibleAnswerTranslation: string | undefined;
+  onAnswer: (/* e: React.MouseEvent<HTMLButtonElement> | */ answer: string) => void;
+
 };
