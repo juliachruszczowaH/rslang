@@ -19,15 +19,15 @@ const App: React.FC = () => {
 
       <div className="main-content-container" style={{ textAlign: 'center' }}>
         <Routes>
-          <Route path={'/book'} element={<Book />}  >
-            <Route path={'/book/:groupId/:pageId'} element={<Category />}>
-            </Route>
+          <Route path={'/book'} element={<Book />}>
+            <Route path={'/book/:groupId/:pageId'} element={<Category />}></Route>
+            <Route path={'/book/dictionary'} element={<Category />}></Route>
           </Route>
 
-          <Route path={'/sprintgame'} element={<SprintGame />}  ></Route>
-          <Route path={'/audiocall'} element={<AudioCallGame />}  ></Route>
-          <Route path={'/statistics'} element={<Statistics />}  ></Route>
-          <Route path={'/team'} element={<Team />}  ></Route>
+          <Route path={'/sprintgame'} element={<SprintGame />}></Route>
+          <Route path={'/audiocall'} element={<AudioCallGame />}></Route>
+          <Route path={'/statistics'} element={<Statistics />}></Route>
+          <Route path={'/team'} element={<Team />}></Route>
           <Route path={'/home'} element={<Home />} />
           <Route path={'/'} element={<Home />} />
           <Route
@@ -36,16 +36,13 @@ const App: React.FC = () => {
               <main style={{ padding: '1rem' }}>
                 <p>There's nothing here!</p>
               </main>
-            } />
+            }
+          />
         </Routes>
-
       </div>
-      {(location.pathname !== '/sprintgame' && location.pathname !== '/audiocall') ? <Footer /> : ''}
-
+      {location.pathname !== '/sprintgame' && location.pathname !== '/audiocall' ? <Footer /> : ''}
     </div>
   );
 };
-
-
 
 export default App;

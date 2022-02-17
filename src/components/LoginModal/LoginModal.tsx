@@ -9,7 +9,8 @@ import {
   Message,
   Modal,
 } from 'semantic-ui-react';
-import { login } from '../../services/AuthService';
+import { getCurrentToken, getCurrentUserId, login } from '../../services/AuthService';
+import { getUserStatistics, setUserOptionalLoginStatistics } from '../../services/StatisticsService';
 import { createNewUser } from '../../services/UserService';
 import './loginmodal.css';
 
@@ -21,7 +22,6 @@ type FormState = {
 
 export const LoginModal = (triggerElement: JSX.Element): JSX.Element => {
   const initialState: FormState = { email: '', password: '', name: '' };
-
   const [state, setState] = useState(true);
   const [email, setEmail] = useState(initialState.email);
   const [pass, setPass] = useState(initialState.password);
@@ -55,51 +55,56 @@ export const LoginModal = (triggerElement: JSX.Element): JSX.Element => {
     setLoginError('');
     setState(true);
   };
+
+  const processError = (error: { response: { data: any; statusText: any; }; }) => {
+    const errorData = error.response.data;
+    const errorStatus = error.response.statusText;
+    const errorMessage =
+      typeof errorData === 'string'
+        ? errorData
+        : errorData.error.errors
+          .map((i: { message: string }) => i.message)
+          .join('. ');
+    setLoginError(`${errorStatus}:  ${errorMessage}`);
+  };
+
+  const processLogin = () => {
+    login({ email: email, password: pass }).then(
+      (response) => {
+
+        if (response) {
+          const currentUser = getCurrentUserId();
+          const currentToken = getCurrentToken();
+          setEmail(initialState.email);
+          setPass(initialState.password);
+          if (currentUser && currentToken) {
+            getUserStatistics(currentUser, currentToken).then(() => {
+              setUserOptionalLoginStatistics(currentUser, currentToken, Date.now()).then(() => window.location.reload());
+            });
+          }
+          setOpen(false);
+
+        }
+      },
+      (error) => {
+        processError(error);
+      },
+    );
+  };
+
   const handleSubmit = () => {
     if (state) {
-      login({ email: email, password: pass }).then(
-        (response) => {
-          if (response) {
-            console.log(response);
-            setEmail(initialState.email);
-            setPass(initialState.password);
-            setOpen(false);
-            window.location.reload();
-          }
-        },
-        (error) => {
-          const content =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString();
-          console.log(error.response);
-          setLoginError(content);
-        },
-      );
+      processLogin();
     } else {
       console.log('Registration');
       createNewUser({ name: name, email: email, password: pass }).then(
         (response) => {
           if (response) {
-            console.log(response);
-            login({ email: email, password: pass }).then(() =>
-              window.location.reload(),
-            );
+            processLogin();
           }
-          setOpen(false);
         },
         (error) => {
-          const errorData = error.response.data;
-          const errorStatus = error.response.statusText;
-          const errorMessage =
-            typeof errorData === 'string'
-              ? errorData
-              : errorData.error.errors
-                .map((i: { message: string }) => i.message)
-                .join('. ');
-
-          console.log(errorMessage);
-          setLoginError(`${errorStatus}:  ${errorMessage}`);
+          processError(error);
         },
       );
     }

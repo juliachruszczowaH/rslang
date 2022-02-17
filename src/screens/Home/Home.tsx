@@ -101,7 +101,7 @@ const Home: React.FC = () => {
                       as="a"
                       color="green"
                       ribbon
-                      onClick={() => navigate('/dictionary')}
+                      onClick={() => navigate('/book/dictionary')}
                     >
                       Dictionary
                     </Label>
