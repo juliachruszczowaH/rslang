@@ -25,7 +25,7 @@ const AudioCallCard: FC<AudioCallData> = ({
         </div>
         <div>
             {answersAudioCall.map((answer) => (
-              <Button  basic color='green' value={answer} onClick={onAnswer}>
+              <Button  basic color='green' /* value={answer} */ onClick={()=>{onAnswer(answer);}}>
                 {`${answer}`}
               </Button>
             ))}

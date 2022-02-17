@@ -36,10 +36,10 @@ const AudioCallGameField: React.FC = () => {
   };
 
 
-  const checkAnswer = (e: any ) => {
+  const checkAnswer = (/* e: any, */ answer: string ) => {
 
     if (!gameOver) {
-      const answer = e.currentTarget.value;
+      /* const answer = e.currentTarget.value; */
       const correct = questions[number].wordTranslate === answer;
 
       if (correct === true) {
@@ -82,11 +82,26 @@ const AudioCallGameField: React.FC = () => {
     if (questions[number]) {
       play(API_URL + questions[number].audio);
     }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions[number]]);
 
 
-
+  useEffect(() => {
+    if (gameOver || gameStart) return undefined;
+    const handleKeysControl = (event: KeyboardEvent) =>{
+      if (event.repeat) return;
+      if (event.key === '1') checkAnswer(questions[number].answersAudioCall[0]);
+      if (event.key === '2') checkAnswer(questions[number].answersAudioCall[1]);
+      if (event.key === '3') checkAnswer(questions[number].answersAudioCall[2]);
+      if (event.key === '4') checkAnswer(questions[number].answersAudioCall[3]);
+      if (event.key === '5') checkAnswer(questions[number].answersAudioCall[4]);
+      if (event.key === ' ') play(API_URL + questions[number].audio);
+      console.log(questions[number].answersAudioCall[0]);
+    };
+    window.addEventListener<'keypress'>('keypress', handleKeysControl);
+    return () => window.removeEventListener('keypress', handleKeysControl);
+  });
   const onStartGame = async (level: number) => {
     setLoading(true);
     setGameStart(false);
