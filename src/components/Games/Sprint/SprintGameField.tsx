@@ -32,7 +32,8 @@ const SprintGameField: React.FC = () => {
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
-  const [gameStart, setGameStart] = useState(true);
+  const [gameStartFromMenu, setGameStartFromMenu] = useState(true);
+  /* const [gameStartFromBook, setGameStartFromBook] = useState(true); */
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -41,7 +42,7 @@ const SprintGameField: React.FC = () => {
   };
   const onStartGame = async (level: number) => {
     setLoading(true);
-    setGameStart(false);
+    setGameStartFromMenu(false);
     const randomNumberPage = getRandomNumber(1, PAGES_PER_CATEGORY);
     setPage(randomNumberPage);
     const newQuestion = await getDataSprintGame(level, page);
@@ -92,7 +93,7 @@ const SprintGameField: React.FC = () => {
 
   return (
     <div>
-      {gameStart ? (
+      {gameStartFromMenu ? (
         <div>
           <Message info>
             <Message.Header>Welcome to the game "Sprint"</Message.Header>
@@ -164,7 +165,7 @@ const SprintGameField: React.FC = () => {
               basic
               onClick={() => {
                 setOpen(false);
-                setGameStart(false);
+                setGameStartFromMenu(false);
                 setGameOver(false);
               }}
             >
@@ -176,7 +177,7 @@ const SprintGameField: React.FC = () => {
               icon="checkmark"
               onClick={() => {
                 setOpen(false);
-                setGameStart(true);
+                setGameStartFromMenu(true);
                 setGameOver(false);
               }}
               positive
@@ -187,7 +188,7 @@ const SprintGameField: React.FC = () => {
 
       {<Loader size="large">Loading</Loader>}
 
-      {!loading && !gameStart && !gameOver && (
+      {!loading && !gameStartFromMenu && !gameOver && (
         <div>
           <div>
             <Statistic size="small">
@@ -220,7 +221,7 @@ const SprintGameField: React.FC = () => {
             color="red"
             onClick={() => {
               setOpen(false);
-              setGameStart(false);
+              setGameStartFromMenu(false);
               setGameOver(true);
             }}
           >

@@ -1,18 +1,19 @@
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type totalCount = {
   count: boolean
-}
+};
 
 export type IUserWordOptionals = {
   isNew?: boolean,
   isKnown?: boolean
-}
+};
 
 export type UserWordData = {
   id?: string,
   difficulty?: string,
   wordId?: string,
   optional?: IUserWordOptionals
-}
+};
 export interface IWordData {
   audio?: string;
   audioExample?: string;

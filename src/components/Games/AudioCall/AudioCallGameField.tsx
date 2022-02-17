@@ -19,7 +19,8 @@ import { API_URL } from '../../../services/AppService';
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
-import GameStartScreen from '../GameStartScreen';
+
+
 
 const AudioCallGameField: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ const AudioCallGameField: React.FC = () => {
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
-  const [gameStart, setGameStart] = useState(true);
+  const [gameStartFromMenu, setGameStartFromMenu] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -75,14 +76,14 @@ const AudioCallGameField: React.FC = () => {
 
   useEffect(() => {
     if (questions[number]) {
-      play(API_URL + questions[number].audio);
+      play([API_URL + questions[number].audio]);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions[number]]);
 
   useEffect(() => {
-    if (gameOver || gameStart) return undefined;
+    if (gameOver || gameStartFromMenu) return undefined;
     const handleKeysControl = (event: KeyboardEvent) => {
       event.preventDefault();
       if (event.repeat) return;
@@ -91,7 +92,7 @@ const AudioCallGameField: React.FC = () => {
       if (event.key === '3') checkAnswer(questions[number].answersAudioCall[2]);
       if (event.key === '4') checkAnswer(questions[number].answersAudioCall[3]);
       if (event.key === '5') checkAnswer(questions[number].answersAudioCall[4]);
-      if (event.key === ' ') play(API_URL + questions[number].audio);
+      if (event.key === ' ') play([API_URL + questions[number].audio]);
       console.log(questions[number].answersAudioCall[0]);
     };
     window.addEventListener<'keypress'>('keypress', handleKeysControl);
@@ -99,7 +100,7 @@ const AudioCallGameField: React.FC = () => {
   });
   const onStartGame = async (level: number) => {
     setLoading(true);
-    setGameStart(false);
+    setGameStartFromMenu(false);
     const newQuestion = await getDataAudioGame(
       level,
       getRandomNumber(1, PAGES_PER_CATEGORY),
@@ -113,7 +114,7 @@ const AudioCallGameField: React.FC = () => {
 
   return (
     <div>
-      {gameStart ? (
+      {gameStartFromMenu ? (
         <div>
         <Message info>
           <Message.Header>Welcome to the game "AudioCall"</Message.Header>
@@ -187,7 +188,7 @@ const AudioCallGameField: React.FC = () => {
               basic
               onClick={() => {
                 setOpen(false);
-                setGameStart(false);
+                setGameStartFromMenu(false);
                 setGameOver(false);
               }}
             >
@@ -199,7 +200,7 @@ const AudioCallGameField: React.FC = () => {
               icon="checkmark"
               onClick={() => {
                 setOpen(false);
-                setGameStart(true);
+                setGameStartFromMenu(true);
                 setGameOver(false);
               }}
               positive
@@ -210,7 +211,7 @@ const AudioCallGameField: React.FC = () => {
 
       {<Loader size="large">Loading</Loader>}
 
-      {!loading && !gameStart && !gameOver && (
+      {!loading && !gameStartFromMenu && !gameOver && (
         <div>
           <div>
             <Statistic size="small">
@@ -230,7 +231,7 @@ const AudioCallGameField: React.FC = () => {
             color="red"
             onClick={() => {
               setOpen(false);
-              setGameStart(false);
+              setGameStartFromMenu(false);
               setGameOver(true);
             }}
           >
