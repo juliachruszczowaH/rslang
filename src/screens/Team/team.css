@@ -1,10 +1,15 @@
+.main-container {
+  background: url(../../assets/index.jpg) center;
+  background-color: antiquewhite;
+  object-fit: cover;
+}
+
 .team-container {
   background-color: lightseagreen;
 }
 .team-units {
   display: flex;
   justify-content: space-between;
-
 }
 .unit-logo {
   max-width: 260px;
@@ -47,7 +52,7 @@
   transition: all 0.8s ease;
 }
 .unit-box {
- padding: 5px;
+  padding: 5px;
 }
 .github-box {
   display: flex;

@@ -2,6 +2,7 @@ import './team.css';
 import logo from '../../assets/alexboagreek.jpg';
 import { Card, Grid, Icon, Image } from 'semantic-ui-react';
 
+
 const TeamUnits = () => {
   return (
     <Grid centered stackable columns={2}>

@@ -27,10 +27,10 @@
 .App-link {
   color: #61dafb;
 }
-.container{
+.container {
   margin: 20px;
 }
-h3{
+h3 {
   text-align: center;
 }
 
@@ -41,4 +41,39 @@ h3{
   to {
     transform: rotate(360deg);
   }
+}
+
+.main-container {
+  background-color: var(--background-color);
+  transition: background-color 200ms linear;
+}
+
+.app__logo {
+  color: var(--icon-color);
+  transition: color 500ms linear;
+}
+
+.app__button,
+.app__button:hover,
+.app__button:focus,
+.app__button:active,
+.app__button:not(:disabled):not(.disabled):active {
+  color: var(--button-text-color);
+  background-color: var(--button-background-color);
+  border-color: var(--button-border-color);
+  transition: color 500ms linear, background-color 500ms linear,
+    border-color 500ms linear;
+}
+
+.app__input,
+.app__input:focus {
+  color: var(--input-text-color);
+  background-color: var(--input-background-color);
+  border-color: var(--input-border-color);
+  transition: color 500ms linear, background-color 500ms linear,
+    border-color 500ms linear;
+}
+.app__input::placeholder {
+  color: var(--input-placeholder-text-color);
+  transition: color 500ms linear;
 }

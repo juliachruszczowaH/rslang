@@ -43,7 +43,7 @@ const Home: React.FC = () => {
           <Grid.Column width={6}>
             <Container fluid textAlign="center">
               <Header as="h1">RS Lang</Header>
-              <p style={{ fontSize: '18px' }}>
+              <p style={{ fontSize: '18px', backgroundColor: 'white' }}>
                 Learning English has never been so easy Memorizing English words
                 can be fun and challenging. Play games, listen to pronunciation,
                 improve your knowledge. With our app, learning is a joy.

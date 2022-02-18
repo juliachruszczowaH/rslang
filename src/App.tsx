@@ -9,10 +9,20 @@ import AudioCallGame from './screens/AudiocallGame';
 import SprintGame from './screens/SprintGame';
 import Book from './screens/Book';
 import { Category } from './components/Category';
+import { useTheme } from './hooks/use-theme';
 import 'semantic-ui-css/semantic.css';
 
 const App: React.FC = () => {
   const location = useLocation();
+  const { theme, setTheme } = useTheme()
+
+  const handleLightThemeClick = () => {
+    setTheme('light')
+  }
+  const handleDarkThemeClick = () => {
+    setTheme('dark')
+  }
+
   return (
     <div className="main-container">
       <Header />
@@ -38,6 +48,10 @@ const App: React.FC = () => {
               </main>
             } />
         </Routes>
+        <div>
+          <button onClick={handleLightThemeClick}></button>
+          <button onClick={handleDarkThemeClick}></button>
+        </div>
 
       </div>
       {(location.pathname !== '/sprintgame' && location.pathname !== '/audiocall') ? <Footer /> : ''}
