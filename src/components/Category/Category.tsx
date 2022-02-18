@@ -1,21 +1,33 @@
+import { render } from '@testing-library/react';
 import React, { useEffect, useState, MouseEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Button, Card, Divider, Icon, Pagination, Popup, Image, Segment, Loader, Label } from 'semantic-ui-react';
+import {
+  Button,
+  Card,
+  Divider,
+  Pagination,
+  Popup,
+  Image,
+  Segment,
+  Loader,
+  Label,
+  Menu,
+  Message,
+  Icon,
+  Progress,
+  Sticky,
+  Checkbox,
+  Rail,
+} from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from '../../services/AuthService';
-import {
-  createUpdateUserWordById,
-  getHardWords,
-  getPaginatedAllUserAggregatedWords,
-  getUserWordById,
-  setWordToHard,
-  updateUserWordById,
-} from '../../services/UserWordsService';
+import { createUpdateUserWordById, getHardWords, getPaginatedAllUserAggregatedWords } from '../../services/UserWordsService';
 import { getWords } from '../../services/WordsService';
 import { play } from '../../utils/utils';
+import SprintGameField from '../Games/Sprint/SprintGameField';
 
 type State = {
   words: IWordData[];
@@ -121,34 +133,23 @@ export const Category: React.FunctionComponent = () => {
 
   const onItemClick = (e: MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     const clickedNavElemValue = Number((e.target as HTMLElement).getAttribute('value'));
-    console.log(clickedNavElemValue);
     setActivePage(clickedNavElemValue);
     setPage(clickedNavElemValue - 1);
     navigate(`/book/${group}/${clickedNavElemValue - 1}`);
   };
 
-  console.log('Dictionary => ' + isDictionary);
-
   const handleHardClick = (wordId: string | undefined) => {
-    if (id && token) {
-      if (wordId)
-        createUpdateUserWordById(id, token, wordId, { difficulty: isDictionary ? 'normal' : 'hard', optional: { isKnown: false } }).then(() =>
-          setUpdated(true)
-        );
+    if (id && token && wordId) {
+      createUpdateUserWordById(id, token, wordId, { difficulty: isDictionary ? 'normal' : 'hard', optional: { isKnown: false } }).then(() =>
+        setUpdated(true)
+      );
     }
-
-    console.log('HARD: ' + isDictionary);
   };
 
   const handleKnownClick = (wordId: string | undefined) => {
-    console.log(wordId);
-    if (id && token) {
-      if (wordId) {
-        createUpdateUserWordById(id, token, wordId, { difficulty: 'normal', optional: { isKnown: true } }).then(() => setUpdated(true));
-      }
+    if (id && token && wordId) {
+      createUpdateUserWordById(id, token, wordId, { difficulty: 'normal', optional: { isKnown: true } }).then(() => setUpdated(true));
     }
-
-    console.log('known: ');
   };
 
   return (
@@ -165,9 +166,21 @@ export const Category: React.FunctionComponent = () => {
           totalPages={30}
         />
       )}
-      <Divider key={Math.floor(Math.random() * (0 - 10001)) + 0} />
+
+      {isDictionary ? null : <Progress value="5" total="20" size="tiny" success={5 < 20} />}
+
       {words.words.length > 0 ? (
-        <Card.Group stackable centered style={{ overflowY: 'scroll' }}>
+        <Card.Group centered style={{ overflowY: 'scroll' }}>
+          {isDictionary ? null : (
+            <Label attached="top right" basic size="medium" style={{ backgroundColor: color, border: 'none' }}>
+              <Button color="blue" inverted onClick={() => navigate(`/sprintgame?group=${group}&page=${page}`)}>
+                <Icon name="gamepad" /> Sprint
+              </Button>
+              <Button color="teal" inverted onClick={() => navigate(`/audiocall?group=${group}&page=${page}`)}>
+                <Icon name="gamepad" /> AudioCall
+              </Button>
+            </Label>
+          )}
           {words.words &&
             words.words.map((word: IWordData, index: number) => (
               <Card key={`${index}-card`}>
@@ -238,26 +251,35 @@ export const Category: React.FunctionComponent = () => {
                     <Divider />
                     {isAuthenticated() ? (
                       <Card.Content extra style={{ maxHeight: '40px' }}>
-                        <Button
-                          circular
-                          inverted
-                          color="red"
-                          icon={isDictionary ? 'trash alternate' : 'eye'}
-                          onClick={() => handleHardClick(word._id)}
-                          key={word._id}
-                          loading={updated}
-                          disabled={word.userWord?.difficulty === 'hard' && !isDictionary}
-                        >
-                        </Button>
-                        <Button
-                          circular
-                          inverted
-                          color="green"
-                          icon="check circle outline"
-                          loading={updated}
-                          disabled={word.userWord?.optional?.isKnown}
-                          onClick={() => handleKnownClick(word._id)}
-                        ></Button>
+                        <Popup
+                          content="Click to mark word as Hard"
+                          trigger={
+                            <Button
+                              circular
+                              inverted
+                              color="red"
+                              icon={isDictionary ? 'trash alternate' : 'eye'}
+                              onClick={() => handleHardClick(word._id)}
+                              key={word._id}
+                              loading={updated}
+                              disabled={word.userWord?.difficulty === 'hard' && !isDictionary}
+                            />
+                          }
+                        />
+                        <Popup
+                          content="Click to mark word as Known"
+                          trigger={
+                            <Button
+                              circular
+                              inverted
+                              color="green"
+                              icon="check circle outline"
+                              loading={updated}
+                              disabled={word.userWord?.optional?.isKnown}
+                              onClick={() => handleKnownClick(word._id)}
+                            />
+                          }
+                        />
                       </Card.Content>
                     ) : null}
                   </div>

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import { Icon, MenuItem, Message, Tab } from 'semantic-ui-react';
-import { Category } from '../../components/Category';
-import { Dictionary } from '../../components/Dictionary';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import { isAuthenticated } from '../../services/AuthService';
 import './book.css';
@@ -15,7 +13,7 @@ const defaultPanes = CATEGOTY_LINKS.map((item) => {
       </MenuItem>
     ),
     render: () => (
-      <Tab.Pane style={{  backgroundColor: item.color }} key={`${item.title}pane`}>
+      <Tab.Pane style={{ hegiht:'63vh', backgroundColor: item.color }} key={`${item.title}pane`}>
         {<Outlet />}
       </Tab.Pane>
     ),
@@ -29,7 +27,7 @@ const dictionaryPane = {
     </MenuItem>
   ),
   render: () => (
-    <Tab.Pane style={{  backgroundColor: '#f4defc' }} key={'dictpane'}>
+    <Tab.Pane style={{ height:'63vh',  backgroundColor: '#f4defc' }} key={'dictpane'}>
       {<Outlet />}
     </Tab.Pane>
   ),
