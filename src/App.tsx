@@ -14,14 +14,14 @@ import 'semantic-ui-css/semantic.css';
 
 const App: React.FC = () => {
   const location = useLocation();
-  const { theme, setTheme } = useTheme()
+  // const { theme, setTheme } = useTheme()
 
-  const handleLightThemeClick = () => {
-    setTheme('light')
-  }
-  const handleDarkThemeClick = () => {
-    setTheme('dark')
-  }
+  // const handleLightThemeClick = () => {
+  //   setTheme('light')
+  // }
+  // const handleDarkThemeClick = () => {
+  //   setTheme('dark')
+  // }
 
   return (
     <div className="main-container">
@@ -59,7 +59,6 @@ const App: React.FC = () => {
     </div>
   );
 };
-
 
 
 export default App;
