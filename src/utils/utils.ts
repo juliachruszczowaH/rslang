@@ -1,3 +1,4 @@
+import { ILoginResponseData } from '../models/UserModel';
 import { IUserWordOptionals, UserWordData } from '../models/WordModel';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,3 +33,10 @@ export const getStorageData = (key: string): string | null => {
   return null;
 };
 
+export const registerStorageData = (data: ILoginResponseData):void => {
+  localStorage.setItem('token', data.token);
+  localStorage.setItem('currentId', data.userId);
+  localStorage.setItem('currentName', data.name);
+  localStorage.setItem('refreshToken', data.refreshToken);
+  localStorage.setItem('authState', data.message);
+};

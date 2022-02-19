@@ -1,4 +1,3 @@
-import { render } from '@testing-library/react';
 import React, { useEffect, useState, MouseEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -21,10 +20,18 @@ import {
   Rail,
 } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
+import { WORDS_PER_PAGE } from '../../constants/wordsConstants';
 import { IWordData } from '../../models/WordModel';
 import { API_URL } from '../../services/AppService';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from '../../services/AuthService';
-import { createUpdateUserWordById, getHardWords, getPaginatedAllUserAggregatedWords } from '../../services/UserWordsService';
+import {
+  createUpdateUserWordById,
+  Difficulty,
+  getHardWords,
+  getPaginatedAllUserAggregatedWords,
+  Known,
+  UserOptionsFields,
+} from '../../services/UserWordsService';
 import { getWords } from '../../services/WordsService';
 import { play } from '../../utils/utils';
 import SprintGameField from '../Games/Sprint/SprintGameField';
@@ -39,6 +46,7 @@ const initialState: State = {
 export const Category: React.FunctionComponent = () => {
   const [words, setWords] = useState(initialState);
   const [updated, setUpdated] = useState(true);
+  const [learned, setLearned] = useState(0);
   const [activePage, setActivePage] = useState(1);
   const { groupId, pageId } = useParams();
   const [group, setGroup] = useState(groupId ? +groupId : 0);
@@ -54,16 +62,38 @@ export const Category: React.FunctionComponent = () => {
 
   useEffect(() => {
     let isMounted = true;
-    if (id && token) {
-      if (isDictionary) {
-        if (updated) {
-          getHardWords(id, token).then(
+    if (updated) {
+      if (id && token) {
+        if (isDictionary) {
+          getHardWords().then(
             (response) => {
               if (response) {
                 console.log('response');
                 console.log(response[0]);
                 if (isMounted) setWords({ words: response[0].paginatedResults });
                 setUpdated(false);
+              }
+            },
+            (error: any) => {
+              const content = (error.response && error.response.data) || error.message || error.toString();
+              console.log(content);
+            }
+          );
+        } else {
+          getPaginatedAllUserAggregatedWords(group, page).then(
+            (response) => {
+              if (response) {
+                console.log('response');
+                console.log(response[0]);
+                const markedWords = response[0].paginatedResults.filter((i) => i.userWord?.difficulty === 'hard' || i.userWord?.optional?.isKnown);
+
+                if (isMounted) {
+                  setLearned(markedWords.length);
+                  setWords({ words: response[0].paginatedResults });
+                }
+                setUpdated(false);
+              } else {
+                setUpdated(true);
               }
             },
             (error: any) => {
@@ -73,25 +103,6 @@ export const Category: React.FunctionComponent = () => {
           );
         }
       } else {
-        if (updated) {
-          getPaginatedAllUserAggregatedWords(id, token, group, page).then(
-            (response) => {
-              if (response) {
-                console.log('response');
-                console.log(response[0]);
-                if (isMounted) setWords({ words: response[0].paginatedResults });
-                setUpdated(false);
-              }
-            },
-            (error: any) => {
-              const content = (error.response && error.response.data) || error.message || error.toString();
-              console.log(content);
-            }
-          );
-        }
-      }
-    } else {
-      if (updated) {
         getWords(group, page).then(
           (response) => {
             if (response) {
@@ -106,12 +117,12 @@ export const Category: React.FunctionComponent = () => {
           }
         );
       }
-    }
 
-    return () => {
-      isMounted = false;
-    };
-  }, [group, page, token, id, isDictionary, updated]);
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [group, page, token, id, isDictionary, learned, updated]);
 
   useEffect(() => {
     if (groupId && pageId) {
@@ -140,15 +151,15 @@ export const Category: React.FunctionComponent = () => {
 
   const handleHardClick = (wordId: string | undefined) => {
     if (id && token && wordId) {
-      createUpdateUserWordById(id, token, wordId, { difficulty: isDictionary ? 'normal' : 'hard', optional: { isKnown: false } }).then(() =>
-        setUpdated(true)
-      );
+      createUpdateUserWordById(wordId, { difficulty: isDictionary ? Difficulty.Normal : Difficulty.Hard }).then(() => setUpdated(true));
     }
   };
 
   const handleKnownClick = (wordId: string | undefined) => {
     if (id && token && wordId) {
-      createUpdateUserWordById(id, token, wordId, { difficulty: 'normal', optional: { isKnown: true } }).then(() => setUpdated(true));
+      createUpdateUserWordById(wordId, { [`${UserOptionsFields.IsKnown}`]: Known.True }).then(() => {
+        setUpdated(true);
+      });
     }
   };
 
@@ -167,16 +178,20 @@ export const Category: React.FunctionComponent = () => {
         />
       )}
 
-      {isDictionary ? null : <Progress value="5" total="20" size="tiny" success={5 < 20} />}
+      {isDictionary ? null : !isAuthenticated() ? (
+        <Divider />
+      ) : (
+        <Progress value={learned} total={WORDS_PER_PAGE} size="tiny" progress success={learned === 20} />
+      )}
 
       {words.words.length > 0 ? (
         <Card.Group centered style={{ overflowY: 'scroll' }}>
           {isDictionary ? null : (
             <Label attached="top right" basic size="medium" style={{ backgroundColor: color, border: 'none' }}>
-              <Button color="blue" inverted onClick={() => navigate(`/sprintgame?group=${group}&page=${page}`)}>
+              <Button color="blue" inverted disabled={learned === 20} onClick={() => navigate(`/sprintgame?group=${group}&page=${page}`)}>
                 <Icon name="gamepad" /> Sprint
               </Button>
-              <Button color="teal" inverted onClick={() => navigate(`/audiocall?group=${group}&page=${page}`)}>
+              <Button color="teal" inverted disabled={learned === 20} onClick={() => navigate(`/audiocall?group=${group}&page=${page}`)}>
                 <Icon name="gamepad" /> AudioCall
               </Button>
             </Label>
@@ -186,22 +201,25 @@ export const Category: React.FunctionComponent = () => {
               <Card key={`${index}-card`}>
                 <Card.Content>
                   <div>
-                    <Image src={API_URL + word.image} size="medium" />
+                    <Image src={API_URL + word.image} wrapped />
                     <Segment
                       raised
                       style={{
                         backgroundColor: color,
-                        borderColor: word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === true ? 'green' : 'none',
+                        borderColor:
+                          word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === Known.True ? 'green' : 'none',
                       }}
                     >
                       <Card.Header as={'h3'} textAlign="left">
-                        {word.userWord?.difficulty === 'hard' || word.userWord?.optional?.isKnown === true ? (
+                        {word.userWord?.difficulty === 'hard' || word.userWord?.optional?.isKnown === Known.True ? (
                           <Label
-                            color={word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === true ? 'green' : undefined}
+                            color={
+                              word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === Known.True ? 'green' : undefined
+                            }
                             ribbon="right"
                             size="mini"
                           >
-                            {word.userWord?.difficulty === 'hard' ? 'hard' : word.userWord?.optional?.isKnown === true ? 'known' : undefined}
+                            {word.userWord?.difficulty === 'hard' ? 'hard' : word.userWord?.optional?.isKnown === Known.True ? 'known' : undefined}
                           </Label>
                         ) : null}
                         <Popup
@@ -275,7 +293,7 @@ export const Category: React.FunctionComponent = () => {
                               color="green"
                               icon="check circle outline"
                               loading={updated}
-                              disabled={word.userWord?.optional?.isKnown}
+                              disabled={word.userWord?.optional?.isKnown === Known.True}
                               onClick={() => handleKnownClick(word._id)}
                             />
                           }
