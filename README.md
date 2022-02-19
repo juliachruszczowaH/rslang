@@ -1,11 +1,11 @@
 # RSlang
 
-[![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang?style=plastic)](https://github.com/juliachruszczowaH/rslang/issues)
+[![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang?style=plastic)](https://github.com/juliachruszczowaH/rslang)
 This project was created with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
-In the project  project directory, you can run:
+In the project directory, you can run:
 
 ### `npm start`
 
