@@ -2,6 +2,14 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang?style=plastic)](https://github.com/juliachruszczowaH/rslang)
 This project was created with [Create React App](https://github.com/facebook/create-react-app).
+## Technology and libraries to create APP
+
+* React
+* TS
+* axios
+* semantic-ui-react v.2.0.1
+* TSX
+*
 
 ## Getting Start
 To install the project, please, download it or clone, and then use
