@@ -1,4 +1,4 @@
-# RSlang
+# RSlang  With our app, learning is a joy.
 
 [![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang?style=plastic)](https://github.com/juliachruszczowaH/rslang)
 This project was created with [Create React App](https://github.com/facebook/create-react-app).
