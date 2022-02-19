@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useEffect, useState } from 'react';
 import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
 import { getDataAudioGame } from '../../../services/WordsService';
@@ -23,12 +24,34 @@ import wrongSound from '../../../assets/sound/wrong.mp3';
 
 
 const AudioCallGameField: React.FC = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const group = queryParams.get('group');
+  const page = queryParams.get('page');
+
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const [gameStartFromBook, setGameStartFromBook] = useState(isBook(group, page));
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const [gameStartFromMenu, setGameStartFromMenu] = useState(isMenu(group, page));
+
+  function isMenu(group: string | null, page: string | null) {
+    if (group === null && page === null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function isBook(group: string | null, page: string | null) {
+    if (group !== null && page !== null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<AudioQuestionsState[]>([]);
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
-  const [gameStartFromMenu, setGameStartFromMenu] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -41,7 +64,7 @@ const AudioCallGameField: React.FC = () => {
       const correct = questions[number].wordTranslate === answer;
 
       if (correct === true) {
-        play(correctSound);
+        play([correctSound]);
         if (score >= 0 && score < SUM_POINTS[30]) {
           setScore((prev) => prev + POINTS[1]);
         } else if (score >= SUM_POINTS[30] && score < SUM_POINTS[90]) {
@@ -52,7 +75,7 @@ const AudioCallGameField: React.FC = () => {
           setScore((prev) => prev + POINTS[4]);
         }
       } else {
-        play(wrongSound);
+        play([wrongSound]);
       }
       const answerObject: AnswerObject = {
         questionID: questions[number].id,
@@ -98,14 +121,16 @@ const AudioCallGameField: React.FC = () => {
     window.addEventListener<'keypress'>('keypress', handleKeysControl);
     return () => window.removeEventListener('keypress', handleKeysControl);
   });
-  const onStartGame = async (level: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const onStartGame = async (group: string | null, page: string | null) => {
     setLoading(true);
     setGameStartFromMenu(false);
-    const newQuestion = await getDataAudioGame(
-      level,
-      getRandomNumber(1, PAGES_PER_CATEGORY),
-    );
+    setGameStartFromBook(false);
+    const newQuestion = await getDataAudioGame(Number(group), Number(page));
+    console.log(group, page);
+    console.log(Number(group), Number(page));
     setQuestions(newQuestion);
+    console.log(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
@@ -114,7 +139,30 @@ const AudioCallGameField: React.FC = () => {
 
   return (
     <div>
-      {gameStartFromMenu ? (
+      {gameStartFromBook && !gameStartFromMenu ? (
+        <div>
+          <Message info>
+            <Message.Header>Welcome to the game "AudioCal"</Message.Header>
+            <p>
+            "AudioCall" is a 20-question game in which the
+            question is spoken in English and you have to
+            choose one of 5 suggested translations. Use the
+            mouse and keys from 1 to 5 to select the correct
+            answer, to repeat the question, press the spacebar
+            </p>
+            <p>Click on START to start the game.</p>
+          </Message>
+
+          <Button
+            onClick={() => {
+              onStartGame(group, page);
+            }}
+          >
+            START
+          </Button>
+        </div>
+      ) : null}
+      {gameStartFromMenu && !gameStartFromBook ? (
         <div>
         <Message info>
           <Message.Header>Welcome to the game "AudioCall"</Message.Header>
@@ -133,7 +181,7 @@ const AudioCallGameField: React.FC = () => {
             key={item.id}
             style={{ backgroundColor: item.color }}
             onClick={() => {
-              onStartGame(item.id);
+              onStartGame(item.id.toString(), getRandomNumber(1, PAGES_PER_CATEGORY).toString());
             }}
           >
             {`${item.id + 1} LEVEL`}
@@ -189,6 +237,7 @@ const AudioCallGameField: React.FC = () => {
               onClick={() => {
                 setOpen(false);
                 setGameStartFromMenu(false);
+                setGameStartFromBook(false);
                 setGameOver(false);
               }}
             >
@@ -201,6 +250,7 @@ const AudioCallGameField: React.FC = () => {
               onClick={() => {
                 setOpen(false);
                 setGameStartFromMenu(true);
+                setGameStartFromBook(false);
                 setGameOver(false);
               }}
               positive
@@ -211,7 +261,7 @@ const AudioCallGameField: React.FC = () => {
 
       {<Loader size="large">Loading</Loader>}
 
-      {!loading && !gameStartFromMenu && !gameOver && (
+      {!loading && !gameStartFromMenu && !gameStartFromBook && !gameOver && (
         <div>
           <div>
             <Statistic size="small">
@@ -232,6 +282,7 @@ const AudioCallGameField: React.FC = () => {
             onClick={() => {
               setOpen(false);
               setGameStartFromMenu(false);
+              setGameStartFromBook(false);
               setGameOver(true);
             }}
           >
@@ -246,4 +297,4 @@ const AudioCallGameField: React.FC = () => {
 
 export default AudioCallGameField;
 
-{/* */}
+
