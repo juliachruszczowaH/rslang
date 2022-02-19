@@ -8,8 +8,8 @@ This project was created with [Create React App](https://github.com/facebook/cre
 * TS
 * axios
 * semantic-ui-react v.2.0.1
+* semantic-ui-css": v.2.4.1
 * TSX
-*
 
 ## Getting Start
 To install the project, please, download it or clone, and then use
