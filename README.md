@@ -3,6 +3,8 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang?style=plastic)](https://github.com/juliachruszczowaH/rslang)
 This project was created with [Create React App](https://github.com/facebook/create-react-app).
+
+[![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang)](https://github.com/juliachruszczowaH/rslang/issues)
 ## Technology and libraries to create APP
 
 * React
