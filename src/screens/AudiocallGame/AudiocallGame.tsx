@@ -4,13 +4,13 @@ import './audiocallgame.css';
 
 const AudioCallGame: React.FC = () => {
 
-  const queryParams = new URLSearchParams(window.location.search);
+  /*  const queryParams = new URLSearchParams(window.location.search);
   const group = queryParams.get('group');
   const page = queryParams.get('page');
   console.log(group, page);
 
   //если придёт null null - старый способ с выбором категории
-  // если придут цифры - то это номер группы и номер страницы
+  // если придут цифры - то это номер группы и номер страницы */
 
   return (
     <div className="audiocall-container">

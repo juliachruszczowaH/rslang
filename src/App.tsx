@@ -10,7 +10,7 @@ import SprintGame from './screens/SprintGame';
 import Book from './screens/Book';
 import { Category } from './components/Category';
 import 'semantic-ui-css/semantic.css';
-import SprintGameField from './components/Games/Sprint/SprintGameField';
+
 
 const App: React.FC = () => {
   const location = useLocation();

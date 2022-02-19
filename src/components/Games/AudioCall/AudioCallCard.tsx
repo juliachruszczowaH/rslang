@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { AudioCallData } from '../../../models/WordModel';
 import { Button, Icon, Segment, Statistic } from 'semantic-ui-react';
-import { API_URL } from '../../../services/AppService';
+
 
 
 const AudioCallCard: FC<AudioCallData> = ({
