@@ -1,0 +1,23 @@
+.ui.vertical.menu .active.item{
+  color: red;
+  text-transform: uppercase;
+}
+
+.book__container{
+  height: 80vh;
+
+}
+
+.book__wrapper{
+  height: 100%;
+  width: 100%;
+  background-image: url(../../../public/img/var5.jpg);
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.book__title{
+  text-shadow: 1px 1px 2px rgb(26, 153, 208), 0 0 1em rgb(77, 77, 125), 0 0 0.2em rgb(191, 17, 26);
+  color: #fff !important;
+}

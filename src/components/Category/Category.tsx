@@ -318,16 +318,15 @@ export const Category: React.FunctionComponent = () => {
                         word.userWord?.optional?.audioPositive ||
                         word.userWord?.optional?.audioNegative ? (
                           <div>
-                            {' '}
-                            <Label>
+                            <Label className={style.cards__results}>
                               Sprint
-                              <Label.Detail style={{ color: 'green' }}>{word.userWord?.optional?.sprintPositive}</Label.Detail>
-                              <Label.Detail style={{ color: 'red' }}>{word.userWord?.optional?.sprintNegative}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'green' }}>{word.userWord?.optional?.sprintPositive}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'red' }}>{word.userWord?.optional?.sprintNegative}</Label.Detail>
                             </Label>
-                            <Label>
+                            <Label  className={style.cards__results}>
                               AudioCall
-                              <Label.Detail style={{ color: 'green' }}>{word.userWord?.optional?.audioPositive}</Label.Detail>
-                              <Label.Detail style={{ color: 'red' }}>{word.userWord?.optional?.audioNegative}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'green' }}>{word.userWord?.optional?.audioPositive}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'red' }}>{word.userWord?.optional?.audioNegative}</Label.Detail>
                             </Label>
                           </div>
                           ) : null}
