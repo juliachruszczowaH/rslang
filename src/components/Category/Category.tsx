@@ -85,8 +85,10 @@ export const Category: React.FunctionComponent = () => {
               if (response) {
                 console.log('response');
                 console.log(response[0]);
-                const markedWords = response[0].paginatedResults.filter((i) => i.userWord?.difficulty === 'hard' || i.userWord?.optional?.isKnown);
-
+                const markedWords = response[0].paginatedResults.filter(
+                  (i) => i.userWord?.difficulty === Difficulty.Hard || i.userWord?.optional?.isKnown === Known.True
+                );
+                console.log(markedWords);
                 if (isMounted) {
                   setLearned(markedWords.length);
                   setWords({ words: response[0].paginatedResults });
@@ -181,7 +183,7 @@ export const Category: React.FunctionComponent = () => {
       {isDictionary ? null : !isAuthenticated() ? (
         <Divider />
       ) : (
-        <Progress value={learned} total={WORDS_PER_PAGE} size="tiny" progress success={learned === 20} />
+        <Progress value={learned} total={WORDS_PER_PAGE} size="tiny" progress='value' success={learned === 20} />
       )}
 
       {words.words.length > 0 ? (
