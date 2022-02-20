@@ -7,8 +7,7 @@ export type IUserWordOptionals = {
   [key: string]: number | string | undefined;
   isNew?: string,
   isKnown?: string
-  sprintAttempts?: number,
-  audioAttempts?: number,
+  attempts?: number,
   sprintPositive?: number,
   sprintNegative?: number,
   audioPositive?: number,
@@ -27,8 +26,7 @@ export type IUserWordOptionsData = {
   difficulty?: string,
   isKnown?: string,
   isNew?: string,
-  sprintAttempts?: number,
-  audioAttempts?: number,
+  attempts?: number,
   sprintPositive?: number,
   sprintNegative?: number,
   audioPositive?: number,
