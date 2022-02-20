@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import { AudioQuestionsState, AnswerObject, IWordData } from '../../../models/WordModel';
-import { getDataAudioGame, getWords } from '../../../services/WordsService';
-=======
 import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
 import { getDataAudioGame } from '../../../services/WordsService';
->>>>>>> 0b49de9d02568be9146d8d177569c92b97fbf5f7
 import { Button, Header, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber, handleAnswers, play } from '../../../utils/utils';
@@ -17,19 +12,8 @@ import { API_URL } from '../../../services/AppService';
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
-<<<<<<< HEAD
-import { getPaginatedAllUserAggregatedWords } from '../../../services/UserWordsService';
-import { getCurrentToken, getCurrentUserId } from '../../../services/AuthService';
-type State = {
-  words: IWordData[];
-};
-const initialState: State = {
-  words: [],
-};
-=======
 import { updateNewWordsCount } from '../../../services/StatisticsService';
 import { Game } from '../../../services/UserWordsService';
->>>>>>> 0b49de9d02568be9146d8d177569c92b97fbf5f7
 
 const AudioCallGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -148,7 +132,7 @@ const AudioCallGameField: React.FC = () => {
     setNumber(0);
     setLoading(false);
   };
-  
+
   return (
     <div>
       {gameStartFromBook && !gameStartFromMenu ? (

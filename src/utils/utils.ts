@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-
-=======
 import { ILoginResponseData } from '../models/UserModel';
 import { AnswerObject, IUserWordOptionals, UserWordData } from '../models/WordModel';
 import { registerWordGameResult } from '../services/StatisticsService';
 import { getUserWordById, initialUserWord, createUserWord, Game } from '../services/UserWordsService';
->>>>>>> 0b49de9d02568be9146d8d177569c92b97fbf5f7
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const shuffleArray = (array: any[]) => {

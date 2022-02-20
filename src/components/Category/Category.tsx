@@ -210,7 +210,7 @@ export const Category: React.FunctionComponent = () => {
               <Card className={style.cards__item} key={`${index}-card`}>
 
                   <div className={style.cards__content}>
-                    <Image className={style.cards__image} src={API_URL + word.image} /* size="medium" */ wrapped/>
+                    <Image className={style.cards__image} src={API_URL + word.image} size="medium" />
                     <Segment className={style.cards__transcription}
                       raised
                       style={{
