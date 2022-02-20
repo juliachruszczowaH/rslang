@@ -4,11 +4,18 @@
 [![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang?style=plastic)](https://github.com/juliachruszczowaH/rslang)
 
 [![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang)](https://github.com/juliachruszczowaH/rslang/issues)
+# Advantages 
+
+* Magic Book
+* Dictionary
+* 2 Games: Sprint and Audiocall
+* Progress statistics
+
 ## Technology and libraries to create APP
 ## This project was created with [Create React App](https://github.com/facebook/create-react-app).
 
 * React
-* TS
+* TS  
 * axios
 * semantic-ui-react v.2.0.1
 * semantic-ui-css v.2.4.1
