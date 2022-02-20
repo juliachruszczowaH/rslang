@@ -19,6 +19,8 @@ import {
   Sticky,
   Checkbox,
   Rail,
+  Grid,
+  GridColumn,
 } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import { IWordData } from '../../models/WordModel';
@@ -28,6 +30,10 @@ import { createUpdateUserWordById, getHardWords, getPaginatedAllUserAggregatedWo
 import { getWords } from '../../services/WordsService';
 import { disabledBtn, play } from '../../utils/utils';
 import SprintGameField from '../Games/Sprint/SprintGameField';
+
+
+import style from './category.module.css';
+
 
 type State = {
   words: IWordData[];
@@ -170,7 +176,7 @@ export const Category: React.FunctionComponent = () => {
       {isDictionary ? null : <Progress value="5" total="20" size="tiny" success={5 < 20} />}
 
       {words.words.length > 0 ? (
-        <Card.Group centered style={{ overflowY: 'scroll' }}>
+        <Grid columns={1}   className={style.cards__group}>
           {isDictionary ? null : (
             <Label attached="top right" basic size="medium" style={{ backgroundColor: color, border: 'none' }}>
               <Button color="blue" inverted onClick={() => navigate(`/sprintgame?group=${group}&page=${page}`)}>
@@ -183,18 +189,19 @@ export const Category: React.FunctionComponent = () => {
           )}
           {words.words &&
             words.words.map((word: IWordData, index: number) => (
-              <Card key={`${index}-card`}>
-                <Card.Content>
-                  <div>
-                    <Image src={API_URL + word.image} size="medium" />
-                    <Segment
+              <GridColumn className={style.cards__wrapper}>
+              <Card className={style.cards__item} key={`${index}-card`}>
+
+                  <div className={style.cards__content}>
+                    <Image className={style.cards__image} src={API_URL + word.image} size="medium" />
+                    <Segment className={style.cards__transcription}
                       raised
                       style={{
                         backgroundColor: color,
                         borderColor: word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === true ? 'green' : 'none',
                       }}
                     >
-                      <Card.Header as={'h3'} textAlign="left">
+                      <Card.Header className={style.cards__title}  as={'h3'} textAlign="left">
                         {word.userWord?.difficulty === 'hard' || word.userWord?.optional?.isKnown === true ? (
                           <Label
                             color={word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === true ? 'green' : undefined}
@@ -213,7 +220,6 @@ export const Category: React.FunctionComponent = () => {
                               inverted
                               color="blue"
                               icon="headphones"
-                              /* disabled = {false} */
                               onClick={() => {
                                 play([API_URL + word.audio, API_URL + word.audioMeaning, API_URL + word.audioExample]);
                                 disabledBtn();
@@ -226,13 +232,15 @@ export const Category: React.FunctionComponent = () => {
                           {' '}
                           <span className="transcription">{word.transcription}</span>
                         </Card.Meta>
+                        <Card.Header as={'h3'}>{word.wordTranslate}</Card.Header>
                       </Card.Header>
                     </Segment>
-                    <Card.Header as={'h3'}>{word.wordTranslate}</Card.Header>
+
                     <Divider />
                   </div>
-                  <div>
-                    <Card.Description textAlign="left">
+                  <div className={style.cards__text}>
+                    <Card.Description   >
+
                       <p>
                         <span
                           dangerouslySetInnerHTML={{
@@ -288,10 +296,11 @@ export const Category: React.FunctionComponent = () => {
                       </Card.Content>
                     ) : null}
                   </div>
-                </Card.Content>
+
               </Card>
+              </GridColumn>
             ))}
-        </Card.Group>
+        </Grid>
       ) : (
         <Loader active content="Loading" />
       )}
