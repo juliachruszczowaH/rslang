@@ -9,7 +9,6 @@ const AudioCallCard: FC<AudioCallData> = ({
   onAnswer,
   questionNumber,
 }) => {
-  console.log(answersAudioCall[1]);
 
 
   return (

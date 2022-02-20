@@ -1,16 +1,8 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, { useEffect, useState } from 'react';
-import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
-import { getDataAudioGame } from '../../../services/WordsService';
-import {
-  Button,
-  Header,
-  List,
-  Loader,
-  Message,
-  Modal,
-  Statistic,
-} from 'semantic-ui-react';
+import { AudioQuestionsState, AnswerObject, IWordData } from '../../../models/WordModel';
+import { getDataAudioGame, getWords } from '../../../services/WordsService';
+import { Button, Header, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
@@ -20,8 +12,14 @@ import { API_URL } from '../../../services/AppService';
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
-
-
+import { getPaginatedAllUserAggregatedWords } from '../../../services/UserWordsService';
+import { getCurrentToken, getCurrentUserId } from '../../../services/AuthService';
+type State = {
+  words: IWordData[];
+};
+const initialState: State = {
+  words: [],
+};
 
 const AudioCallGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -136,7 +134,7 @@ const AudioCallGameField: React.FC = () => {
     setNumber(0);
     setLoading(false);
   };
-
+  
   return (
     <div>
       {gameStartFromBook && !gameStartFromMenu ? (
@@ -144,11 +142,8 @@ const AudioCallGameField: React.FC = () => {
           <Message info>
             <Message.Header>Welcome to the game "AudioCal"</Message.Header>
             <p>
-            "AudioCall" is a 20-question game in which the
-            question is spoken in English and you have to
-            choose one of 5 suggested translations. Use the
-            mouse and keys from 1 to 5 to select the correct
-            answer, to repeat the question, press the spacebar
+              "AudioCall" is a 20-question game in which the question is spoken in English and you have to choose one of 5 suggested translations. Use
+              the mouse and keys from 1 to 5 to select the correct answer, to repeat the question, press the spacebar
             </p>
             <p>Click on START to start the game.</p>
           </Message>
@@ -164,31 +159,26 @@ const AudioCallGameField: React.FC = () => {
       ) : null}
       {gameStartFromMenu && !gameStartFromBook ? (
         <div>
-        <Message info>
-          <Message.Header>Welcome to the game "AudioCall"</Message.Header>
-          <p>
-            The "AudioCall" is a game in which the question is pronounced in
-            English and you have to choose one of the 5 proposed translation
-            options. Use the mouse and keys from 1 to 5 to select the correct
-            answer, to repeat the question, press the space bar.
-          </p>
-          <p>
-            Below you need to select the level of difficulty of the questions.
-          </p>
-        </Message>
-        {CATEGOTY_LINKS.map((item) => (
-          <Button
-            key={item.id}
-            style={{ backgroundColor: item.color }}
-            onClick={() => {
-              onStartGame(item.id.toString(), getRandomNumber(1, PAGES_PER_CATEGORY).toString());
-            }}
-          >
-            {`${item.id + 1} LEVEL`}
-          </Button>
-        ))}
-      </div>
-
+          <Message info>
+            <Message.Header>Welcome to the game "AudioCall"</Message.Header>
+            <p>
+              The "AudioCall" is a game in which the question is pronounced in English and you have to choose one of the 5 proposed translation
+              options. Use the mouse and keys from 1 to 5 to select the correct answer, to repeat the question, press the space bar.
+            </p>
+            <p>Below you need to select the level of difficulty of the questions.</p>
+          </Message>
+          {CATEGOTY_LINKS.map((item) => (
+            <Button
+              key={item.id}
+              style={{ backgroundColor: item.color }}
+              onClick={() => {
+                onStartGame(item.id.toString(), getRandomNumber(1, PAGES_PER_CATEGORY).toString());
+              }}
+            >
+              {`${item.id + 1} LEVEL`}
+            </Button>
+          ))}
+        </div>
       ) : null}
 
       {gameOver ? (
@@ -215,15 +205,9 @@ const AudioCallGameField: React.FC = () => {
               <List celled ordered>
                 {userAnswers.map((item) => (
                   <List.Item key={item.questionID}>
-                    <List.Icon
-                      name={item.correct ? 'checkmark' : 'close'}
-                      color={item.correct ? 'green' : 'red'}
-                    />
+                    <List.Icon name={item.correct ? 'checkmark' : 'close'} color={item.correct ? 'green' : 'red'} />
                     <List.Content verticalAlign="middle">
-                      <List.Header
-                        as={'h3'}
-                        color="blue"
-                      >{`${item.question}`}</List.Header>
+                      <List.Header as={'h3'} color="blue">{`${item.question}`}</List.Header>
                       <List.Description>{`${item.correctTranslate}`}</List.Description>
                     </List.Content>
                   </List.Item>

@@ -212,7 +212,11 @@ export const Category: React.FunctionComponent = () => {
                               inverted
                               color="blue"
                               icon="headphones"
-                              onClick={() => play([API_URL + word.audio, API_URL + word.audioMeaning, API_URL + word.audioExample])}
+                              
+                              onClick={() => {
+                                play([API_URL + word.audio, API_URL + word.audioMeaning, API_URL + word.audioExample]);
+
+                              }}
                             />
                           }
                         />
