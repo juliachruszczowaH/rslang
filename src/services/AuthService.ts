@@ -2,6 +2,15 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { ILoginResponseData, IUserCreds } from '../models/UserModel';
 import { getStorageData } from '../utils/utils';
 import { API_URL } from './AppService';
+import { getUserStatistics, setUserStatistics } from './StatisticsService';
+
+const initialStat = {
+  learnedWords: 0,
+  optional: {
+    creationDate: Date.now(),
+    lastLoginDate: Date.now(),
+  },
+};
 
 export const logout = () => {
   localStorage.clear();
@@ -16,19 +25,25 @@ export const signIn = async (user: IUserCreds): Promise<ILoginResponseData> => {
     },
   };
   const data = await axios.post(`${API_URL}signin`, body, options);
-  console.log(data.data);
   return data.data;
 };
 
 export const login = async (user: IUserCreds): Promise<ILoginResponseData> => {
-
-  const signInResp = await signIn(user);
-  localStorage.setItem('token', signInResp.token);
-  localStorage.setItem('currentId', signInResp.userId);
-  localStorage.setItem('currentName', signInResp.name);
-  localStorage.setItem('refreshToken', signInResp.refreshToken);
-  localStorage.setItem('authState', signInResp.message);
-  return signInResp;
+  let result: ILoginResponseData;
+  return signIn(user).then((signInResp) => {
+    localStorage.setItem('token', signInResp.token);
+    localStorage.setItem('currentId', signInResp.userId);
+    localStorage.setItem('currentName', signInResp.name);
+    localStorage.setItem('refreshToken', signInResp.refreshToken);
+    localStorage.setItem('authState', signInResp.message);
+    result = signInResp;
+  }).then(() => {
+    getUserStatistics(result.userId, result.token).then(async (response) => {
+      if (response === null) {
+        setUserStatistics(result.userId, result.token, initialStat);
+      }
+    });
+  }).then(() => result);
 
 
 };

@@ -42,3 +42,7 @@ h3{
     transform: rotate(360deg);
   }
 }
+body ::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 0px;
+}
