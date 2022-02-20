@@ -1,52 +1,66 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+
 import React, { useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
-import {
-  Button,
-  Header,
-  Icon,
-  List,
-  Loader,
-  Message,
-  Modal,
-  Statistic,
-} from 'semantic-ui-react';
+import { Button, Header, Icon, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
-import {
-  GAME_TIMER,
-  POINTS,
-  SUM_POINTS,
-} from '../../../constants/gamesConstants';
+import { GAME_TIMER, POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 
 const SprintGameField: React.FC = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const group = queryParams.get('group');
+  const page = queryParams.get('page');
+
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const [gameStartFromBook, setGameStartFromBook] = useState(isBook(group, page));
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const [gameStartFromMenu, setGameStartFromMenu] = useState(isMenu(group, page));
+
+  function isMenu(group: string | null, page: string | null) {
+    if (group === null && page === null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function isBook(group: string | null, page: string | null) {
+    if (group !== null && page !== null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<SprintQuestionsState[]>([]);
-  const [page, setPage] = useState(29);
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
-  const [gameStartFromMenu, setGameStartFromMenu] = useState(true);
-  /* const [gameStartFromBook, setGameStartFromBook] = useState(true); */
+
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
 
   const onGameEnd = (counter: number) => {
     setGameOver(true);
   };
-  const onStartGame = async (level: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const onStartGame = async (group: string | null, page: string | null) => {
     setLoading(true);
     setGameStartFromMenu(false);
-    const randomNumberPage = getRandomNumber(1, PAGES_PER_CATEGORY);
-    setPage(randomNumberPage);
-    const newQuestion = await getDataSprintGame(level, page);
+    setGameStartFromBook(false);
+    const newQuestion = await getDataSprintGame(Number(group), Number(page));
+    console.log(group, page);
+    console.log(Number(group), Number(page));
     setQuestions(newQuestion);
+    console.log(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
@@ -66,7 +80,7 @@ const SprintGameField: React.FC = () => {
         correctTranslate: questions[number].wordTranslate,
       };
       if (correct === true) {
-        play(correctSound);
+        play([correctSound]);
         if (score >= 0 && score < SUM_POINTS[30]) {
           setScore((prev) => prev + POINTS[1]);
         } else if (score >= SUM_POINTS[30] && score < SUM_POINTS[90]) {
@@ -77,7 +91,7 @@ const SprintGameField: React.FC = () => {
           setScore((prev) => prev + POINTS[4]);
         }
       } else {
-        play(wrongSound);
+        play([wrongSound]);
       }
 
       setUserAnswers((prev) => [...prev, answerObject]);
@@ -90,28 +104,45 @@ const SprintGameField: React.FC = () => {
     }
   };
 
-
   return (
     <div>
-      {gameStartFromMenu ? (
+      {gameStartFromBook && !gameStartFromMenu ? (
         <div>
           <Message info>
             <Message.Header>Welcome to the game "Sprint"</Message.Header>
             <p>
-              Sprint is a speed game where you have 60 seconds to complete the
-              game. Use the mouse and the right or left key to select the
-              correct answer.
+            Sprint is a game of speed where you have 20 questions and 60 seconds to complete the game.
+             Use the mouse and the right or left key to select the correct
+              answer.
             </p>
+            <p>Click on START to start the game.</p>
+          </Message>
+
+          <Button
+            onClick={() => {
+              onStartGame(group, page);
+            }}
+          >
+            START
+          </Button>
+        </div>
+      ) : null}
+      {gameStartFromMenu && !gameStartFromBook ? (
+        <div>
+          <Message info>
+            <Message.Header>Welcome to the game "Sprint"</Message.Header>
             <p>
-              Below you need to select the level of difficulty of the questions.
+            Sprint is a game of speed where you have 20 questions and 60 seconds to complete the game. Use the mouse and the right or left key to select the correct
+              answer.
             </p>
+            <p>Below you need to select the level of difficulty of the questions.</p>
           </Message>
 
           {CATEGOTY_LINKS.map((item) => (
             <Button
               key={item.id}
               onClick={() => {
-                onStartGame(item.id);
+                onStartGame(item.id.toString(), getRandomNumber(1, PAGES_PER_CATEGORY).toString());
               }}
               style={{ backgroundColor: item.color }}
             >
@@ -144,15 +175,9 @@ const SprintGameField: React.FC = () => {
               <List celled ordered>
                 {userAnswers.map((item) => (
                   <List.Item key={item.questionID}>
-                    <List.Icon
-                      name={item.result ? 'checkmark' : 'close'}
-                      color={item.result ? 'green' : 'red'}
-                    />
+                    <List.Icon name={item.result ? 'checkmark' : 'close'} color={item.result ? 'green' : 'red'} />
                     <List.Content verticalAlign="middle">
-                      <List.Header
-                        as={'h3'}
-                        color="blue"
-                      >{`${item.question}`}</List.Header>
+                      <List.Header as={'h3'} color="blue">{`${item.question}`}</List.Header>
                       <List.Description>{`${item.correctTranslate}`}</List.Description>
                     </List.Content>
                   </List.Item>
@@ -166,6 +191,7 @@ const SprintGameField: React.FC = () => {
               onClick={() => {
                 setOpen(false);
                 setGameStartFromMenu(false);
+                setGameStartFromBook(false);
                 setGameOver(false);
               }}
             >
@@ -178,6 +204,7 @@ const SprintGameField: React.FC = () => {
               onClick={() => {
                 setOpen(false);
                 setGameStartFromMenu(true);
+                setGameStartFromBook(false);
                 setGameOver(false);
               }}
               positive
@@ -188,16 +215,12 @@ const SprintGameField: React.FC = () => {
 
       {<Loader size="large">Loading</Loader>}
 
-      {!loading && !gameStartFromMenu && !gameOver && (
+      {!loading && !gameStartFromMenu && !gameStartFromBook && !gameOver && (
         <div>
           <div>
             <Statistic size="small">
               <Statistic.Value>
-                <Timer
-                  isActive={true}
-                  initialTime={GAME_TIMER}
-                  onCountdownFinish={() => onGameEnd(number)}
-                />
+                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => onGameEnd(number)} />
               </Statistic.Value>
               <Statistic.Label>
                 <Icon name="stopwatch" size="big" />
@@ -222,6 +245,7 @@ const SprintGameField: React.FC = () => {
             onClick={() => {
               setOpen(false);
               setGameStartFromMenu(false);
+              setGameStartFromBook(false);
               setGameOver(true);
             }}
           >
