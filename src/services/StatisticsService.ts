@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { IMonthStatData, IStatisticsRequestData, LongStatData } from '../models/StatisticsModel';
+import { UserWordData } from '../models/WordModel';
 import { API_URL } from './AppService';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from './AuthService';
-import { createUpdateUserWordById, Difficulty, Game, getUserWordById, Known, UserOptionsFields } from './UserWordsService';
+import { createUpdateUserWordById, Difficulty, Game, getNewWords, getUserWordById, initialUserWord, Known, UserOptionsFields } from './UserWordsService';
 const currentDate = new Date();
 const month: string = currentDate.toLocaleString('default', { month: 'short' });
-const day: number = currentDate.getDate();
+const day: number = currentDate.getDate() - 1;
 
 export const initialStatData: LongStatData = {
   learnedWords: 0,
@@ -92,6 +93,33 @@ export const updateLearnedWordsCount = async (isLearned: boolean) => {
   }
 };
 
+export const updateNewWordsCount = (game: Game, count: number, posCount: number, seriaLength: number) => {
+  getUserStatistics().then((existingStat) => {
+    if (existingStat) {
+      const body = existingStat;
+      if (!body.optional[month]) {
+        body.optional[month] = initialMonthData;
+      }
+      const temp = body.optional[month] as IMonthStatData;
+      if (game === Game.Sprint) {
+        temp.newSprint[day] = temp.newSprint[day] + count;
+        temp.posSprint[day] = temp.posSprint[day] + posCount;
+        temp.seriaSprint[day] = temp.seriaSprint[day] < seriaLength ? seriaLength : temp.seriaSprint[day];
+      } else if ((game === Game.Audiocall)) {
+        temp.newAudio[day] = temp.newAudio[day] + count;
+        temp.posAudio[day] = temp.posAudio[day] + posCount;
+        temp.seriaAudio[day] = temp.seriaAudio[day] < seriaLength ? seriaLength : temp.seriaAudio[day];
+      }
+
+      body.optional[month] = temp;
+      setUserStatistics(body);
+    }
+  });
+
+};
+
+
+
 export const setUserLoginStatistics = async (stat: LongStatData) => {
   stat.optional.lastLoginDate = Date.now();
   if (isAuthenticated()) {
@@ -99,38 +127,78 @@ export const setUserLoginStatistics = async (stat: LongStatData) => {
   }
 };
 
-export const registerWordGameResult = async (game: Game, wordId: string, result: boolean) => {
-  const word = await getUserWordById(wordId);
-  if (word) {
-    const isDifficult = word.difficulty === Difficulty.Hard;
-    const attemptsInRow = word.optional.attempts ? +word.optional.attempts : 0;
-    const positiveRes = game === Game.Sprint ? word.optional.sprintPositive : word.optional.audioPositive;
-    const negativeRes = game === Game.Sprint ? word.optional.sprintNegative : word.optional.audioNegative;
-    // set known=false when result is false
-    if (result) {
-      if (isDifficult && attemptsInRow === 4) {
-        createUpdateUserWordById(wordId, { attempts: 0, [`${UserOptionsFields.IsKnown}`]: Known.True });
-      }
-      if (!isDifficult && attemptsInRow === 2) {
-        createUpdateUserWordById(wordId, { attempts: 0, [`${UserOptionsFields.IsKnown}`]: Known.True });
-      }
+const updateWordIsKnown = (
+  wordId: string,
+  result: boolean,
+  isDifficult: boolean,
+  attemptsInRow: number
+): Promise<UserWordData> | null | undefined => {
+  if (result) {
+    if ((isDifficult && attemptsInRow === 4) || (!isDifficult && attemptsInRow === 2)) {
+      return createUpdateUserWordById(wordId, { [`${UserOptionsFields.IsKnown}`]: Known.True });
     } else {
-      createUpdateUserWordById(wordId, { attempts: 0, [`${UserOptionsFields.IsKnown}`]: Known.False });
+      return null;
     }
-    if (game === Game.Sprint) {
-      createUpdateUserWordById(
-        wordId,
-        result
-          ? { attempts: attemptsInRow + 1, sprintPositive: positiveRes ? positiveRes + 1 : 1 }
-          : { sprintNegative: negativeRes ? negativeRes + 1 : 1 }
-      );
-    } else {
-      createUpdateUserWordById(
-        wordId,
-        result
-          ? { attempts: attemptsInRow + 1, audioPositive: positiveRes ? positiveRes + 1 : 1 }
-          : { audioNegative: negativeRes ? negativeRes + 1 : 1 }
-      );
+  } else {
+    return createUpdateUserWordById(wordId, { attempts: 0, [`${UserOptionsFields.IsKnown}`]: Known.False });
+  }
+};
+
+const updateWordAttempts = (
+  game: Game.Sprint | Game.Audiocall,
+  wordId: string,
+  result: boolean,
+  attemptsInRow: number,
+  positiveRes: number,
+  negativeRes: number
+): Promise<UserWordData> => {
+  if (game === Game.Sprint) {
+    return createUpdateUserWordById(
+      wordId,
+      result === true
+        ? { attempts: attemptsInRow + 1, sprintPositive: positiveRes ? positiveRes + 1 : 1 }
+        : { sprintNegative: negativeRes ? negativeRes + 1 : 1 }
+    );
+  } else {
+    return createUpdateUserWordById(
+      wordId,
+      result === true
+        ? { attempts: attemptsInRow + 1, audioPositive: positiveRes ? positiveRes + 1 : 1 }
+        : { audioNegative: negativeRes ? negativeRes + 1 : 1 }
+    );
+  }
+};
+
+export const registerWordGameResult = async (game: Game.Sprint | Game.Audiocall, wordId: string, result: boolean) => {
+  if (isAuthenticated()) {
+    const word = await getUserWordById(wordId);
+    if (word) {
+      const isDifficult = word.difficulty === Difficulty.Hard;
+      const attemptsInRow = word.optional.attempts ? word.optional.attempts : 0;
+      const positiveRes =
+        game === Game.Sprint
+          ? word.optional.sprintPositive
+            ? word.optional.sprintPositive
+            : 0
+          : word.optional.audioPositive
+            ? word.optional.audioPositive
+            : 0;
+      const negativeRes =
+        game === Game.Sprint
+          ? word.optional.sprintNegative
+            ? word.optional.sprintNegative
+            : 0
+          : word.optional.audioNegative
+            ? word.optional.audioNegative
+            : 0;
+      // set known=false when result is false
+
+      return updateWordAttempts(game, wordId, result, attemptsInRow, positiveRes, negativeRes).then(() => {
+
+        updateWordIsKnown(wordId, result, isDifficult, attemptsInRow);
+      });
     }
+  } else {
+    return null;
   }
 };

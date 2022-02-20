@@ -36,7 +36,7 @@ export enum UserOptionsFields {
   AudioNegative = 'audioNegative',
 }
 
-const initialUserWord: UserWordData = {
+export const initialUserWord: UserWordData = {
   difficulty: Difficulty.Normal,
   optional: {
     isNew: New.False,
@@ -97,7 +97,7 @@ export const getUserWords = async (): Promise<UserWordData[]> => {
   return data.data;
 };
 
-export const createUserWord = async (wordId: string, wordData: UserWordData) => {
+export const createUserWord = async (wordId: string, wordData: UserWordData): Promise<UserWordData> => {
   const id = getCurrentUserId();
   const token = getCurrentToken();
   const data = await axios.post(`${API_URL}users/${id}/words/${wordId}`, wordData, {
@@ -107,7 +107,6 @@ export const createUserWord = async (wordId: string, wordData: UserWordData) => 
       'Content-Type': 'application/json',
     },
   });
-  console.log(data);
   return data.data;
 };
 
@@ -140,7 +139,6 @@ export const updateUserWordById = async (wordId: string, wordData: UserWordData)
       'Content-Type': 'application/json',
     },
   });
-  console.log(data);
   return data.data;
 
 };
@@ -163,22 +161,24 @@ export const createUpdateUserWordById = async (wordId: string, wordData: IUserWo
           updateLearnedWordsCount(false);
         }
       }
-    } else {
-      if (wordData[key]) {
-        newWordState.optional[key] = wordData[key];
-        if (wordData[key] === Known.True) {
-          newWordState.difficulty = Difficulty.Normal;
-          updateLearnedWordsCount(true);
-        }
-      }
-    }
-  });
+    } else if (key === 'attempts') {
+      // console.log(wordData[key]);
 
-  if (word) {
-    return updateUserWordById(wordId, newWordState);
-  } else {
-    return createUserWord(wordId, newWordState);
-  }
+
+      newWordState.optional.attempts = wordData[key];
+    } else if (wordData[key]) {
+      newWordState.optional[key] = wordData[key];
+      if (wordData[key] === Known.True) {
+        newWordState.difficulty = Difficulty.Normal;
+        updateLearnedWordsCount(true);
+      }
+
+    }
+
+  });
+  const result = word ? await updateUserWordById(wordId, newWordState) : await createUserWord(wordId, newWordState);
+
+  return result;
 };
 
 export const getHardWords = async (): Promise<IUserWordData[]> => {
@@ -230,7 +230,41 @@ export const getPaginatedAllUserAggregatedWords = async (group: number, page: nu
       console.log(content);
     }
   );
+};
 
+export const getNewWords = async (wordsPerPage = 4000): Promise<IUserWordData[] | null> => {
+  const id = getCurrentUserId();
+  const token = getCurrentToken();
+  return axios.get(encodeURI(`${API_URL}users/${id}/aggregatedWords?wordsPerPage=${wordsPerPage}`), {
+    params: { filter: JSON.stringify({ '$and': [{ 'userWord.optional.isKnew': 'true' }] }) },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }).then(
+    (response) => {
+      if (response) {
+        console.log(response);
+        return response.data;
+      }
+    },
+    (error: any) => {
+      console.log(error.response.status);
+      if (error.response.status === 401 || error.response.status === 422) {
+        refreshToken().then((response) => {
+          if (response) {
+            getNewWords();
+          } else {
+            return null;
+          }
+        });
+
+      }
+      const content = (error.response && error.response.data) || error.message || error.toString();
+      console.log(content);
+    }
+  );
 };
 
 

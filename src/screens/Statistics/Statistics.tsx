@@ -4,6 +4,9 @@ import { IStatOptions, LongStatData } from '../../models/StatisticsModel';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from '../../services/AuthService';
 import { getUserStatistics, initialStatData } from '../../services/StatisticsService';
 import './statistics.css';
+const currentDate = new Date();
+const month: string = currentDate.toLocaleString('default', { month: 'short' });
+const day: number = currentDate.getDate();
 
 const Statistics: React.FC = () => {
   const currentUser = getCurrentUserId();
@@ -33,6 +36,8 @@ const Statistics: React.FC = () => {
       isMounted = false;
     };
   }, [updated]);
+
+  console.log(state);
 
   return (
     <div className="stat-container">
@@ -64,6 +69,24 @@ const Statistics: React.FC = () => {
             </Statistic>
           </Card>
         </Segment>
+        <Segment.Group horizontal>
+          <Segment>
+            <Card raised>
+              <Statistic>
+                <Statistic.Value>{state.optional[month] ? state.optional[month].toString() : 'nothing'}</Statistic.Value>
+                <Statistic.Label>Sprint</Statistic.Label>
+              </Statistic>
+            </Card>
+          </Segment>
+          <Segment>
+            <Card raised>
+              <Statistic>
+                <Statistic.Value>{state.optional ? state.optional.toString() : 'nothing'}</Statistic.Value>
+                <Statistic.Label>Audio</Statistic.Label>
+              </Statistic>
+            </Card>
+          </Segment>
+        </Segment.Group>
       </div>
     </div>
   );

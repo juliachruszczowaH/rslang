@@ -183,7 +183,7 @@ export const Category: React.FunctionComponent = () => {
       {isDictionary ? null : !isAuthenticated() ? (
         <Divider />
       ) : (
-        <Progress value={learned} total={WORDS_PER_PAGE} size="tiny" progress='value' success={learned === 20} />
+        <Progress value={learned} total={WORDS_PER_PAGE} size="tiny" progress="value" success={learned === 20} />
       )}
 
       {words.words.length > 0 ? (
@@ -300,6 +300,24 @@ export const Category: React.FunctionComponent = () => {
                             />
                           }
                         />
+                        {word.userWord?.optional?.sprintPositive ||
+                        word.userWord?.optional?.sprintNegative ||
+                        word.userWord?.optional?.audioPositive ||
+                        word.userWord?.optional?.audioNegative ? (
+                          <div>
+                            {' '}
+                            <Label>
+                              Sprint
+                              <Label.Detail style={{ color: 'green' }}>{word.userWord?.optional?.sprintPositive}</Label.Detail>
+                              <Label.Detail style={{ color: 'red' }}>{word.userWord?.optional?.sprintNegative}</Label.Detail>
+                            </Label>
+                            <Label>
+                              AudioCall
+                              <Label.Detail style={{ color: 'green' }}>{word.userWord?.optional?.audioPositive}</Label.Detail>
+                              <Label.Detail style={{ color: 'red' }}>{word.userWord?.optional?.audioNegative}</Label.Detail>
+                            </Label>
+                          </div>
+                          ) : null}
                       </Card.Content>
                     ) : null}
                   </div>
