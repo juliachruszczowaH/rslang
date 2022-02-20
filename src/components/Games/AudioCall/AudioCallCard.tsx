@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { AudioCallData } from '../../../models/WordModel';
 import { Button, Icon, Segment, Statistic } from 'semantic-ui-react';
+import { disabledBtn } from '../../../utils/utils';
 
 
 
@@ -23,7 +24,7 @@ const AudioCallCard: FC<AudioCallData> = ({
         </div>
         <div>
             {answersAudioCall.map((answer) => (
-              <Button  basic color='green' onClick={()=>{onAnswer(answer);}}>
+              <Button className='button__game--audio' basic color='green' onClick={()=>{onAnswer(answer); disabledBtn();}}>
                 {`${answer}`}
               </Button>
             ))}

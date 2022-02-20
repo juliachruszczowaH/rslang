@@ -71,6 +71,7 @@ const SprintGameField: React.FC = () => {
     if (!gameOver) {
       const correct = answerCompare === compare;
       const answer = answerCompare;
+
       const answerObject: AnswerObject = {
         questionID: questions[number].id,
         question: questions[number].word,
@@ -79,6 +80,8 @@ const SprintGameField: React.FC = () => {
         result: correct,
         correctTranslate: questions[number].wordTranslate,
       };
+      setUserAnswers((prev) => [...prev, answerObject]);
+
       if (correct === true) {
         play([correctSound]);
         if (score >= 0 && score < SUM_POINTS[30]) {
@@ -94,7 +97,7 @@ const SprintGameField: React.FC = () => {
         play([wrongSound]);
       }
 
-      setUserAnswers((prev) => [...prev, answerObject]);
+
       const nextQuestion = number + 1;
       if (number === questions.length - 1) {
         onGameEnd(number);
@@ -102,7 +105,9 @@ const SprintGameField: React.FC = () => {
         setNumber(nextQuestion);
       }
     }
+    console.log(userAnswers);
   };
+  console.log(userAnswers);
 
   return (
     <div>

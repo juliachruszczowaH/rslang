@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect } from 'react';
-import { getRandomNumber } from '../../../utils/utils';
+import { disabledBtn, getRandomNumber } from '../../../utils/utils';
 import { SprintData } from '../../../models/WordModel';
 import { Button, Header, Segment, Statistic } from 'semantic-ui-react';
 
@@ -51,17 +51,21 @@ const SprintCard: FC<SprintData> = ({
         <div>
           <Button.Group>
             <Button
+            className='button__game--audio'
               onClick={() => {
                 onAnswer(false, compare());
+                disabledBtn();
               }}
             >
               False
             </Button>
             <Button.Or />
             <Button
+            className='button__game--audio'
               positive
               onClick={() => {
                 onAnswer(true, compare());
+                disabledBtn();
               }}
             >
               True

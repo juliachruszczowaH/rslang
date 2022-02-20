@@ -26,7 +26,7 @@ import { API_URL } from '../../services/AppService';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from '../../services/AuthService';
 import { createUpdateUserWordById, getHardWords, getPaginatedAllUserAggregatedWords } from '../../services/UserWordsService';
 import { getWords } from '../../services/WordsService';
-import { play } from '../../utils/utils';
+import { disabledBtn, play } from '../../utils/utils';
 import SprintGameField from '../Games/Sprint/SprintGameField';
 
 type State = {
@@ -208,14 +208,15 @@ export const Category: React.FunctionComponent = () => {
                           content="Click to listen"
                           trigger={
                             <Button
+                            className='button--audio'
                               circular
                               inverted
                               color="blue"
                               icon="headphones"
-                              
+                              /* disabled = {false} */
                               onClick={() => {
                                 play([API_URL + word.audio, API_URL + word.audioMeaning, API_URL + word.audioExample]);
-
+                                disabledBtn();
                               }}
                             />
                           }
