@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
-import { Button, Header, Icon, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
+import { Button, Dimmer, Header, Icon, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber, handleAnswers, play } from '../../../utils/utils';
@@ -20,6 +20,7 @@ const SprintGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const group = queryParams.get('group');
   const page = queryParams.get('page');
+  const [updated, setUpdated] = useState(true);
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const [gameStartFromBook, setGameStartFromBook] = useState(isBook(group, page));
@@ -51,8 +52,10 @@ const SprintGameField: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const onGameEnd = (counter: number) => {
+    setUpdated(false);
     handleAnswers(userAnswers, Game.Sprint).then((i) => {
       updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+      setUpdated(true);
       setGameOver(true);
     });
   };
@@ -114,7 +117,11 @@ const SprintGameField: React.FC = () => {
   };
   console.log(userAnswers);
 
-  return (
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated]);
+
+  return updated ? (
     <div>
       {gameStartFromBook && !gameStartFromMenu ? (
         <div>
@@ -264,6 +271,10 @@ const SprintGameField: React.FC = () => {
         </div>
       )}
     </div>
+  ) : (
+    <Dimmer active>
+      <Loader size="large" content="Please, wait. We are writing game results..." />
+    </Dimmer>
   );
 };
 export default SprintGameField;

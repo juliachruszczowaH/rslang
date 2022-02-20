@@ -69,7 +69,7 @@ export const handleAnswers = async (arr: AnswerObject[], game: Game.Sprint | Gam
   let seriaLengthResult = 0;
   const results = [0, 0, 0];
   console.log(arr);
-  const promises = arr.map(async (answer, index) => {
+  const promises = arr.map(async (answer) => {
     indexCount = indexCount + 1;
     if (answer.questionID) {
       if (answer.correct) {
