@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { AudioQuestionsState, AnswerObject } from '../../../models/WordModel';
 import { getDataAudioGame } from '../../../services/WordsService';
-import { Button, Header, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
+import { Button, Dimmer, Header, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
 import { getRandomNumber, handleAnswers, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
@@ -19,6 +19,7 @@ const AudioCallGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const group = queryParams.get('group');
   const page = queryParams.get('page');
+  const [updated, setUpdated] = useState(true);
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const [gameStartFromBook, setGameStartFromBook] = useState(isBook(group, page));
@@ -48,12 +49,17 @@ const AudioCallGameField: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const onGameEnd = (counter: number) => {
+    setUpdated(false);
     handleAnswers(userAnswers, Game.Audiocall).then((i) => {
-      console.log(userAnswers);
       updateNewWordsCount(Game.Audiocall, i[0], i[1], i[2]);
       setGameOver(true);
+      setUpdated(true);
     });
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated]);
 
   const checkAnswer = (answer: string) => {
     if (!gameOver) {
@@ -133,7 +139,7 @@ const AudioCallGameField: React.FC = () => {
     setLoading(false);
   };
 
-  return (
+  return updated ? (
     <div>
       {gameStartFromBook && !gameStartFromMenu ? (
         <div>
@@ -274,6 +280,10 @@ const AudioCallGameField: React.FC = () => {
         </div>
       )}
     </div>
+  ) : (
+    <Dimmer active>
+      <Loader size="large" content="Please, wait. We are writing game results..." />
+    </Dimmer>
   );
 };
 
