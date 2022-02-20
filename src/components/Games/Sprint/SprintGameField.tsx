@@ -7,12 +7,14 @@ import { getDataSprintGame } from '../../../services/WordsService';
 import { Button, Header, Icon, List, Loader, Message, Modal, Statistic } from 'semantic-ui-react';
 import Timer from './SprintTimer';
 import { CATEGOTY_LINKS } from '../../../constants/linksDataConstants';
-import { getRandomNumber, play } from '../../../utils/utils';
+import { getRandomNumber, handleAnswers, play } from '../../../utils/utils';
 import { PAGES_PER_CATEGORY } from '../../../constants/wordsConstants';
 import { GAME_TIMER, POINTS, SUM_POINTS } from '../../../constants/gamesConstants';
 import { NavLink } from 'react-router-dom';
 import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
+import { Game } from '../../../services/UserWordsService';
+import { updateNewWordsCount } from '../../../services/StatisticsService';
 
 const SprintGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -49,7 +51,10 @@ const SprintGameField: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const onGameEnd = (counter: number) => {
-    setGameOver(true);
+    handleAnswers(userAnswers, Game.Sprint).then((i) => {
+      updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+      setGameOver(true);
+    });
   };
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const onStartGame = async (group: string | null, page: string | null) => {
@@ -116,9 +121,8 @@ const SprintGameField: React.FC = () => {
           <Message info>
             <Message.Header>Welcome to the game "Sprint"</Message.Header>
             <p>
-            Sprint is a game of speed where you have 20 questions and 60 seconds to complete the game.
-             Use the mouse and the right or left key to select the correct
-              answer.
+              Sprint is a game of speed where you have 20 questions and 60 seconds to complete the game. Use the mouse and the right or left key to
+              select the correct answer.
             </p>
             <p>Click on START to start the game.</p>
           </Message>
@@ -137,8 +141,8 @@ const SprintGameField: React.FC = () => {
           <Message info>
             <Message.Header>Welcome to the game "Sprint"</Message.Header>
             <p>
-            Sprint is a game of speed where you have 20 questions and 60 seconds to complete the game. Use the mouse and the right or left key to select the correct
-              answer.
+              Sprint is a game of speed where you have 20 questions and 60 seconds to complete the game. Use the mouse and the right or left key to
+              select the correct answer.
             </p>
             <p>Below you need to select the level of difficulty of the questions.</p>
           </Message>

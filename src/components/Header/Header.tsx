@@ -1,11 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import './header.css';
-import { Menu, Button } from 'semantic-ui-react';
+import { Menu, Button, Image } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
 import { HEADER_LINKS } from '../../constants/linksDataConstants';
 import { isAuthenticated } from '../../services/AuthService';
 import { LogoutModal } from '../LogoutModal';
 import { LoginModal } from '../LoginModal';
+import logo from '../../assets/rs-lang-logo.jpg';
 
 const initialProps = {
   name: 'home',
@@ -34,7 +35,7 @@ function Header() {
   return (
     <Menu>
       <Menu.Item header>
-        <img alt="logo" src='rs-lang-logo.jpg' />
+        <Image alt="logo" src={logo} avatar/>
       </Menu.Item>
       {links.map((item) => (
         <Menu.Item as={Link} to={`/${item.keyword}`}
@@ -46,7 +47,7 @@ function Header() {
         </Menu.Item>
       ))}
       <Menu.Menu position='right'>
-        {auth ? LogoutModal(<Button color={'orange'} circular inverted size='small'> Logout</Button>) : LoginModal(<Button color={'green'} circular inverted size='small'> Login</Button>)}
+        {auth ? LogoutModal(<Button color='orange' circular inverted size='small'> Logout</Button>) : LoginModal(<Button color={'green'} circular inverted size='small'> Login</Button>)}
       </Menu.Menu>
 
     </Menu >

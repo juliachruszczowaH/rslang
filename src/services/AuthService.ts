@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { ILoginResponseData, IUserCreds } from '../models/UserModel';
-import { getStorageData } from '../utils/utils';
+import { getStorageData, registerStorageData } from '../utils/utils';
 import { API_URL } from './AppService';
-import { getUserStatistics, setUserStatistics } from './StatisticsService';
+import { getUserStatistics, setInitialUserStatistics, setUserStatistics } from './StatisticsService';
 
 const initialStat = {
   learnedWords: 0,
@@ -30,22 +30,17 @@ export const signIn = async (user: IUserCreds): Promise<ILoginResponseData> => {
 
 export const login = async (user: IUserCreds): Promise<ILoginResponseData> => {
   let result: ILoginResponseData;
+  const currentDate = new Date();
+  const month: string = currentDate.toLocaleString('default', { month: 'long' });
   return signIn(user).then((signInResp) => {
-    localStorage.setItem('token', signInResp.token);
-    localStorage.setItem('currentId', signInResp.userId);
-    localStorage.setItem('currentName', signInResp.name);
-    localStorage.setItem('refreshToken', signInResp.refreshToken);
-    localStorage.setItem('authState', signInResp.message);
+    registerStorageData(signInResp);
     result = signInResp;
   }).then(() => {
-    getUserStatistics(result.userId, result.token).then(async (response) => {
-      if (response === null) {
-        setUserStatistics(result.userId, result.token, initialStat);
-      }
+    getUserStatistics().then(async (response) => {
+      if (response) console.log(response.optional[month]);
+      result = (response && response.optional[month]) ? await setUserStatistics(response) : await setInitialUserStatistics();
     });
   }).then(() => result);
-
-
 };
 
 export const getCurrentUserId = (): string | null => {
@@ -54,6 +49,10 @@ export const getCurrentUserId = (): string | null => {
 
 export const getCurrentToken = (): string | null => {
   return getStorageData('token');
+};
+
+export const getCurrentRefreshToken = (): string | null => {
+  return getStorageData('refreshToken');
 };
 
 export const isAuthenticated = (): boolean => {
