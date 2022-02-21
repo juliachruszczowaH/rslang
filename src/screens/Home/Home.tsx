@@ -188,9 +188,9 @@ const Home: React.FC = () => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={10}>
-            <Transition visible={visibility} animation="fade" duration="2500">
-              <Embed placeholder="/images/image-16by9.png" source="youtube" />
-            </Transition>
+            <div className={style.home__videoWrapper}>
+            <iframe className={style.home__video} src="https://www.youtube.com/embed/izX35WGhlTc" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+            </div>
           </Grid.Column>
         </Grid.Row>
       </Grid>
