@@ -49,12 +49,15 @@ const AudioCallGameField: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const onGameEnd = (counter: number) => {
+
     setUpdated(false);
+    console.log(userAnswers);
     handleAnswers(userAnswers, Game.Audiocall).then((i) => {
       updateNewWordsCount(Game.Audiocall, i[0], i[1], i[2]);
       setGameOver(true);
       setUpdated(true);
     });
+
   };
 
   useEffect(() => {

@@ -15,6 +15,7 @@ import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 import { Game } from '../../../services/UserWordsService';
 import { updateNewWordsCount } from '../../../services/StatisticsService';
+import style from './sprint.module.css';
 
 const SprintGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -81,8 +82,8 @@ const SprintGameField: React.FC = () => {
         questionID: questions[number].id,
         question: questions[number].word,
         userAnswer: answer,
-        correct: compare,
-        result: correct,
+        correct: correct,
+        result: compare,
         correctTranslate: questions[number].wordTranslate,
       };
       setUserAnswers((prev) => [...prev, answerObject]);
@@ -178,7 +179,7 @@ const SprintGameField: React.FC = () => {
           }
         >
           <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
-            userAnswers.filter((i) => i.result).length
+            userAnswers.filter((i) => i.correct).length
           } - are correct)`}</Modal.Header>
           <Modal.Content image scrolling>
             <Modal.Description>
@@ -186,7 +187,7 @@ const SprintGameField: React.FC = () => {
               <List celled ordered>
                 {userAnswers.map((item) => (
                   <List.Item key={item.questionID}>
-                    <List.Icon name={item.result ? 'checkmark' : 'close'} color={item.result ? 'green' : 'red'} />
+                    <List.Icon name={item.correct ? 'checkmark' : 'close'} color={item.correct ? 'green' : 'red'} />
                     <List.Content verticalAlign="middle">
                       <List.Header as={'h3'} color="blue">{`${item.question}`}</List.Header>
                       <List.Description>{`${item.correctTranslate}`}</List.Description>
@@ -229,7 +230,7 @@ const SprintGameField: React.FC = () => {
       {!loading && !gameStartFromMenu && !gameStartFromBook && !gameOver && (
         <div>
           <div>
-            <Statistic size="small">
+            <Statistic className={style.sprint__timer} size="small">
               <Statistic.Value>
                 <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => onGameEnd(number)} />
               </Statistic.Value>

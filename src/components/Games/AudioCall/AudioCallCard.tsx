@@ -3,8 +3,6 @@ import { AudioCallData } from '../../../models/WordModel';
 import { Button, Icon, Segment, Statistic } from 'semantic-ui-react';
 import { disabledBtn } from '../../../utils/utils';
 
-
-
 const AudioCallCard: FC<AudioCallData> = ({
   answersAudioCall,
   onAnswer,
