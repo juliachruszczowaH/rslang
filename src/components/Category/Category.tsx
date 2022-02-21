@@ -59,7 +59,6 @@ export const Category: React.FunctionComponent = () => {
   const [page, setPage] = useState(pageId ? +pageId : 0);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(`PAGINATION: group: ${group}; page: ${page}`);
   const id = getCurrentUserId();
   const token = getCurrentToken();
   const isDictionary = location.pathname === '/book/dictionary';
@@ -74,27 +73,21 @@ export const Category: React.FunctionComponent = () => {
           getHardWords().then(
             (response) => {
               if (response) {
-                console.log('response');
-                console.log(response[0]);
                 if (isMounted) setWords({ words: response[0].paginatedResults });
                 setUpdated(false);
               }
             },
             (error: any) => {
               const content = (error.response && error.response.data) || error.message || error.toString();
-              console.log(content);
             }
           );
         } else {
           getPaginatedAllUserAggregatedWords(group, page).then(
             (response) => {
               if (response) {
-                console.log('response');
-                console.log(response[0]);
                 const markedWords = response[0].paginatedResults.filter(
                   (i) => i.userWord?.difficulty === Difficulty.Hard || i.userWord?.optional?.isKnown === Known.True
                 );
-                console.log(markedWords);
                 if (isMounted) {
                   setLearned(markedWords.length);
                   setWords({ words: response[0].paginatedResults });
@@ -106,7 +99,6 @@ export const Category: React.FunctionComponent = () => {
             },
             (error: any) => {
               const content = (error.response && error.response.data) || error.message || error.toString();
-              console.log(content);
             }
           );
         }
@@ -114,14 +106,12 @@ export const Category: React.FunctionComponent = () => {
         getWords(group, page).then(
           (response) => {
             if (response) {
-              console.log(response);
               if (isMounted) setWords({ words: response });
               setUpdated(false);
             }
           },
           (error: any) => {
             const content = (error.response && error.response.data) || error.message || error.toString();
-            console.log(content);
           }
         );
       }
@@ -206,8 +196,8 @@ export const Category: React.FunctionComponent = () => {
           )}
           {words.words &&
             words.words.map((word: IWordData, index: number) => (
-              <GridColumn className={style.cards__wrapper}>
-              <Card raised className={style.cards__item} key={`${index}-card`}>
+              <GridColumn className={style.cards__wrapper} key={`${index}-card`}>
+              <Card raised className={style.cards__item} >
 
                   <div className={style.cards__content}>
                     <Image className={style.cards__image} src={API_URL + word.image} size="medium" />

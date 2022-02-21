@@ -26,7 +26,6 @@ function Header() {
   };
 
   useEffect(() => {
-    console.log(auth);
     setAuth(isAuthenticated());
 
   }, [auth]);

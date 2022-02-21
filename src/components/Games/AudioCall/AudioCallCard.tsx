@@ -24,7 +24,7 @@ const AudioCallCard: FC<AudioCallData> = ({
         </div>
         <div>
             {answersAudioCall.map((answer) => (
-              <Button className='button__game--audio' basic color='green' onClick={()=>{onAnswer(answer); disabledBtn();}}>
+              <Button className='button__game--audio' basic color='green' onClick={()=>{onAnswer(answer); disabledBtn();}} key={answer}>
                 {`${answer}`}
               </Button>
             ))}

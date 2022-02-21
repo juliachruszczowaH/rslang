@@ -118,7 +118,6 @@ const AudioCallGameField: React.FC = () => {
       if (event.key === '4') checkAnswer(questions[number].answersAudioCall[3]);
       if (event.key === '5') checkAnswer(questions[number].answersAudioCall[4]);
       if (event.key === ' ') play([API_URL + questions[number].audio]);
-      console.log(questions[number].answersAudioCall[0]);
     };
     window.addEventListener<'keypress'>('keypress', handleKeysControl);
     return () => window.removeEventListener('keypress', handleKeysControl);
@@ -129,10 +128,7 @@ const AudioCallGameField: React.FC = () => {
     setGameStartFromMenu(false);
     setGameStartFromBook(false);
     const newQuestion = await getDataAudioGame(Number(group), Number(page));
-    console.log(group, page);
-    console.log(Number(group), Number(page));
     setQuestions(newQuestion);
-    console.log(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);

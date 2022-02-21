@@ -65,10 +65,7 @@ const SprintGameField: React.FC = () => {
     setGameStartFromMenu(false);
     setGameStartFromBook(false);
     const newQuestion = await getDataSprintGame(Number(group), Number(page));
-    console.log(group, page);
-    console.log(Number(group), Number(page));
     setQuestions(newQuestion);
-    console.log(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
@@ -113,9 +110,7 @@ const SprintGameField: React.FC = () => {
         setNumber(nextQuestion);
       }
     }
-    console.log(userAnswers);
   };
-  console.log(userAnswers);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
