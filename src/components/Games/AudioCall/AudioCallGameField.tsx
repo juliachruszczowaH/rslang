@@ -48,17 +48,21 @@ const AudioCallGameField: React.FC = () => {
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const onGameEnd = (counter: number) => {
+  const NUMBER_OF_QUESTIONS = 20;
+  let onGameEnd: () => void;
+  useEffect(()=>{
+    if (userAnswers.length === NUMBER_OF_QUESTIONS) {
+      setUpdated(false);
+      handleAnswers(userAnswers, Game.Sprint).then((i) => {
+        updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+        console.log(userAnswers);
+        setUpdated(true);
+        setGameOver(true);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userAnswers]);
 
-    setUpdated(false);
-    console.log(userAnswers);
-    handleAnswers(userAnswers, Game.Audiocall).then((i) => {
-      updateNewWordsCount(Game.Audiocall, i[0], i[1], i[2]);
-      setGameOver(true);
-      setUpdated(true);
-    });
-
-  };
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +97,7 @@ const AudioCallGameField: React.FC = () => {
       setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
       if (number === questions.length - 1) {
-        onGameEnd(number);
+        onGameEnd();
       } else {
         setTimeout(() => {
           setNumber(nextQuestion);

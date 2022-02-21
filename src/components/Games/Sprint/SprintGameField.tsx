@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
@@ -51,16 +51,23 @@ const SprintGameField: React.FC = () => {
 
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
+  const NUMBER_OF_QUESTIONS = 20;
+  let onGameEnd: () => void;
+  useEffect(()=>{
+    if (userAnswers.length === NUMBER_OF_QUESTIONS) {
+      setUpdated(false);
+      handleAnswers(userAnswers, Game.Sprint).then((i) => {
+        updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+        console.log(userAnswers);
+        setUpdated(true);
+        setGameOver(true);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userAnswers]);
 
-  const onGameEnd = (counter: number) => {
-    setUpdated(false);
-    handleAnswers(userAnswers, Game.Sprint).then((i) => {
-      updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
-      setUpdated(true);
-      setGameOver(true);
-    });
-  };
-  // eslint-disable-next-line @typescript-eslint/no-shadow
+
+  
   const onStartGame = async (group: string | null, page: string | null) => {
     setLoading(true);
     setGameStartFromMenu(false);
@@ -73,7 +80,7 @@ const SprintGameField: React.FC = () => {
     setLoading(false);
   };
 
-  const checkAnswer = async (answerCompare: boolean, compare: boolean) => {
+  const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
       const answer = answerCompare;
@@ -103,15 +110,19 @@ const SprintGameField: React.FC = () => {
         play([wrongSound]);
       }
 
-
       const nextQuestion = number + 1;
       if (number === questions.length - 1) {
-        onGameEnd(number);
+        onGameEnd();
       } else {
         setNumber(nextQuestion);
       }
     }
   };
+
+
+
+
+
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -232,7 +243,7 @@ const SprintGameField: React.FC = () => {
           <div>
             <Statistic className={style.sprint__timer} size="small">
               <Statistic.Value>
-                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => onGameEnd(number)} />
+                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => onGameEnd()} />
               </Statistic.Value>
               <Statistic.Label>
                 <Icon name="stopwatch" size="big" />
