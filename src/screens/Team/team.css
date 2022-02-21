@@ -1,0 +1,64 @@
+.team-container {
+  background-color: lightseagreen;
+}
+.team-units {
+  display: flex;
+  justify-content: space-between;
+
+}
+.unit-logo {
+  max-width: 260px;
+  max-height: 265px;
+  border-radius: 10px;
+}
+.card-item {
+  margin-bottom: 20px;
+  border: 2px solid olive;
+}
+.team-units-title {
+  text-align: center;
+  text-transform: uppercase;
+  color: rgb(207, 207, 14);
+}
+.card-unit {
+  border: 3px solid rgb(207, 207, 14);
+  border-radius: 10px;
+  max-width: 265px;
+}
+.github-link {
+  cursor: pointer;
+}
+.card-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-bottom: 35px;
+}
+.card-unit-title {
+  text-align: center;
+  font-family: 'Ubuntu';
+}
+
+.github-link {
+  text-decoration: none;
+  color: #030303;
+}
+.github-link:hover {
+  color: rgb(84, 133, 11);
+  transition: all 0.8s ease;
+}
+.unit-box {
+ padding: 5px;
+}
+.github-box {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.github-logo {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+.unit-info {
+  list-style: none;
+}

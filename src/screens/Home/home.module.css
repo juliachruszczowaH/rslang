@@ -1,0 +1,22 @@
+.home__video{
+  max-width: 900px;
+  width: 100%;
+  height: 500px;
+}
+.home__videoWrapper{
+  text-align: center!important;
+}
+.home__card{
+  height: 345px !important;
+  border: 4px solid #737272!important
+}
+@media (max-width: 768px){
+  .home__video{
+    height: 315px;
+  }
+}
+@media (max-width: 400px){
+  .home__video{
+    height: 200px;
+  }
+}

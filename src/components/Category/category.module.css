@@ -1,0 +1,116 @@
+
+.cards__group {
+  overflow-y: scroll;
+  max-height: 71vh!important;
+  height: 100%!important;
+  background-position-x: 50%!important;
+  background-position-y: 50%!important;
+  background-size: cover !important;
+  background-origin:content-box;
+  background-clip: initial;
+}
+
+.cards__content {
+  display: flex;
+  flex-direction: row;
+}
+
+.cards__image {
+  max-height: 100%;
+  max-width: 300px !important;
+  width: 100% !important;
+}
+
+.cards__item {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  min-width: 80%;
+
+}
+.cards__wrapper {
+  display: flex !important;
+  justify-content: center;
+}
+.cards__transcription {
+  min-width: 150px;
+  max-width: 150px;
+  height: 100%;
+  margin: 0 !important;
+}
+.cards__transcription h3{
+  text-align: center;
+}
+.cards__title {
+  height: 100%;
+  justify-content: space-around;
+}
+.cards__text {
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 16px!important;
+}
+.cards__title,
+.cards__text,
+.cards__transcription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cards__results{
+  background-color: transparent !important;
+  font-size: 14px !important;
+  text-shadow: 1px 1px 2px rgb(20, 16, 16), 0 0 1em rgb(188, 188, 194), 0 0 0.2em rgb(17, 110, 191);
+  color: #fff !important;
+  padding:0px 10px 20px 30px!important;
+}
+.cards__results__item{
+  text-shadow: none;
+}
+
+@media (max-width: 1268px) {
+  .cards__item {
+    flex-direction: column !important;
+  }
+  .cards__content {
+    width: 100%;
+  }
+  .cards__transcription {
+    max-width: 100rem;
+    width: 100%;
+  }
+  .cards__text {
+    max-width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .cards__item,
+  .cards__content {
+    flex-direction: column !important;
+  }
+  .cards__transcription {
+    max-width: 100%;
+    min-width: 100%;
+  }
+  .cards__image {
+    max-width: 768px !important;
+  }
+  .cards__text {
+    max-width: 600px;
+  }
+}
+*:before,
+*:after {
+  -webkit-box-sizing: border-box!important;
+  box-sizing: border-box!important;
+}
+.cards__label{
+  position: absolute!important;
+  top: 0;
+  left: 0;
+}

@@ -1,0 +1,8 @@
+
+.sprint__container{
+  background-image: url(../../../public/img/sprint.png);
+  height: 80vh;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 550px;
+}
