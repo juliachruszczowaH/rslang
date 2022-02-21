@@ -11,7 +11,6 @@ export const createNewUser = async (userData: IUserRequestData) => {
     },
   };
   const data = await axios.post(`${API_URL}users`, body, options);
-  console.log(data.data);
   return data;
 };
 

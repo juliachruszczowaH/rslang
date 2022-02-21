@@ -61,7 +61,6 @@ export const refreshToken = async (): Promise<ILoginResponseData | null> => {
   }).then(
     (response) => {
       if (response) {
-        console.log(response);
         registerStorageData(response.data);
         return response.data;
       }
@@ -76,7 +75,6 @@ export const refreshToken = async (): Promise<ILoginResponseData | null> => {
         localStorage.clear();
       }
       const content = (error.response && error.response.data) || error.message || error.toString();
-      console.log(content);
       return null;
     }
   );
@@ -93,7 +91,6 @@ export const getUserWords = async (): Promise<UserWordData[]> => {
       'Content-Type': 'application/json',
     },
   });
-  console.log(data);
   return data.data;
 };
 
@@ -121,7 +118,6 @@ export const getUserWordById = async (wordId: string): Promise<UserWordData | nu
         'Content-Type': 'application/json',
       },
     });
-    console.log(data);
     return data.data;
   } catch (error) {
     return null;
@@ -162,7 +158,6 @@ export const createUpdateUserWordById = async (wordId: string, wordData: IUserWo
         }
       }
     } else if (key === 'attempts') {
-      // console.log(wordData[key]);
 
 
       newWordState.optional.attempts = wordData[key];
@@ -193,7 +188,6 @@ export const getHardWords = async (): Promise<IUserWordData[]> => {
       'Content-Type': 'application/json',
     },
   });
-  console.log(data);
   return data.data;
 };
 
@@ -210,7 +204,6 @@ export const getPaginatedAllUserAggregatedWords = async (group: number, page: nu
   }).then(
     (response) => {
       if (response) {
-        console.log(response);
         return response.data;
       }
     },
@@ -227,7 +220,6 @@ export const getPaginatedAllUserAggregatedWords = async (group: number, page: nu
 
       }
       const content = (error.response && error.response.data) || error.message || error.toString();
-      console.log(content);
     }
   );
 };
@@ -245,7 +237,6 @@ export const getNewWords = async (wordsPerPage = 4000): Promise<IUserWordData[] 
   }).then(
     (response) => {
       if (response) {
-        console.log(response);
         return response.data;
       }
     },
@@ -262,7 +253,6 @@ export const getNewWords = async (wordsPerPage = 4000): Promise<IUserWordData[] 
 
       }
       const content = (error.response && error.response.data) || error.message || error.toString();
-      console.log(content);
     }
   );
 };

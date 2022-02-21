@@ -42,7 +42,6 @@ const Book: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(`${location.pathname}`);
     setActiveGroup(location.pathname === '/book/dictionary' ? '6' : groupId === undefined ? ' ' : groupId);
     setIsSelected(groupId === undefined && location.pathname !== '/book/dictionary' ? false : true);
   }, [groupId, location.pathname]);
