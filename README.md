@@ -4,6 +4,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang?style=plastic)](https://github.com/juliachruszczowaH/rslang)
 
 [![GitHub issues](https://img.shields.io/github/issues/juliachruszczowaH/rslang)](https://github.com/juliachruszczowaH/rslang/issues)
+
+[Video Presentation](https://youtu.be/izX35WGhlTc)
 # Advantages 
 
 * Magic Book
