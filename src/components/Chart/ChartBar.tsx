@@ -37,8 +37,6 @@ export const ChartBar = (chartData: IStatOptions, totalLearned = false) => {
   const dataset1: number[] = [];
   Object.keys(chartData).forEach((key) => {
     const creationDate = new Date(chartData.creationDate);
-    console.log(creationDate.getDate());
-    console.log(creationDate.toLocaleString('en-US', { month: 'short' }));
     if (key !== 'creationDate' && key !== 'lastLoginDate') {
       if (chartData[key]) {
         const temp = chartData[key] as IMonthStatData;

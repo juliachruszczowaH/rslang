@@ -40,7 +40,6 @@ const Statistics: React.FC = () => {
           },
           (error: any) => {
             const content = (error.response && error.response.data) || error.message || error.toString();
-            console.log(content);
           }
         );
       }
@@ -50,8 +49,7 @@ const Statistics: React.FC = () => {
     };
   }, [updated, optionals, currentDayData, isLearned]);
 
-  console.log(optionals);
-  console.log(currentDayData);
+  
 
   return (
     <div className="stat-container">

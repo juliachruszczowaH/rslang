@@ -55,7 +55,6 @@ export const LoginModal = (triggerElement: JSX.Element): JSX.Element => {
           setPass(initialState.password);
           if (currentUser && currentToken) {
             getUserStatistics().then((stat) => {
-              console.log(stat);
               if (stat) {
                 setUserLoginStatistics(stat).then(() => window.location.reload());
               } else {
