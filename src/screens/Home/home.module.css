@@ -1,0 +1,18 @@
+/* .home__text{
+  color: rgb(238, 235, 235)!important;
+}
+.home__title{
+  font-family: 'Rubik One', sans-serif!important;
+  font-size: 50px!important;
+  text-transform: uppercase!important;
+  background: linear-gradient(45deg, #1b5c7d 33%, #0D61BC 66%, #8AA9D6)!important;
+  -webkit-background-clip: text!important;
+  -webkit-text-fill-color: transparent!important;
+  color: #0B2349!important;
+  display: table!important;
+  margin: 20px auto!important;
+} */
+.home__card{
+  height: 345px !important;
+  border: 4px solid #737272!important
+}

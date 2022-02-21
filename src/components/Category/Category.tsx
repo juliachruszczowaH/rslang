@@ -207,7 +207,7 @@ export const Category: React.FunctionComponent = () => {
           {words.words &&
             words.words.map((word: IWordData, index: number) => (
               <GridColumn className={style.cards__wrapper}>
-              <Card className={style.cards__item} key={`${index}-card`}>
+              <Card raised className={style.cards__item} key={`${index}-card`}>
 
                   <div className={style.cards__content}>
                     <Image className={style.cards__image} src={API_URL + word.image} size="medium" />
@@ -219,7 +219,7 @@ export const Category: React.FunctionComponent = () => {
                           word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === Known.True ? 'green' : 'none',
                       }}
                     >
-                      <Card.Header className={style.cards__title}  as={'h3'} textAlign="left">
+                      <Card.Header className={style.cards__title}  as={'h2'} textAlign="left">
                         {word.userWord?.difficulty === 'hard' || word.userWord?.optional?.isKnown === Known.True ? (
                           <Label
                             color={

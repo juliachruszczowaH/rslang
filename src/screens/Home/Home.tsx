@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './home.css';
 import {
   Grid,
   Label,
@@ -19,7 +18,7 @@ import game from '../../assets/game.png';
 import stat from '../../assets/statistics.png';
 import { isAuthenticated } from '../../services/AuthService';
 import { LoginModal } from '../../components/LoginModal';
-
+import style from './home.module.css';
 const Home: React.FC = () => {
   const [auth, setAuth] = useState(isAuthenticated());
   const [visibility, setVisibility] = useState(false);
@@ -41,8 +40,8 @@ const Home: React.FC = () => {
       <Grid centered stackable relaxed>
         <Grid.Row>
           <Grid.Column width={6}>
-            <Container fluid textAlign="center">
-              <Header as="h1">RS Lang</Header>
+            <Container className={style.home__text} fluid textAlign="center">
+              <Header className={style.home__title} as="h1">RS Lang</Header>
               <p style={{ fontSize: '18px' }}>
                 Learning English has never been so easy Memorizing English words
                 can be fun and challenging. Play games, listen to pronunciation,
@@ -58,7 +57,7 @@ const Home: React.FC = () => {
               animation="fly down"
               duration="1000"
             >
-              <Card style={{ padding: '15px' }} centered>
+              <Card className={style.home__card} style={{ padding: '15px' }} centered>
                 <Image src={book} centered size="tiny" />
                 <Card.Content>
                   <Label
@@ -86,7 +85,7 @@ const Home: React.FC = () => {
               animation="fly left"
               duration="1000"
             >
-              <Card centered style={{ padding: '15px' }}>
+              <Card className={style.home__card} centered style={{ padding: '15px' }}>
                 <Image src={dictionary} centered size="tiny" />
 
                 <Card.Content>
@@ -125,7 +124,7 @@ const Home: React.FC = () => {
               animation="fly right"
               duration="1000"
             >
-              <Card centered style={{ padding: '15px' }}>
+              <Card className={style.home__card} centered style={{ padding: '15px' }}>
                 <Image src={game} centered size="tiny" />
                 <Card.Content>
                   <Label
@@ -156,7 +155,7 @@ const Home: React.FC = () => {
           </Grid.Column>
           <Grid.Column width={6}>
             <Transition visible={visibility} animation="fly up" duration="1000">
-              <Card centered style={{ padding: '15px' }}>
+              <Card className={style.home__card} centered style={{ padding: '15px' }}>
                 <Image src={stat} centered size="tiny" />
                 <Card.Content>
                   {!auth ? (

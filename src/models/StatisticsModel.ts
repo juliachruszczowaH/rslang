@@ -18,7 +18,8 @@ export interface IMonthStatData {
   seriaAudio: number[];
   newTotal: number[];
   knownTotal: number[];
-  positiveTotal: number[];
+  sprintTotal: number[];
+  audioTotal:number[];
 };
 
 export type IStatisticsRequestData = {

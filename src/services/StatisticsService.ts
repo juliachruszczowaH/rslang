@@ -1,13 +1,12 @@
 import axios from 'axios';
-import { IMonthStatData, IStatisticsRequestData, LongStatData } from '../models/StatisticsModel';
+import { IMonthStatData, LongStatData } from '../models/StatisticsModel';
 import { UserWordData } from '../models/WordModel';
 import { API_URL } from './AppService';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from './AuthService';
-import { createUpdateUserWordById, Difficulty, Game, getNewWords, getUserWordById, initialUserWord, Known, UserOptionsFields } from './UserWordsService';
+import { createUpdateUserWordById, Difficulty, Game, getUserWordById, Known, UserOptionsFields } from './UserWordsService';
 const currentDate = new Date();
 const month: string = currentDate.toLocaleString('default', { month: 'short' });
 const day: number = currentDate.getDate() - 1;
-
 export const initialStatData: LongStatData = {
   learnedWords: 0,
   optional: {
@@ -24,7 +23,8 @@ const initialMonthData = {
   seriaAudio: [...Array(31)].map((x) => 0),
   newTotal: [...Array(31)].map((x) => 0),
   knownTotal: [...Array(31)].map((x) => 0),
-  positiveTotal: [...Array(31)].map((x) => 0),
+  sprintTotal: [...Array(31)].map((x) => 0),
+  audioTotal: [...Array(31)].map((x) => 0),
 };
 
 export const setUserStatistics = async (stats: LongStatData) => {
@@ -83,12 +83,12 @@ export const updateLearnedWordsCount = async (isLearned: boolean) => {
   console.log(existingStat);
   if (existingStat) {
     const body = existingStat;
-    body.learnedWords = isLearned ? existingStat.learnedWords + 1 : existingStat.learnedWords - 1;
+    body.learnedWords = isLearned ? existingStat.learnedWords + 1 : existingStat.learnedWords > 0 ? existingStat.learnedWords - 1 : 0;
     if (!body.optional[month]) {
       body.optional[month] = initialMonthData;
     }
     const temp = body.optional[month] as IMonthStatData;
-    temp.knownTotal[day] = isLearned ? temp.knownTotal[day] + 1 : temp.knownTotal[day] - 1;
+    temp.knownTotal[day] = isLearned ? temp.knownTotal[day] + 1 : temp.knownTotal[day] > 0 ? temp.knownTotal[day] - 1 : 0;
     setUserStatistics(body);
   }
 };
@@ -105,10 +105,14 @@ export const updateNewWordsCount = (game: Game, count: number, posCount: number,
         temp.newSprint[day] = temp.newSprint[day] + count;
         temp.posSprint[day] = temp.posSprint[day] + posCount;
         temp.seriaSprint[day] = temp.seriaSprint[day] < seriaLength ? seriaLength : temp.seriaSprint[day];
-      } else if ((game === Game.Audiocall)) {
+        temp.sprintTotal[day] = temp.sprintTotal[day] + 20;
+        temp.newTotal[day] = temp.newTotal[day] + count;
+      } else {
         temp.newAudio[day] = temp.newAudio[day] + count;
         temp.posAudio[day] = temp.posAudio[day] + posCount;
         temp.seriaAudio[day] = temp.seriaAudio[day] < seriaLength ? seriaLength : temp.seriaAudio[day];
+        temp.audioTotal[day] = temp.audioTotal[day] + 20;
+        temp.newTotal[day] = temp.newTotal[day] + count;
       }
 
       body.optional[month] = temp;
