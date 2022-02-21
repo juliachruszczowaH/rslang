@@ -5,7 +5,7 @@ import { API_URL } from './AppService';
 import { getCurrentToken, getCurrentUserId, isAuthenticated } from './AuthService';
 import { createUpdateUserWordById, Difficulty, Game, getUserWordById, Known, UserOptionsFields } from './UserWordsService';
 const currentDate = new Date();
-const month: string = currentDate.toLocaleString('default', { month: 'short' });
+const month: string = currentDate.toLocaleString('en-US', { month: 'short' });
 const day: number = currentDate.getDate() - 1;
 export const initialStatData: LongStatData = {
   learnedWords: 0,

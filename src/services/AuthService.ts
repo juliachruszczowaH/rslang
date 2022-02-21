@@ -31,7 +31,7 @@ export const signIn = async (user: IUserCreds): Promise<ILoginResponseData> => {
 export const login = async (user: IUserCreds): Promise<ILoginResponseData> => {
   let result: ILoginResponseData;
   const currentDate = new Date();
-  const month: string = currentDate.toLocaleString('default', { month: 'long' });
+  const month: string = currentDate.toLocaleString('en-US', { month: 'short' });
   return signIn(user).then((signInResp) => {
     registerStorageData(signInResp);
     result = signInResp;

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AnswerObject, SprintQuestionsState } from '../../../models/WordModel';
 import SprintCard from './SprintCard';
 import { getDataSprintGame } from '../../../services/WordsService';
@@ -15,6 +15,7 @@ import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 import { Game } from '../../../services/UserWordsService';
 import { updateNewWordsCount } from '../../../services/StatisticsService';
+
 
 const SprintGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -50,16 +51,22 @@ const SprintGameField: React.FC = () => {
 
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
+  const NUMBER_OF_QUESTIONS = 20;
 
-  const onGameEnd = (counter: number) => {
-    setUpdated(false);
-    handleAnswers(userAnswers, Game.Sprint).then((i) => {
-      updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
-      setUpdated(true);
-      setGameOver(true);
-    });
-  };
-  // eslint-disable-next-line @typescript-eslint/no-shadow
+  useEffect(()=>{
+    if (userAnswers.length === NUMBER_OF_QUESTIONS) {
+      setUpdated(false);
+      handleAnswers(userAnswers, Game.Sprint).then((i) => {
+        updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+        setUpdated(true);
+        setGameOver(true);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userAnswers]);
+
+
+
   const onStartGame = async (group: string | null, page: string | null) => {
     setLoading(true);
     setGameStartFromMenu(false);
@@ -72,7 +79,7 @@ const SprintGameField: React.FC = () => {
     setLoading(false);
   };
 
-  const checkAnswer = async (answerCompare: boolean, compare: boolean) => {
+  const checkAnswer = (answerCompare: boolean, compare: boolean) => {
     if (!gameOver) {
       const correct = answerCompare === compare;
       const answer = answerCompare;
@@ -81,8 +88,8 @@ const SprintGameField: React.FC = () => {
         questionID: questions[number].id,
         question: questions[number].word,
         userAnswer: answer,
-        correct: compare,
-        result: correct,
+        correct: correct,
+        result: compare,
         correctTranslate: questions[number].wordTranslate,
       };
       setUserAnswers((prev) => [...prev, answerObject]);
@@ -102,15 +109,15 @@ const SprintGameField: React.FC = () => {
         play([wrongSound]);
       }
 
-
       const nextQuestion = number + 1;
-      if (number === questions.length - 1) {
-        onGameEnd(number);
-      } else {
+
+      if (number !== questions.length - 1) {
         setNumber(nextQuestion);
       }
     }
   };
+
+
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,7 +185,7 @@ const SprintGameField: React.FC = () => {
           }
         >
           <Modal.Header>{`Total number of answers: ${userAnswers.length} (${
-            userAnswers.filter((i) => i.result).length
+            userAnswers.filter((i) => i.correct).length
           } - are correct)`}</Modal.Header>
           <Modal.Content image scrolling>
             <Modal.Description>
@@ -186,7 +193,7 @@ const SprintGameField: React.FC = () => {
               <List celled ordered>
                 {userAnswers.map((item) => (
                   <List.Item key={item.questionID}>
-                    <List.Icon name={item.result ? 'checkmark' : 'close'} color={item.result ? 'green' : 'red'} />
+                    <List.Icon name={item.correct ? 'checkmark' : 'close'} color={item.correct ? 'green' : 'red'} />
                     <List.Content verticalAlign="middle">
                       <List.Header as={'h3'} color="blue">{`${item.question}`}</List.Header>
                       <List.Description>{`${item.correctTranslate}`}</List.Description>
@@ -229,9 +236,9 @@ const SprintGameField: React.FC = () => {
       {!loading && !gameStartFromMenu && !gameStartFromBook && !gameOver && (
         <div>
           <div>
-            <Statistic size="small">
+            <Statistic  size="small">
               <Statistic.Value>
-                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => onGameEnd(number)} />
+                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => {}} />
               </Statistic.Value>
               <Statistic.Label>
                 <Icon name="stopwatch" size="big" />
