@@ -88,3 +88,19 @@ export const handleAnswers = async (arr: AnswerObject[], game: Game.Sprint | Gam
   await Promise.all(promises);
   return results;
 };
+
+
+export const formatDate = (date: Date): string => {
+
+  const dd = date.getDate();
+
+  const mm = date.toLocaleString('default', { month: 'short' });
+
+  const yy = date.getFullYear();
+
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+
+
+  return `${mm} ${dd}, ${yy}, ${hour}:${minute}`;
+};
