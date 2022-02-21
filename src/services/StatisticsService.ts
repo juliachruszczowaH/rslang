@@ -80,7 +80,6 @@ export const setInitialUserStatistics = async () => {
 
 export const updateLearnedWordsCount = async (isLearned: boolean) => {
   const existingStat = await getUserStatistics();
-  console.log(existingStat);
   if (existingStat) {
     const body = existingStat;
     body.learnedWords = isLearned ? existingStat.learnedWords + 1 : existingStat.learnedWords > 0 ? existingStat.learnedWords - 1 : 0;
