@@ -4,16 +4,34 @@ export type totalCount = {
 };
 
 export type IUserWordOptionals = {
-  isNew?: boolean,
-  isKnown?: boolean
+  [key: string]: number | string | undefined;
+  isNew?: string,
+  isKnown?: string
+  attempts?: number,
+  sprintPositive?: number,
+  sprintNegative?: number,
+  audioPositive?: number,
+  audioNegative?: number,
 };
 
 export type UserWordData = {
   id?: string,
-  difficulty?: string,
+  difficulty: string,
   wordId?: string,
-  optional?: IUserWordOptionals
+  optional: IUserWordOptionals
 };
+
+export type IUserWordOptionsData = {
+  [key: string]: number | string | undefined;
+  difficulty?: string,
+  isKnown?: string,
+  isNew?: string,
+  attempts?: number,
+  sprintPositive?: number,
+  sprintNegative?: number,
+  audioPositive?: number,
+  audioNegative?: number,
+}
 export interface IWordData {
   audio?: string;
   audioExample?: string;
@@ -70,7 +88,7 @@ export type SprintData = {
 export type AudioCallData = {
   questionNumber: number;
   questionsWord: string | undefined;
-  answersAudioCall:  string[];
+  answersAudioCall: string[];
   posibleAnswerTranslation: string | undefined;
   onAnswer: (/* e: React.MouseEvent<HTMLButtonElement> | */ answer: string) => void;
 

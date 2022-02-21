@@ -15,8 +15,3 @@ export const HEADER_LINKS = [
   { keyword: 'statistics', title: 'Statictics' },
   { keyword: 'team', title: 'Team' },
 ];
-
-export const HEADER_LOGIN_LINKS = [
-  { keyword: 'register', title: 'Register' },
-  { keyword: 'login', title: 'Login' },
-];

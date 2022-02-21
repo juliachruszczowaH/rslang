@@ -4,6 +4,7 @@ import './sprintgame.css';
 
 const SprintGame: React.FC = () => {
 
+
   return (
     <div className="sprint-container">
       <div className="sprint-content">
