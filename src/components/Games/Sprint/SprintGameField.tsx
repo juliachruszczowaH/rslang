@@ -65,10 +65,7 @@ const SprintGameField: React.FC = () => {
     setGameStartFromMenu(false);
     setGameStartFromBook(false);
     const newQuestion = await getDataSprintGame(Number(group), Number(page));
-    console.log(group, page);
-    console.log(Number(group), Number(page));
     setQuestions(newQuestion);
-    console.log(newQuestion);
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
@@ -79,6 +76,7 @@ const SprintGameField: React.FC = () => {
     if (!gameOver) {
       const correct = answerCompare === compare;
       const answer = answerCompare;
+
       const answerObject: AnswerObject = {
         questionID: questions[number].id,
         question: questions[number].word,
@@ -87,6 +85,8 @@ const SprintGameField: React.FC = () => {
         result: correct,
         correctTranslate: questions[number].wordTranslate,
       };
+      setUserAnswers((prev) => [...prev, answerObject]);
+
       if (correct === true) {
         play([correctSound]);
         if (score >= 0 && score < SUM_POINTS[30]) {
@@ -102,7 +102,7 @@ const SprintGameField: React.FC = () => {
         play([wrongSound]);
       }
 
-      setUserAnswers((prev) => [...prev, answerObject]);
+
       const nextQuestion = number + 1;
       if (number === questions.length - 1) {
         onGameEnd(number);

@@ -18,6 +18,8 @@ import {
   Sticky,
   Checkbox,
   Rail,
+  Grid,
+  GridColumn,
 } from 'semantic-ui-react';
 import { CATEGOTY_LINKS } from '../../constants/linksDataConstants';
 import { WORDS_PER_PAGE } from '../../constants/wordsConstants';
@@ -33,8 +35,12 @@ import {
   UserOptionsFields,
 } from '../../services/UserWordsService';
 import { getWords } from '../../services/WordsService';
-import { play } from '../../utils/utils';
+import { disabledBtn, play } from '../../utils/utils';
 import SprintGameField from '../Games/Sprint/SprintGameField';
+
+
+import style from './category.module.css';
+
 
 type State = {
   words: IWordData[];
@@ -53,7 +59,6 @@ export const Category: React.FunctionComponent = () => {
   const [page, setPage] = useState(pageId ? +pageId : 0);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(`PAGINATION: group: ${group}; page: ${page}`);
   const id = getCurrentUserId();
   const token = getCurrentToken();
   const isDictionary = location.pathname === '/book/dictionary';
@@ -68,27 +73,21 @@ export const Category: React.FunctionComponent = () => {
           getHardWords().then(
             (response) => {
               if (response) {
-                console.log('response');
-                console.log(response[0]);
                 if (isMounted) setWords({ words: response[0].paginatedResults });
                 setUpdated(false);
               }
             },
             (error: any) => {
               const content = (error.response && error.response.data) || error.message || error.toString();
-              console.log(content);
             }
           );
         } else {
           getPaginatedAllUserAggregatedWords(group, page).then(
             (response) => {
               if (response) {
-                console.log('response');
-                console.log(response[0]);
                 const markedWords = response[0].paginatedResults.filter(
                   (i) => i.userWord?.difficulty === Difficulty.Hard || i.userWord?.optional?.isKnown === Known.True
                 );
-                console.log(markedWords);
                 if (isMounted) {
                   setLearned(markedWords.length);
                   setWords({ words: response[0].paginatedResults });
@@ -100,7 +99,6 @@ export const Category: React.FunctionComponent = () => {
             },
             (error: any) => {
               const content = (error.response && error.response.data) || error.message || error.toString();
-              console.log(content);
             }
           );
         }
@@ -108,14 +106,12 @@ export const Category: React.FunctionComponent = () => {
         getWords(group, page).then(
           (response) => {
             if (response) {
-              console.log(response);
               if (isMounted) setWords({ words: response });
               setUpdated(false);
             }
           },
           (error: any) => {
             const content = (error.response && error.response.data) || error.message || error.toString();
-            console.log(content);
           }
         );
       }
@@ -187,7 +183,7 @@ export const Category: React.FunctionComponent = () => {
       )}
 
       {words.words.length > 0 ? (
-        <Card.Group centered style={{ overflowY: 'scroll' }}>
+        <Grid columns={1}   className={style.cards__group}>
           {isDictionary ? null : (
             <Label attached="top right" basic size="medium" style={{ backgroundColor: color, border: 'none' }}>
               <Button color="blue" inverted disabled={learned === 20} onClick={() => navigate(`/sprintgame?group=${group}&page=${page}`)}>
@@ -200,11 +196,12 @@ export const Category: React.FunctionComponent = () => {
           )}
           {words.words &&
             words.words.map((word: IWordData, index: number) => (
-              <Card key={`${index}-card`}>
-                <Card.Content>
-                  <div>
-                    <Image src={API_URL + word.image} />
-                    <Segment
+              <GridColumn className={style.cards__wrapper} key={`${index}-card`}>
+              <Card raised className={style.cards__item} >
+
+                  <div className={style.cards__content}>
+                    <Image className={style.cards__image} src={API_URL + word.image} size="medium" />
+                    <Segment className={style.cards__transcription}
                       raised
                       style={{
                         backgroundColor: color,
@@ -212,9 +209,9 @@ export const Category: React.FunctionComponent = () => {
                           word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === Known.True ? 'green' : 'none',
                       }}
                     >
-                      <Card.Header as={'h3'} textAlign="left">
+                      <Card.Header className={style.cards__title}  as={'h3'} textAlign="left">
                         {word.userWord?.difficulty === 'hard' || word.userWord?.optional?.isKnown === Known.True ? (
-                          <Label
+                          <Label className={style.cards__label}
                             color={
                               word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === Known.True ? 'green' : undefined
                             }
@@ -228,11 +225,15 @@ export const Category: React.FunctionComponent = () => {
                           content="Click to listen"
                           trigger={
                             <Button
+                            className='button--audio'
                               circular
                               inverted
                               color="blue"
                               icon="headphones"
-                              onClick={() => play([API_URL + word.audio, API_URL + word.audioMeaning, API_URL + word.audioExample])}
+                              onClick={() => {
+                                play([API_URL + word.audio, API_URL + word.audioMeaning, API_URL + word.audioExample]);
+                                disabledBtn();
+                              }}
                             />
                           }
                         />
@@ -241,13 +242,15 @@ export const Category: React.FunctionComponent = () => {
                           {' '}
                           <span className="transcription">{word.transcription}</span>
                         </Card.Meta>
+                        <p>{word.wordTranslate}</p>
                       </Card.Header>
                     </Segment>
-                    <Card.Header as={'h3'}>{word.wordTranslate}</Card.Header>
+
                     <Divider />
                   </div>
-                  <div>
-                    <Card.Description textAlign="left">
+                  <div className={style.cards__text}>
+                    <Card.Description   >
+
                       <p>
                         <span
                           dangerouslySetInnerHTML={{
@@ -305,26 +308,26 @@ export const Category: React.FunctionComponent = () => {
                         word.userWord?.optional?.audioPositive ||
                         word.userWord?.optional?.audioNegative ? (
                           <div>
-                            {' '}
-                            <Label>
+                            <Label className={style.cards__results}>
                               Sprint
-                              <Label.Detail style={{ color: 'green' }}>{word.userWord?.optional?.sprintPositive}</Label.Detail>
-                              <Label.Detail style={{ color: 'red' }}>{word.userWord?.optional?.sprintNegative}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'green' }}>{word.userWord?.optional?.sprintPositive}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'red' }}>{word.userWord?.optional?.sprintNegative}</Label.Detail>
                             </Label>
-                            <Label>
+                            <Label  className={style.cards__results}>
                               AudioCall
-                              <Label.Detail style={{ color: 'green' }}>{word.userWord?.optional?.audioPositive}</Label.Detail>
-                              <Label.Detail style={{ color: 'red' }}>{word.userWord?.optional?.audioNegative}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'green' }}>{word.userWord?.optional?.audioPositive}</Label.Detail>
+                              <Label.Detail className={style.cards__results__item} style={{ color: 'red' }}>{word.userWord?.optional?.audioNegative}</Label.Detail>
                             </Label>
                           </div>
                           ) : null}
                       </Card.Content>
                     ) : null}
                   </div>
-                </Card.Content>
+
               </Card>
+              </GridColumn>
             ))}
-        </Card.Group>
+        </Grid>
       ) : (
         <Loader active content="Loading" />
       )}

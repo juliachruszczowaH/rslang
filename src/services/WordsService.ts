@@ -11,7 +11,7 @@ export const getWords = async (group = 0, page = 0): Promise<IWordData[]> => {
   const data = await axios.get(`${API_URL}words`, {
     params: { group: group, page: page },
   });
-  
+
   return data.data;
 };
 
@@ -44,7 +44,6 @@ export const getDataAudioGame = async (
     for (let i = 1; i < WRONG_WORDS_LENGTH; i++){
       wrongWordArr.push(newArr.splice(Math.random() * newArr.length, 1)[0]);
     }
-    console.log(wrongWordArr);
     return {
       ...wordsData,
       answersAudioCall:  shuffleArray([

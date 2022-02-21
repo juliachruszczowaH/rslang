@@ -15,17 +15,35 @@ export const getRandomNumber = (min: number, max: number) => {
 };
 
 export const play = (sounds: string[]) => {
+  const audio = new Audio(sounds[0]);
+  // eslint-disable-next-line prefer-const
   if (sounds.length > 0) {
-    const audio = new Audio(sounds[0]);
     audio.currentTime = 0;
     audio.play();
     sounds.shift();
     audio.addEventListener('ended', function () {
       return play(sounds);
     });
+
+  }
+};
+export function disabledBtn(){
+  const BUTTONS_AUDIO_BOOK: NodeListOf<Element> = document.querySelectorAll('.button--audio');
+  const BUTTONS_AUDIO_GAME: NodeListOf<Element> = document.querySelectorAll('.button__game--audio');
+  for (const btn of BUTTONS_AUDIO_BOOK as any){
+    btn.setAttribute('disabled', 'disabled');
+    setTimeout(()=>{
+      btn.removeAttribute('disabled', 'disabled');
+    }, 9000);
+  }
+  for (const btn of BUTTONS_AUDIO_GAME as any){
+    btn.setAttribute('disabled', 'disabled');
+    setTimeout(()=>{
+      btn.removeAttribute('disabled', 'disabled');
+    }, 1000);
   }
 
-};
+}
 
 export const getStorageData = (key: string): string | null => {
   const data = localStorage.getItem(key);
@@ -50,7 +68,6 @@ export const handleAnswers = async (arr: AnswerObject[], game: Game.Sprint | Gam
   let seriaLength = 0;
   let seriaLengthResult = 0;
   const results = [0, 0, 0];
-  console.log(arr);
   const promises = arr.map(async (answer) => {
     indexCount = indexCount + 1;
     if (answer.questionID) {

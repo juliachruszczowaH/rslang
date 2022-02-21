@@ -1,12 +1,12 @@
 import React from 'react';
 import SprintGameField from '../../components/Games/Sprint/SprintGameField';
-import './sprintgame.css';
+import style from './sprintgame.module.css';
 
 const SprintGame: React.FC = () => {
 
 
   return (
-    <div className="sprint-container">
+    <div className={style.sprint__container}>
       <div className="sprint-content">
         <SprintGameField />
       </div>

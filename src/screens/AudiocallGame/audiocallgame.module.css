@@ -1,0 +1,7 @@
+.audiocall__container{
+  background-image: url(../../../public/img/audiocall.png);
+  height: 80vh;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 450px;
+}
