@@ -49,13 +49,12 @@ const AudioCallGameField: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const NUMBER_OF_QUESTIONS = 20;
-  let onGameEnd: () => void;
+
   useEffect(()=>{
     if (userAnswers.length === NUMBER_OF_QUESTIONS) {
       setUpdated(false);
       handleAnswers(userAnswers, Game.Sprint).then((i) => {
         updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
-        console.log(userAnswers);
         setUpdated(true);
         setGameOver(true);
       });
@@ -96,13 +95,12 @@ const AudioCallGameField: React.FC = () => {
 
       setUserAnswers((prev) => [...prev, answerObject]);
       const nextQuestion = number + 1;
-      if (number === questions.length - 1) {
-        onGameEnd();
-      } else {
+      if (number !== questions.length - 1) {
         setTimeout(() => {
           setNumber(nextQuestion);
         }, 1000);
       }
+
     }
   };
 

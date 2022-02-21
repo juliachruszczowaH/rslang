@@ -15,7 +15,7 @@ import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 import { Game } from '../../../services/UserWordsService';
 import { updateNewWordsCount } from '../../../services/StatisticsService';
-import style from './sprint.module.css';
+
 
 const SprintGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -52,13 +52,12 @@ const SprintGameField: React.FC = () => {
   const [gameOver, setGameOver] = useState(false);
   const [open, setOpen] = useState(false);
   const NUMBER_OF_QUESTIONS = 20;
-  let onGameEnd: () => void;
+
   useEffect(()=>{
     if (userAnswers.length === NUMBER_OF_QUESTIONS) {
       setUpdated(false);
       handleAnswers(userAnswers, Game.Sprint).then((i) => {
         updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
-        console.log(userAnswers);
         setUpdated(true);
         setGameOver(true);
       });
@@ -67,7 +66,7 @@ const SprintGameField: React.FC = () => {
   }, [userAnswers]);
 
 
-  
+
   const onStartGame = async (group: string | null, page: string | null) => {
     setLoading(true);
     setGameStartFromMenu(false);
@@ -111,16 +110,12 @@ const SprintGameField: React.FC = () => {
       }
 
       const nextQuestion = number + 1;
-      if (number === questions.length - 1) {
-        onGameEnd();
-      } else {
+
+      if (number !== questions.length - 1) {
         setNumber(nextQuestion);
       }
     }
   };
-
-
-
 
 
 
@@ -241,9 +236,9 @@ const SprintGameField: React.FC = () => {
       {!loading && !gameStartFromMenu && !gameStartFromBook && !gameOver && (
         <div>
           <div>
-            <Statistic className={style.sprint__timer} size="small">
+            <Statistic  size="small">
               <Statistic.Value>
-                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => onGameEnd()} />
+                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => {}} />
               </Statistic.Value>
               <Statistic.Label>
                 <Icon name="stopwatch" size="big" />
