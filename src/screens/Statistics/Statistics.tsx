@@ -8,7 +8,7 @@ import { getUserStatistics, initialStatData } from '../../services/StatisticsSer
 import { formatDate } from '../../utils/utils';
 import './statistics.css';
 const currentDate = new Date();
-const month: string = currentDate.toLocaleString('default', { month: 'short' });
+const month: string = currentDate.toLocaleString('en-US', { month: 'short' });
 const day: number = currentDate.getDate() - 1;
 
 const Statistics: React.FC = () => {
@@ -144,7 +144,12 @@ const Statistics: React.FC = () => {
             </Segment.Group>
           </>
         ) : null}
-        {currentDayData ? <Segment>{ChartBar(optionals)}</Segment> : null}
+        {currentDayData ? (
+          <Segment>
+            {ChartBar(optionals)}
+            {ChartBar(optionals, true)}
+          </Segment>
+        ) : null}
       </div>
     </div>
   );

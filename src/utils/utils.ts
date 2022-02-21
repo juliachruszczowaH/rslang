@@ -112,7 +112,7 @@ export const formatDate = (date: Date): string => {
 
   const dd = date.getDate();
 
-  const mm = date.toLocaleString('default', { month: 'short' });
+  const mm = date.toLocaleString('en-US', { month: 'short' });
 
   const yy = date.getFullYear();
 

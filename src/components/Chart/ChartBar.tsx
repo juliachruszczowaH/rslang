@@ -3,12 +3,13 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { Line } from 'react-chartjs-2';
 import { IMonthStatData, IStatOptions } from '../../models/StatisticsModel';
 const currentDate = new Date();
-const month: string = currentDate.toLocaleString('default', { month: 'short' });
+const month: string = currentDate.toLocaleString('en-US', { month: 'short' });
 const day: number = currentDate.getDate() - 1;
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const ChartBar = (chartData: IStatOptions) => {
+export const ChartBar = (chartData: IStatOptions, totalLearned = false) => {
+  const increasingValues: number[] = [];
   const options = {
     responsive: true,
     interaction: {
@@ -37,48 +38,51 @@ export const ChartBar = (chartData: IStatOptions) => {
   Object.keys(chartData).forEach((key) => {
     const creationDate = new Date(chartData.creationDate);
     console.log(creationDate.getDate());
-    console.log(creationDate.toLocaleString('default', { month: 'short' }));
+    console.log(creationDate.toLocaleString('en-US', { month: 'short' }));
     if (key !== 'creationDate' && key !== 'lastLoginDate') {
       if (chartData[key]) {
         const temp = chartData[key] as IMonthStatData;
-        temp.newTotal.forEach((item, index) => {
-          if (key === 'Feb' && index > 28) {
-            console.log('not exists');
-          } else {
-            labels.push(`${key}.${index + 1}`);
-            dataset1.push(item);
-          }
-        });
+        if (totalLearned) {
+          temp.knownTotal.forEach((item, index) => {
+            if (key === 'Feb' && index > 28) {
+              console.log('not exists');
+            } else {
+              labels.push(`${key}.${index + 1}`);
+              dataset1.push(item);
+            }
+          });
+        } else {
+          temp.newTotal.forEach((item, index) => {
+            if (key === 'Feb' && index > 28) {
+              console.log('not exists');
+            } else {
+              labels.push(`${key}.${index + 1}`);
+              dataset1.push(item);
+            }
+          });
+        }
       }
     }
   });
 
-  const increasingValues: number[] = [];
-  dataset1.forEach((item, index, array) => {
-    if (index > 0) {
-      increasingValues.push(increasingValues[increasingValues.length - 1] + item);
-    } else {
-      increasingValues.push(item);
-    }
-  });
-  console.log(dataset1);
-  console.log(increasingValues);
+  if (totalLearned) {
+    dataset1.forEach((item, index) => {
+      if (index > 0) {
+        increasingValues.push(increasingValues[increasingValues.length - 1] + item);
+      } else {
+        increasingValues.push(item);
+      }
+    });
+  }
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Learned words per date',
+        label: totalLearned ? 'Total learned words' : 'New words per date',
         data: dataset1,
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        yAxisID: 'y',
-      },
-      {
-        label: 'Total learned words',
-        data: increasingValues,
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        borderColor: totalLearned ? 'rgb(255, 99, 132)' : 'rgb(53, 162, 235)',
+        backgroundColor: totalLearned ? 'rgba(255, 99, 132, 0.5)' : 'rgba(53, 162, 235, 0.5)',
         yAxisID: 'y',
       },
     ],
