@@ -219,9 +219,9 @@ export const Category: React.FunctionComponent = () => {
                           word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === Known.True ? 'green' : 'none',
                       }}
                     >
-                      <Card.Header className={style.cards__title}  as={'h2'} textAlign="left">
+                      <Card.Header className={style.cards__title}  as={'h3'} textAlign="left">
                         {word.userWord?.difficulty === 'hard' || word.userWord?.optional?.isKnown === Known.True ? (
-                          <Label
+                          <Label className={style.cards__label}
                             color={
                               word.userWord?.difficulty === 'hard' ? 'red' : word.userWord?.optional?.isKnown === Known.True ? 'green' : undefined
                             }
@@ -252,7 +252,7 @@ export const Category: React.FunctionComponent = () => {
                           {' '}
                           <span className="transcription">{word.transcription}</span>
                         </Card.Meta>
-                        <Card.Header as={'h3'}>{word.wordTranslate}</Card.Header>
+                        <p>{word.wordTranslate}</p>
                       </Card.Header>
                     </Segment>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import AudioCallGameField from '../../components/Games/AudioCall/AudioCallGameField';
-import './audiocallgame.css';
+import style from './audiocallgame.module.css';
 
 const AudioCallGame: React.FC = () => {
 
@@ -13,7 +13,7 @@ const AudioCallGame: React.FC = () => {
   // если придут цифры - то это номер группы и номер страницы */
 
   return (
-    <div className="audiocall-container">
+    <div className={style.audiocall__container}>
       <div className="audiocall-content">
         <AudioCallGameField />
       </div>

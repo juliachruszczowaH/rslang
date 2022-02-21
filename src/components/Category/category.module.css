@@ -26,10 +26,7 @@
   flex-direction: row !important;
   justify-content: space-between;
   min-width: 80%;
-  background: url(/public/img/background-book.jpg) !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  background-position: center !important;
+
 }
 .cards__wrapper {
   display: flex !important;
@@ -70,6 +67,7 @@
   font-size: 14px !important;
   text-shadow: 1px 1px 2px rgb(20, 16, 16), 0 0 1em rgb(188, 188, 194), 0 0 0.2em rgb(17, 110, 191);
   color: #fff !important;
+  padding:0px 10px 20px 30px!important;
 }
 .cards__results__item{
   text-shadow: none;
@@ -110,4 +108,9 @@
 *:after {
   -webkit-box-sizing: border-box!important;
   box-sizing: border-box!important;
+}
+.cards__label{
+  position: absolute!important;
+  top: 0;
+  left: 0;
 }
