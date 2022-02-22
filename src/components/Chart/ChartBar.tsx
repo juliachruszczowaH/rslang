@@ -78,7 +78,7 @@ export const ChartBar = (chartData: IStatOptions, totalLearned = false) => {
     datasets: [
       {
         label: totalLearned ? 'Total learned words' : 'New words per date',
-        data: dataset1,
+        data: totalLearned ? increasingValues : dataset1,
         borderColor: totalLearned ? 'rgb(255, 99, 132)' : 'rgb(53, 162, 235)',
         backgroundColor: totalLearned ? 'rgba(255, 99, 132, 0.5)' : 'rgba(53, 162, 235, 0.5)',
         yAxisID: 'y',
