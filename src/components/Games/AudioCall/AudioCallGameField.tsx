@@ -14,6 +14,7 @@ import correctSound from '../../../assets/sound/correct.mp3';
 import wrongSound from '../../../assets/sound/wrong.mp3';
 import { updateNewWordsCount } from '../../../services/StatisticsService';
 import { Game } from '../../../services/UserWordsService';
+import { isAuthenticated } from '../../../services/AuthService';
 
 const AudioCallGameField: React.FC = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -50,18 +51,19 @@ const AudioCallGameField: React.FC = () => {
 
   const NUMBER_OF_QUESTIONS = 20;
 
-  useEffect(()=>{
+  useEffect(() => {
     if (userAnswers.length === NUMBER_OF_QUESTIONS) {
       setUpdated(false);
-      handleAnswers(userAnswers, Game.Sprint).then((i) => {
-        updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
-        setUpdated(true);
-        setGameOver(true);
-      });
+      if (isAuthenticated()) {
+        handleAnswers(userAnswers, Game.Sprint).then((i) => {
+          updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+          setUpdated(true);
+          setGameOver(true);
+        });
+      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAnswers]);
-
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,7 +102,6 @@ const AudioCallGameField: React.FC = () => {
           setNumber(nextQuestion);
         }, 1000);
       }
-
     }
   };
 
