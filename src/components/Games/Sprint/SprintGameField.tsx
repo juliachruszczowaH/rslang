@@ -62,6 +62,9 @@ const SprintGameField: React.FC = () => {
           setUpdated(true);
           setGameOver(true);
         });
+      } else {
+        setUpdated(true);
+        setGameOver(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -271,10 +274,10 @@ const SprintGameField: React.FC = () => {
         </div>
       )}
     </div>
-  ) : (
+  ) : isAuthenticated() ? (
     <Dimmer active>
       <Loader size="large" content="Please, wait. We are writing game results..." />
     </Dimmer>
-  );
+  ) : null;
 };
 export default SprintGameField;
