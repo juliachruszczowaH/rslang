@@ -55,8 +55,8 @@ const AudioCallGameField: React.FC = () => {
     if (userAnswers.length === NUMBER_OF_QUESTIONS) {
       setUpdated(false);
       if (isAuthenticated()) {
-        handleAnswers(userAnswers, Game.Sprint).then((i) => {
-          updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+        handleAnswers(userAnswers, Game.Audiocall).then((i) => {
+          updateNewWordsCount(Game.Audiocall, i[0], i[1], i[2]);
           setUpdated(true);
           setGameOver(true);
         });
