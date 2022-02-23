@@ -239,7 +239,13 @@ const SprintGameField: React.FC = () => {
           <div>
             <Statistic size="small">
               <Statistic.Value>
-                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => {}} />
+                <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => {
+                  handleAnswers(userAnswers, Game.Sprint).then((i) => {
+                    updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+                    setUpdated(true);
+                    setGameOver(true);
+                  });
+                }} />
               </Statistic.Value>
               <Statistic.Label>
                 <Icon name="stopwatch" size="big" />
