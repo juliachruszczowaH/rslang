@@ -240,11 +240,17 @@ const SprintGameField: React.FC = () => {
             <Statistic size="small">
               <Statistic.Value>
                 <Timer isActive={true} initialTime={GAME_TIMER} onCountdownFinish={() => {
-                  handleAnswers(userAnswers, Game.Sprint).then((i) => {
-                    updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+                  setUpdated(false);
+                  if (isAuthenticated()) {
+                    handleAnswers(userAnswers, Game.Sprint).then((i) => {
+                      updateNewWordsCount(Game.Sprint, i[0], i[1], i[2]);
+                      setUpdated(true);
+                      setGameOver(true);
+                    });
+                  } else {
                     setUpdated(true);
                     setGameOver(true);
-                  });
+                  }
                 }} />
               </Statistic.Value>
               <Statistic.Label>
